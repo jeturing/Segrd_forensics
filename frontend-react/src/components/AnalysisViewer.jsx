@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Analysis Viewer Component v4.4.1
+ * SEGRD Security - Analysis Viewer Component v4.4.1
  * Visualizador de análisis forenses con streaming de logs en tiempo real
  */
 

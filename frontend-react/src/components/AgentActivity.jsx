@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Agent Activity Component v4.4.1
+ * SEGRD Security - Agent Activity Component v4.4.1
  * Monitor de actividad de agentes Blue/Red/Purple en tiempo real
  */
 

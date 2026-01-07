@@ -68,18 +68,16 @@ const JsonLdSchema = () => {
     }
   };
 
-  // FAQ Schema from translations
-  const faqCategories = t("faq:categories", { returnObjects: true });
-  const faqItems = Object.values(faqCategories).flatMap(cat => 
-    cat.questions.map(q => ({
-      "@type": "Question",
-      "name": q.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": q.a
-      }
-    }))
-  );
+  // FAQ Schema from translations - CORRECTED
+  const faqItemsData = t("faq:items", { returnObjects: true }) || [];
+  const faqItems = Array.isArray(faqItemsData) ? faqItemsData.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  })) : [];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -101,9 +99,9 @@ const JsonLdSchema = () => {
     }
   };
 
-  // Product Schema for each module
-  const modules = t("modules:modules", { returnObjects: true });
-  const productSchemas = Object.entries(modules).map(([key, mod]) => ({
+  // Product Schema for each module - CORRECTED
+  const modulesData = t("modules:items", { returnObjects: true }) || [];
+  const productSchemas = Array.isArray(modulesData) ? modulesData.map((mod, index) => ({
     "@context": "https://schema.org",
     "@type": "Product",
     "name": `SEGRD ${mod.name}`,
@@ -118,7 +116,7 @@ const JsonLdSchema = () => {
       "availability": "https://schema.org/InStock",
       "priceCurrency": "USD"
     }
-  }));
+  })) : [];
 
   return (
     <Helmet>

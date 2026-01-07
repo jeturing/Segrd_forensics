@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Reports Service
+ * SEGRD Security - Reports Service
  * Servicio completo para reportes con CRUD
  */
 

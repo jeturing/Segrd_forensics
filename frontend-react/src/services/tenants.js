@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Tenants Service
+ * SEGRD Security - Tenants Service
  * Servicio completo para gestión de tenants M365 con CRUD
  */
 

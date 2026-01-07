@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - System Configuration Service
+ * SEGRD Security - System Configuration Service
  * Obtiene configuración del sistema desde la API
  * Permite URLs dinámicas desde la base de datos
  */

@@ -1,44 +1,46 @@
 {
   "title": "Frequently Asked Questions",
   "subtitle": "Everything you need to know about SEGRD",
-  "categories": {
-    "general": "General",
-    "security": "Security & Privacy",
-    "technical": "Technical",
-    "pricing": "Pricing & Plans"
-  },
-  "questions": {
-    "what_is_segrd": {
-      "q": "What is SEGRD?",
-      "a": "SEGRD is a modular security, forensics, and incident response platform designed for regulated organizations."
+  "items": [
+    {
+      "category": "general",
+      "question": "What is SEGRD?",
+      "answer": "SEGRD is a modular security, forensics, and incident response platform designed for regulated organizations that require evidence integrity, controlled automation, and private AI execution."
     },
-    "who_is_it_for": {
-      "q": "Who is SEGRD designed for?",
-      "a": "SEGRD is built for small and medium SOCs, law firms and expert witnesses, regional banks, government agencies, MSSPs, and healthcare organizations."
+    {
+      "category": "general",
+      "question": "Who is SEGRD designed for?",
+      "answer": "SEGRD is built for small and medium SOCs, law firms and expert witnesses, regional banks, government agencies, MSSPs, and healthcare organizations."
     },
-    "byollm_explain": {
-      "q": "What is BYO-LLM?",
-      "a": "BYO-LLM (Bring Your Own LLM) means you can run your own AI model on your infrastructure. Your sensitive data never leaves your network."
+    {
+      "category": "security",
+      "question": "What is BYO-LLM?",
+      "answer": "BYO-LLM (Bring Your Own LLM) means you can run your own AI model on your infrastructure. Your sensitive data never leaves your network. You can use OpenAI, Claude, Gemini, or local Ollama."
     },
-    "data_privacy": {
-      "q": "Where is my data stored?",
-      "a": "Your evidence and case data are stored in your MinIO instance. On-premise and air-gapped deployments are also available."
+    {
+      "category": "security",
+      "question": "Where is my data stored?",
+      "answer": "Your evidence and case data are stored in your own infrastructure. On-premise and air-gapped deployments are available."
     },
-    "compliance": {
-      "q": "What compliance standards does SEGRD support?",
-      "a": "SEGRD is designed for HIPAA, SOX, PCI-DSS, GDPR, and FedRAMP requirements."
+    {
+      "category": "technical",
+      "question": "What compliance standards does SEGRD support?",
+      "answer": "SEGRD is designed for HIPAA, SOX, PCI-DSS, GDPR, and SOC 2 Type II requirements with immutable audit logs and complete chain of custody."
     },
-    "tools_included": {
-      "q": "What forensic tools are included?",
-      "a": "SEGRD includes Sparrow, Hawk, YARA, Loki, Volatility, OSQuery, and more. All tools run in isolated containers."
+    {
+      "category": "technical",
+      "question": "Can I integrate with my existing tools?",
+      "answer": "Yes. SEGRD integrates with your SIEM, EDR, SOAR, and other security tools via REST API and webhooks."
     },
-    "pricing_model": {
-      "q": "How is SEGRD priced?",
-      "a": "SEGRD uses per-seat SaaS pricing with module-based add-ons. We offer Starter, Professional, and Enterprise tiers."
+    {
+      "category": "pricing",
+      "question": "How does pricing work?",
+      "answer": "Fixed per-seat pricing. No surprises from token consumption or data volume. Contact us for a custom quote."
     },
-    "trial": {
-      "q": "Is there a free trial?",
-      "a": "Yes! We offer a 14-day free trial with access to core modules. No credit card required."
+    {
+      "category": "pricing",
+      "question": "Is there a free trial?",
+      "answer": "Yes. 14-day free trial with full access to all modules. No credit card required."
     }
-  }
+  ]
 }

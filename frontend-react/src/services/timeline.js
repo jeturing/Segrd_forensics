@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Timeline Service
+ * SEGRD Security - Timeline Service
  * Servicio completo para Timeline con CRUD
  */
 

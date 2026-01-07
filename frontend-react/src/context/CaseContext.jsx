@@ -36,7 +36,7 @@ export const CaseContextProvider = ({ children }) => {
   // Estado del caso actual
   const [currentCase, setCurrentCase] = useState(null);
   const [caseList, setCaseList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   
   // Estado de sesión
@@ -54,7 +54,7 @@ export const CaseContextProvider = ({ children }) => {
         const savedCase = localStorage.getItem('mcp_current_case');
         
         // Cargar lista de casos
-        await fetchCaseList();
+        // await fetchCaseList(); // Disabled: only load when authenticated
         
         if (savedCaseId && savedCase) {
           const parsedCase = JSON.parse(savedCase);
@@ -191,7 +191,7 @@ export const CaseContextProvider = ({ children }) => {
       };
 
       // Actualizar lista y seleccionar
-      await fetchCaseList();
+      // await fetchCaseList(); // Disabled: only load when authenticated
       await selectCase(createdCase);
       
       console.log(`✅ Case created: ${createdCase.case_id}`);

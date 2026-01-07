@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Processes Service
+ * SEGRD Security - Processes Service
  * Servicio completo para gestión de procesos
  */
 

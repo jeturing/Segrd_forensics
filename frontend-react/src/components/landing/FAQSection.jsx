@@ -3,12 +3,21 @@ import { useState } from "react";
 
 const FAQSection = () => {
   const { t } = useTranslation("faq");
-  const categories = t("categories", { returnObjects: true });
+  const items = t("items", { returnObjects: true }) || [];
   const [openItems, setOpenItems] = useState({});
 
-  const toggleItem = (key) => {
-    setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleItem = (index) => {
+    setOpenItems((prev) => ({ ...prev, [index]: !prev[index] }));
   };
+
+  // Group by category
+  const categories = Array.isArray(items) ? items.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {}) : {};
 
   return (
     <section className="py-24 bg-gray-900">
@@ -17,18 +26,19 @@ const FAQSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             {t("title")}
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
+          <p className="text-gray-400">{t("subtitle")}</p>
+          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full mt-6"></div>
         </div>
 
         <div className="space-y-8">
-          {Object.entries(categories).map(([catKey, category]) => (
-            <div key={catKey}>
-              <h3 className="text-lg font-semibold text-cyan-400 mb-4">
-                {category.title}
+          {Object.entries(categories).map(([category, questions]) => (
+            <div key={category}>
+              <h3 className="text-lg font-semibold text-cyan-400 mb-4 capitalize">
+                {category.replace("_", " ")}
               </h3>
               <div className="space-y-3">
-                {category.questions.map((item, index) => {
-                  const itemKey = `${catKey}-${index}`;
+                {questions.map((item, index) => {
+                  const itemKey = `${category}-${index}`;
                   const isOpen = openItems[itemKey];
                   
                   return (
@@ -38,21 +48,30 @@ const FAQSection = () => {
                     >
                       <button
                         onClick={() => toggleItem(itemKey)}
-                        className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-800/80 transition-colors"
+                        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-800/80 transition-colors"
                       >
-                        <span className="text-white font-medium">{item.q}</span>
+                        <span className="text-white font-medium pr-8">
+                          {item.question}
+                        </span>
                         <svg
-                          className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                          className={`w-5 h-5 text-cyan-400 transition-transform flex-shrink-0 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
                         </svg>
                       </button>
                       {isOpen && (
-                        <div className="px-6 pb-4">
-                          <p className="text-gray-400 leading-relaxed">{item.a}</p>
+                        <div className="px-6 pb-4 text-gray-400 leading-relaxed">
+                          {item.answer}
                         </div>
                       )}
                     </div>

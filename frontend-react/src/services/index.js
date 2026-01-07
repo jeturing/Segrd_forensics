@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Services Index
+ * SEGRD Security - Services Index
  * Exporta todos los servicios disponibles
  */
 

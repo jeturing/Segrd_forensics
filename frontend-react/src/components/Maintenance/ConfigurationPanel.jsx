@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - API Configuration Panel
+ * SEGRD Security - API Configuration Panel
  * Panel de configuración de APIs en Mantenimiento
  */
 

@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Dashboard Service
+ * SEGRD Security - Dashboard Service
  * Servicio completo para el Dashboard con CRUD
  */
 

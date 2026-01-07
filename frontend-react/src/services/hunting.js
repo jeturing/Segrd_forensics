@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Threat Hunting Service
+ * SEGRD Security - Threat Hunting Service
  * Servicio completo para Threat Hunting con CRUD
  */
 

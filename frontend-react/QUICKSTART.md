@@ -22,7 +22,7 @@ He creado una **aplicación React profesional** con:
 ## 📍 Ubicación del Proyecto
 
 ```
-/home/hack/mcp-kali-forensics/frontend-react/
+/home/hack/segrd-forensics/frontend-react/
 ```
 
 ## 🚀 SETUP EN 5 MINUTOS
@@ -30,7 +30,7 @@ He creado una **aplicación React profesional** con:
 ### Paso 1: Instalar
 
 ```bash
-cd /home/hack/mcp-kali-forensics/frontend-react
+cd /home/hack/segrd-forensics/frontend-react
 chmod +x setup.sh
 ./setup.sh
 ```
@@ -47,7 +47,7 @@ El backend FastAPI debe estar ejecutando en puerto 9000:
 
 ```bash
 # En otra terminal
-cd /home/hack/mcp-kali-forensics
+cd /home/hack/segrd-forensics
 uvicorn api.main:app --reload --port 9000
 ```
 

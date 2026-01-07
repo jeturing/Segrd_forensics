@@ -1,139 +1,62 @@
 {
-  "title": "Módulos SEGRD",
-  "subtitle": "Suite completa de herramientas forenses y de respuesta a incidentes",
-  "modules": {
-    "foren": {
+  "title": "Módulos de Seguridad",
+  "subtitle": "Plataforma de seguridad integral",
+  "items": [
+    {
+      "slug": "forensics",
       "name": "FOREN",
-      "tagline": "Análisis Forense Digital",
-      "description": "Plataforma integral de análisis forense digital con asistencia de IA. Automatiza la extracción, análisis y documentación de evidencia digital.",
+      "title": "Forense Digital y Contraperitaje",
+      "tagline": "Recolección y análisis de evidencia de grado legal",
+      "description": "Plataforma integral de forense digital para investigaciones, soporte en litigios y testimonios periciales.",
       "features": [
-        "Análisis de memoria RAM y volcados de disco",
-        "Extracción de artefactos de navegadores",
-        "Timeline de eventos automatizado",
-        "Análisis de malware con sandbox",
-        "Generación de informes periciales"
+        { "title": "Recolección de Evidencia", "desc": "Recolección automatizada desde endpoints, nube y móviles" },
+        { "title": "Cadena de Custodia", "desc": "Rastro de auditoría completo con hashing SHA-256" },
+        { "title": "Informes Periciales", "desc": "Informes forenses listos para tribunales" },
+        { "title": "Contraperitaje", "desc": "Validar o cuestionar hallazgos forenses existentes" }
       ],
-      "tools": ["Volatility 3", "Autopsy", "YARA", "Plaso", "Bulk Extractor"],
-      "useCases": [
-        "Investigaciones de brecha de datos",
-        "Análisis de malware corporativo",
-        "Contraperitajes informáticos",
-        "Respuesta a ransomware"
-      ]
+      "tools": ["Sparrow", "Hawk", "YARA", "Loki", "Volatility"]
     },
-    "axion": {
+    {
+      "slug": "incident-response",
       "name": "AXION",
-      "tagline": "Análisis de Red y PCAP",
-      "description": "Captura, análisis y correlación de tráfico de red. Detecta amenazas, exfiltraciones y movimientos laterales.",
+      "title": "Respuesta a Incidentes",
+      "tagline": "Contención y remediación rápida",
+      "description": "Respuesta a incidentes de extremo a extremo desde detección hasta recuperación.",
       "features": [
-        "Captura de paquetes en tiempo real",
-        "Análisis de protocolos Layer 7",
-        "Detección de exfiltración de datos",
-        "Reconstrucción de sesiones",
-        "Integración con IDS/IPS"
+        { "title": "Playbooks Automatizados", "desc": "Playbooks predefinidos y personalizados" },
+        { "title": "Triaje en Tiempo Real", "desc": "Priorización asistida por IA" },
+        { "title": "Acciones de Contención", "desc": "Aislamiento y remediación con un clic" },
+        { "title": "Informes Post-Incidente", "desc": "Generación automatizada de líneas de tiempo" }
       ],
-      "tools": ["Wireshark/tshark", "Zeek", "Suricata", "NetworkMiner", "Rita"],
-      "useCases": [
-        "Investigación de C2 channels",
-        "Análisis de DDoS",
-        "Detección de data leaks",
-        "Auditoría de tráfico cifrado"
-      ]
+      "tools": ["OSQuery", "Velociraptor", "FastIR", "GHOST"]
     },
-    "vigil": {
+    {
+      "slug": "threat-monitoring",
       "name": "VIGIL",
-      "tagline": "Monitoreo y Alertas",
-      "description": "Sistema de monitoreo continuo con detección de anomalías basada en IA. Alertas inteligentes sin fatiga de falsos positivos.",
+      "title": "Monitoreo de Amenazas",
+      "tagline": "Visibilidad continua de tu entorno",
+      "description": "Detección y monitoreo de amenazas 24/7 en endpoints, nube y red.",
       "features": [
-        "Correlación de eventos multi-fuente",
-        "Detección de anomalías con ML",
-        "Dashboards en tiempo real",
-        "Alertas contextualizadas",
-        "Integración con ticketing"
+        { "title": "Análisis de Comportamiento", "desc": "Detección de anomalías por ML" },
+        { "title": "Inteligencia de Amenazas", "desc": "Integración con MISP y OTX" },
+        { "title": "Correlación de Alertas", "desc": "Agrupación inteligente de alertas" },
+        { "title": "Detección Personalizada", "desc": "Reglas Sigma y YARA" }
       ],
-      "tools": ["Wazuh", "Elastic Stack", "Grafana", "Prometheus", "TheHive"],
-      "useCases": [
-        "SOC 24/7",
-        "Detección de amenazas internas",
-        "Cumplimiento continuo",
-        "Early warning system"
-      ]
+      "tools": ["Sigma", "YARA", "MISP", "Elastic"]
     },
-    "orbia": {
+    {
+      "slug": "automation",
       "name": "ORBIA",
-      "tagline": "OSINT e Inteligencia de Amenazas",
-      "description": "Recopilación y análisis de inteligencia de fuentes abiertas. Monitorea la superficie de ataque externa y amenazas emergentes.",
+      "title": "Automatización de Seguridad (SOAR)",
+      "tagline": "Orquestar, automatizar, responder",
+      "description": "Conecta tus herramientas de seguridad y automatiza tareas repetitivas.",
       "features": [
-        "Monitoreo de dark web",
-        "Análisis de superficie de ataque",
-        "Feeds de threat intelligence",
-        "Investigación de actores",
-        "Brand monitoring"
+        { "title": "Motor de Playbooks", "desc": "Diseñador visual de flujos de trabajo" },
+        { "title": "Hub de Integración", "desc": "200+ conectores predefinidos" },
+        { "title": "Gestión de Casos", "desc": "Seguimiento centralizado de incidentes" },
+        { "title": "Reportes", "desc": "Informes ejecutivos y técnicos" }
       ],
-      "tools": ["Maltego", "Shodan", "SpiderFoot", "theHarvester", "MISP"],
-      "useCases": [
-        "Due diligence de terceros",
-        "Investigación de fraude",
-        "Monitoreo de credenciales filtradas",
-        "Attack surface management"
-      ]
-    },
-    "cortexa": {
-      "name": "CORTEXA",
-      "tagline": "Orquestación SOAR",
-      "description": "Automatización de respuesta a incidentes con playbooks inteligentes. Reduce el tiempo medio de respuesta (MTTR) dramáticamente.",
-      "features": [
-        "Playbooks visuales drag-and-drop",
-        "Integración con 100+ herramientas",
-        "Respuesta automática a amenazas",
-        "Métricas de eficiencia",
-        "Escalamiento inteligente"
-      ],
-      "tools": ["Shuffle", "n8n", "Cortex XSOAR", "Tines", "StackStorm"],
-      "useCases": [
-        "Respuesta automatizada a phishing",
-        "Contención de endpoints",
-        "Enriquecimiento de alertas",
-        "Remediación de vulnerabilidades"
-      ]
-    },
-    "clouda": {
-      "name": "CLOUDA",
-      "tagline": "Seguridad Cloud y Contenedores",
-      "description": "Visibilidad y protección de workloads en AWS, Azure, GCP y Kubernetes. CSPM, CWPP y KSPM unificados.",
-      "features": [
-        "Inventario multi-cloud",
-        "Detección de misconfiguraciones",
-        "Seguridad de contenedores",
-        "Compliance automatizado",
-        "IAM analysis"
-      ],
-      "tools": ["Prowler", "Trivy", "Falco", "CloudSploit", "kube-hunter"],
-      "useCases": [
-        "Auditoría de AWS/Azure/GCP",
-        "Seguridad de Kubernetes",
-        "Compliance CIS Benchmarks",
-        "DevSecOps pipeline"
-      ]
-    },
-    "nodos": {
-      "name": "NODOS",
-      "tagline": "Integración MCP",
-      "description": "Hub de Model Context Protocol para conectar agentes IA con todas las herramientas de seguridad. El cerebro que une todo.",
-      "features": [
-        "Servidor MCP nativo",
-        "Conectores pre-construidos",
-        "Context sharing entre agentes",
-        "API unificada",
-        "Extensible con plugins"
-      ],
-      "tools": ["Claude MCP", "OpenAI Functions", "LangChain", "CrewAI", "AutoGen"],
-      "useCases": [
-        "Agentes de investigación autónomos",
-        "Chatbot de SOC",
-        "Automatización de reportes",
-        "Asistente de análisis"
-      ]
+      "tools": ["MISP", "TheHive", "Cortex", "APIs Personalizadas"]
     }
-  }
+  ]
 }

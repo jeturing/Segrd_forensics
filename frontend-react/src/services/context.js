@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Context Service
+ * SEGRD Security - Context Service
  * Servicio para gestión de contexto de caso activo
  */
 

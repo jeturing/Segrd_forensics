@@ -24,7 +24,7 @@ import { MobileAgents } from './components/MobileAgents';
 import { ActiveInvestigation } from './components/ActiveInvestigation';
 import { AttackGraph } from './components/Graph';
 import { IOCStore } from './components/IOCStore';
-import KaliTools from './components/KaliTools';
+import SecurityTools from './components/SecurityTools';
 // v4.1 - New components
 import { PlaybookRunner } from './components/SOAR';
 import { CorrelationDashboard } from './components/Correlation';
@@ -174,9 +174,9 @@ function App() {
                 </ProtectedRoute>
               } />
 
-              <Route path="/kali-tools" element={
+              <Route path="/security-tools" element={
                 <ProtectedRoute>
-                  <Layout><KaliTools /></Layout>
+                  <Layout><SecurityTools /></Layout>
                 </ProtectedRoute>
               } />
 

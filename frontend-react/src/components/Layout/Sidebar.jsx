@@ -15,7 +15,7 @@ const menuItems = [
   {
     category: 'Herramientas',
     items: [
-      { id: 'kali-tools', label: 'Kali Tools', icon: '🐉', path: '/kali-tools' },
+      { id: 'security-tools', label: 'Security Tools', icon: '🐉', path: '/security-tools' },
       { id: 'agents', label: 'Agentes Móviles', icon: '📱', path: '/agents' },
       { id: 'active', label: 'Investigación Activa', icon: '⚡', path: '/active-investigation' }
     ]

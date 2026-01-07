@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - IOC Store Service
+ * SEGRD Security - IOC Store Service
  * Servicio completo para gestión de IOCs con CRUD
  * Actualizado para usar el helper api con autenticación
  */

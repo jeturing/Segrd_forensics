@@ -26,7 +26,7 @@ export default function Topbar({
         {/* Center: Title */}
         <div className="flex-1 ml-6 flex flex-col gap-1">
           <h1 className="text-xl font-semibold text-gray-100">
-            MCP Kali Forensics & IR
+            SEGRD Security & IR
           </h1>
           <div className="text-xs text-gray-400">
             Plataforma DFIR • Multi-tenant M365

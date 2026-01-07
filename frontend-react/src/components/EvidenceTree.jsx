@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Evidence Tree Component v4.4.1
+ * SEGRD Security - Evidence Tree Component v4.4.1
  * Árbol jerárquico de evidencias de un caso
  */
 

@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Live Logs Panel v4.4.1
+ * SEGRD Security - Live Logs Panel v4.4.1
  * Panel de logs en tiempo real con WebSocket y filtrado
  */
 

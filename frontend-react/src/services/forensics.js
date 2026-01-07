@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Forensics Service
+ * SEGRD Security - Forensics Service
  * Servicio completo para análisis forense
  */
 

@@ -1,5 +1,5 @@
 /**
- * MCP Kali Forensics - Modules Service
+ * SEGRD Security - Modules Service
  * Servicio completo para gestión de módulos
  */
 

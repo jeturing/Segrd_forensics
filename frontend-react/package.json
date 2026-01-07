@@ -1,8 +1,8 @@
 {
-  "name": "mcp-forensics-react",
+  "name": "segrd-forensics-react",
   "version": "1.0.0",
   "type": "module",
-  "description": "React Frontend for MCP Kali Forensics & IR",
+  "description": "React Frontend for SEGRD - Security, Forensics MCP Kali Forensics Incident Response & IR",
   "main": "index.html",
   "scripts": {
     "dev": "vite",

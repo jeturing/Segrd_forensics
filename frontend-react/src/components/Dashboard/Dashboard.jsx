@@ -163,7 +163,7 @@ export default function Dashboard() {
   };
 
   const handleThreatHunting = () => {
-    navigate('/kali-tools');
+    navigate('/security-tools');
     toast.info('Abriendo herramientas de Threat Hunting');
   };
 
@@ -186,7 +186,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-100">Dashboard</h1>
-          <p className="text-gray-400 mt-1">             MCP Kali Forensics & IR - v4.1</p>
+          <p className="text-gray-400 mt-1">             SEGRD Security & IR - v4.1</p>
         </div>
         <div className="flex items-center gap-2">
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${

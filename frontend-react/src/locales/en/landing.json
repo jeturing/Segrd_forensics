@@ -3,80 +3,103 @@
     "title": "Security, Forensics & Incident Response",
     "subtitle": "For Regulated Organizations",
     "description": "SEGRD is a modular platform built for organizations that require evidence integrity, controlled automation and private AI execution — without enterprise complexity.",
-    "cta1": "Start Free Trial",
-    "cta2": "Request Demo",
-    "trustedBy": "Trusted by security teams worldwide"
+    "cta_primary": "Start Free Trial",
+    "cta_secondary": "Explore Modules"
   },
   "value": {
     "title": "Why SEGRD?",
-    "subtitle": "Built for regulated environments where evidence integrity matters",
-    "cards": {
-      "forensics": {
-        "title": "Digital Forensics",
-        "desc": "Legal-grade evidence collection with SHA-256 hashing, chain of custody, and exportable forensic reports."
+    "cards": [
+      {
+        "icon": "shield",
+        "title": "Your LLM, Your Control",
+        "description": "Connect your own AI: OpenAI, Claude, local Ollama, or any compatible model. Your data never leaves your infrastructure."
       },
-      "ir": {
-        "title": "Incident Response",
-        "desc": "Automated playbooks and real-time threat detection for rapid containment and remediation."
+      {
+        "icon": "cpu",
+        "title": "MCP-First",
+        "description": "Model Context Protocol architecture for native integration with AI agents and automated workflows."
       },
-      "ai": {
-        "title": "Private AI Analysis",
-        "desc": "BYO-LLM architecture — your AI, your data. No sensitive information leaves your environment."
+      {
+        "icon": "clock",
+        "title": "Response in Minutes",
+        "description": "Reduce forensic investigation time from days to hours with automated analysis and intelligent correlation."
       },
-      "compliance": {
-        "title": "Compliance Ready",
-        "desc": "Immutable audit logs, RBAC, and multi-tenant isolation for regulatory requirements."
+      {
+        "icon": "dollar",
+        "title": "Predictable Cost",
+        "description": "Fixed price per seat. No surprises from token consumption or data volume analyzed."
       }
-    }
+    ]
   },
   "markets": {
-    "title": "Built for Your Industry",
-    "subtitle": "SEGRD is designed for organizations with strict security and compliance requirements",
-    "soc": {
-      "title": "Small & Medium SOCs",
-      "desc": "Enterprise-grade capabilities without enterprise complexity.",
-      "features": ["Automated threat detection", "Playbook automation", "Real-time dashboards"]
-    },
-    "legal": {
-      "title": "Law Firms & Expert Witnesses",
-      "desc": "Digital forensics and counter-expertise for litigation.",
-      "features": ["Expert witness reports", "Evidence integrity", "Counter-expertise analysis"]
-    },
-    "banking": {
-      "title": "Small & Regional Banks",
-      "desc": "Regulatory compliance and fraud investigation.",
-      "features": ["Fraud investigation", "Compliance reporting", "Audit trail"]
-    }
+    "title": "Built For",
+    "segments": [
+      {
+        "id": "soc",
+        "title": "Small SOCs and MSSPs",
+        "description": "Teams of 2-20 analysts who need enterprise capabilities without complexity. Automate triage, accelerate investigation.",
+        "features": ["Multi-source correlation", "Automated playbooks", "Executive reports"]
+      },
+      {
+        "id": "legal",
+        "title": "Law Firms",
+        "description": "Digital forensics expert witness, eDiscovery and forensic analysis for litigation. Certified chain of custody.",
+        "features": ["Expert witness reports", "Chain of custody", "Integrated eDiscovery"]
+      },
+      {
+        "id": "banking",
+        "title": "Banks and Financial Institutions",
+        "description": "PCI-DSS compliance, fraud detection and incident response for regulated entities.",
+        "features": ["PCI/SOX compliance", "Fraud detection", "Continuous audit"]
+      }
+    ]
   },
   "byollm": {
-    "title": "Your AI, Your Control",
-    "subtitle": "Bring Your Own LLM",
-    "description": "Unlike other platforms, SEGRD never sends your sensitive data to third-party AI services.",
-    "how": {
-      "title": "How It Works",
-      "step1": { "title": "Deploy Your LLM", "desc": "Run Llama, Mistral, or any compatible model in your environment" },
-      "step2": { "title": "Connect via Tailscale", "desc": "Secure zero-trust VPN connection — no public endpoints" },
-      "step3": { "title": "SEGRD Orchestrates", "desc": "We send minimal, redacted context and receive structured JSON results" }
-    },
-    "benefits": {
-      "privacy": "No PII leaves your network",
-      "control": "You control the model and training data",
-      "audit": "Full audit trail of prompts and responses",
-      "swap": "Swap models without platform changes"
-    }
+    "title": "Bring Your Own LLM",
+    "description": "SEGRD works with any language model. You choose where your sensitive information is processed.",
+    "providers": ["OpenAI", "Anthropic Claude", "Google Gemini", "Ollama Local", "Azure OpenAI", "AWS Bedrock"],
+    "steps": [
+      {
+        "number": "1",
+        "title": "Connect",
+        "description": "Configure your preferred LLM provider in minutes"
+      },
+      {
+        "number": "2",
+        "title": "Analyze",
+        "description": "Data is processed according to your privacy policies"
+      },
+      {
+        "number": "3",
+        "title": "Control",
+        "description": "Complete audit of every query and response"
+      }
+    ]
   },
   "security": {
-    "title": "Enterprise Security, Simplified",
-    "features": {
-      "zerotrust": { "title": "Zero-Trust Architecture", "desc": "Tailscale VPN with identity-based access." },
-      "multiTenant": { "title": "True Multi-Tenancy", "desc": "Complete data isolation between tenants." },
-      "auditLog": { "title": "Immutable Audit Logs", "desc": "Every action logged with timestamps." },
-      "evidenceIntegrity": { "title": "Evidence Integrity", "desc": "SHA-256 hashing and verifiable exports." }
-    }
+    "title": "Enterprise Security",
+    "features": [
+      {
+        "title": "End-to-end encryption",
+        "description": "AES-256 at rest, TLS 1.3 in transit"
+      },
+      {
+        "title": "Data isolation",
+        "description": "Each tenant in separate infrastructure"
+      },
+      {
+        "title": "Complete audit",
+        "description": "Immutable logs of every action"
+      },
+      {
+        "title": "Regulatory compliance",
+        "description": "SOC 2 Type II, GDPR, HIPAA ready"
+      }
+    ]
   },
-  "cta": {
-    "title": "Ready to Secure Your Organization?",
-    "subtitle": "Start your 14-day free trial. No credit card required.",
-    "button": "Get Started Free"
+  "cta_section": {
+    "title": "Ready to transform your security operation?",
+    "description": "Get started in minutes. No credit card required for trial.",
+    "button": "Request Demo"
   }
 }

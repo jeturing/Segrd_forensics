@@ -1,6 +1,6 @@
 /**
  * Profile Page - User Profile Management
- * MCP Kali Forensics v4.5
+ * SEGRD Security v4.5
  */
 
 import React, { useState, useEffect } from 'react';

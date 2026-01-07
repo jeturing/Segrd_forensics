@@ -13,8 +13,9 @@ const moduleColors = {
 
 const ModulesGrid = () => {
   const { t } = useTranslation("modules");
-  const modules = t("modules", { returnObjects: true });
-  const moduleKeys = Object.keys(modules);
+  const modulesData = t("items", { returnObjects: true }) || [];
+  const modules = Array.isArray(modulesData) ? modulesData : [];
+  // Use array directly instead of keys
 
   return (
     <section className="py-24 bg-gray-800">
@@ -30,8 +31,8 @@ const ModulesGrid = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {moduleKeys.map((key) => {
-            const mod = modules[key];
+          {modules.map((mod, index) => {
+            const key = mod.slug;
             return (
               <Link
                 key={key}
