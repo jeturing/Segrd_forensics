@@ -197,13 +197,26 @@ const LoginPage = () => {
           </form>
 
           {/* Footer */}
-          <div className="mt-6 pt-6 border-t border-gray-700 text-center">
-            <p className="text-sm text-gray-400">
-              ¿Olvidaste tu contraseña?{' '}
-              <a href="/forgot-password" className="text-blue-400 hover:text-blue-300">
-                Recuperar acceso
-              </a>
-            </p>
+          <div className="mt-6 pt-6 border-t border-gray-700 space-y-3">
+            <div className="text-center">
+              <p className="text-sm text-gray-400">
+                ¿Olvidaste tu contraseña?{' '}
+                <a href="/forgot-password" className="text-blue-400 hover:text-blue-300">
+                  Recuperar acceso
+                </a>
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-400">
+                ¿No tienes una cuenta?{' '}
+                <button 
+                  onClick={() => navigate('/register')}
+                  className="text-blue-400 hover:text-blue-300 font-medium"
+                >
+                  Crear cuenta gratis
+                </button>
+              </p>
+            </div>
           </div>
         </div>
 
