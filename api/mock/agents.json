@@ -1,0 +1,105 @@
+{
+  "agents": [
+    {
+      "id": "agent-001",
+      "name": "WORKSTATION-01",
+      "type": "intune",
+      "status": "online",
+      "lastSeen": "2025-12-05T10:30:00Z",
+      "osVersion": "Windows 11 Pro Build 23435",
+      "ipAddress": "192.168.1.100",
+      "macAddress": "00:1A:2B:3C:4D:5E",
+      "hostname": "WORKSTATION-01.sinerlex.local",
+      "domain": "sinerlex.local",
+      "enrolledAt": "2025-01-15T08:00:00Z",
+      "lastSync": "2025-12-05T10:28:00Z",
+      "cases": ["IR-2025-001", "IR-2025-003", "IR-2025-005"],
+      "capabilities": ["remote_shell", "file_collection", "process_list", "registry", "event_logs", "network_capture"],
+      "agentVersion": "3.2.1",
+      "compliance": {
+        "antivirus": true,
+        "firewall": true,
+        "encryption": true,
+        "lastScan": "2025-12-05T06:00:00Z"
+      }
+    },
+    {
+      "id": "agent-002",
+      "name": "LAPTOP-MAC-01",
+      "type": "osquery",
+      "status": "online",
+      "lastSeen": "2025-12-05T10:25:00Z",
+      "osVersion": "macOS 14.2.1 Sonoma",
+      "ipAddress": "192.168.1.105",
+      "macAddress": "A4:83:E7:12:34:56",
+      "hostname": "MacBook-Pro-Juan.local",
+      "domain": null,
+      "enrolledAt": "2025-02-20T14:30:00Z",
+      "lastSync": "2025-12-05T10:20:00Z",
+      "cases": ["IR-2025-002"],
+      "capabilities": ["sql_queries", "process_list", "network_sockets", "file_analysis", "system_info"],
+      "agentVersion": "5.10.2",
+      "osqueryTables": ["processes", "listening_ports", "users", "chrome_extensions", "apps"]
+    },
+    {
+      "id": "agent-003",
+      "name": "SERVER-PROD-01",
+      "type": "velociraptor",
+      "status": "offline",
+      "lastSeen": "2025-12-05T08:15:00Z",
+      "osVersion": "Ubuntu 22.04.3 LTS",
+      "ipAddress": "10.0.1.50",
+      "macAddress": "B8:27:EB:AA:BB:CC",
+      "hostname": "srv-prod-01.sinerlex.local",
+      "domain": "sinerlex.local",
+      "enrolledAt": "2024-11-10T09:00:00Z",
+      "lastSync": "2025-12-05T08:10:00Z",
+      "cases": ["IR-2024-999", "IR-2025-001", "IR-2025-004", "IR-2025-005", "IR-2025-006"],
+      "capabilities": ["yara_scanning", "memory_capture", "registry_collection", "event_logs", "network_capture", "artifact_collection"],
+      "agentVersion": "0.7.1",
+      "artifacts": ["Windows.KapeFiles.Targets", "Linux.Sys.Auditd", "Generic.Forensic.Timeline"]
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "online": 2,
+    "offline": 1,
+    "byType": {
+      "intune": 1,
+      "osquery": 1,
+      "velociraptor": 1
+    },
+    "byOS": {
+      "windows": 1,
+      "macos": 1,
+      "linux": 1
+    }
+  },
+  "deployTemplates": {
+    "intune": {
+      "downloadUrl": "https://intune.microsoft.com/agent/download",
+      "installScript": "msiexec /i IntuneAgent.msi /qn TENANT_ID={{tenant_id}}",
+      "requirements": ["Windows 10/11", "Azure AD Join", "Internet connectivity"]
+    },
+    "osquery": {
+      "downloadUrl": "https://pkg.osquery.io/",
+      "installScript": {
+        "windows": "choco install osquery",
+        "macos": "brew install osquery",
+        "linux": "apt-get install osquery"
+      },
+      "configTemplate": {
+        "options": {
+          "config_plugin": "tls",
+          "logger_plugin": "tls",
+          "tls_hostname": "{{server_hostname}}"
+        }
+      }
+    },
+    "velociraptor": {
+      "downloadUrl": "https://github.com/Velocidex/velociraptor/releases",
+      "clientConfig": "velociraptor config client generate",
+      "requirements": ["Admin rights", "Port 8000 outbound"]
+    }
+  }
+}

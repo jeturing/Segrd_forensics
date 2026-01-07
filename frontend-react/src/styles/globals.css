@@ -1,0 +1,350 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply transition-colors duration-200;
+}
+
+body {
+  @apply bg-gray-900 text-gray-100 font-sans;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded hover:bg-gray-500;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+/* Button utilities */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white;
+}
+
+.btn-secondary {
+  @apply bg-gray-700 hover:bg-gray-600 text-gray-100;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white;
+}
+
+.btn-sm {
+  @apply px-2 py-1 text-sm;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-lg;
+}
+
+/* Card utilities */
+.card {
+  @apply bg-gray-800 rounded-lg shadow-lg border border-gray-700;
+}
+
+.card-hover {
+  @apply hover:shadow-xl hover:border-gray-600 transition-all;
+}
+
+/* Input utilities */
+.input-base {
+  @apply w-full px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border border-gray-600;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  @apply placeholder-gray-500;
+}
+
+/* Badge utilities */
+.badge {
+  @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-info {
+  @apply bg-blue-900 text-blue-200;
+}
+
+.badge-success {
+  @apply bg-green-900 text-green-200;
+}
+
+.badge-warning {
+  @apply bg-yellow-900 text-yellow-200;
+}
+
+.badge-danger {
+  @apply bg-red-900 text-red-200;
+}
+
+/* Alert utilities */
+.alert {
+  @apply flex items-start gap-3 p-4 rounded-lg border;
+}
+
+.alert-info {
+  @apply bg-blue-900/30 border-blue-700 text-blue-200;
+}
+
+.alert-success {
+  @apply bg-green-900/30 border-green-700 text-green-200;
+}
+
+.alert-warning {
+  @apply bg-yellow-900/30 border-yellow-700 text-yellow-200;
+}
+
+.alert-danger {
+  @apply bg-red-900/30 border-red-700 text-red-200;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block animate-spin;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-gray-800 rounded-lg shadow-2xl max-w-md w-full mx-4;
+}
+/* ========================================
+   v4.6: Purple Team Visual Query Animations  
+   ======================================== */
+
+/* Animated pulse for active queries */
+@keyframes queryPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(168, 85, 247, 0);
+  }
+}
+
+.query-pulse {
+  animation: queryPulse 2s ease-in-out infinite;
+}
+
+/* Scanning line animation */
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a855f7, transparent);
+  animation: scanLine 2s ease-in-out infinite;
+}
+
+/* Data flow animation */
+@keyframes dataFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.data-flow {
+  background: linear-gradient(90deg, #1e1b4b, #581c87, #7e22ce, #581c87, #1e1b4b);
+  background-size: 200% 100%;
+  animation: dataFlow 3s ease infinite;
+}
+
+/* Typing/processing dots */
+@keyframes typingDots {
+  0%, 20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.typing-dot {
+  animation: typingDots 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Circular progress ring */
+@keyframes progressRing {
+  0% {
+    stroke-dashoffset: 283;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.progress-ring {
+  animation: progressRing 2s linear forwards;
+}
+
+/* Glow effect for LLM operations */
+@keyframes aiGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px #a855f7) drop-shadow(0 0 10px #7e22ce);
+  }
+  50% {
+    filter: drop-shadow(0 0 15px #a855f7) drop-shadow(0 0 25px #7e22ce);
+  }
+}
+
+.ai-glow {
+  animation: aiGlow 2s ease-in-out infinite;
+}
+
+/* Card shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Bounce in animation */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce-in {
+  animation: bounceIn 0.5s ease-out;
+}
+
+/* Slide up with fade */
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-fade {
+  animation: slideUpFade 0.4s ease-out;
+}
+
+/* Network activity indicator */
+@keyframes networkPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.network-pulse {
+  animation: networkPulse 1s ease-in-out infinite;
+}
+
+/* Purple team gradient background */
+.purple-team-gradient {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+}
+
+/* Agent activity indicator */
+@keyframes agentActivity {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.agent-activity {
+  animation: agentActivity 1s linear infinite;
+}

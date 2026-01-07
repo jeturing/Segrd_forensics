@@ -1,0 +1,194 @@
+{
+  "investigations": [
+    {
+      "id": "IR-2025-001",
+      "name": "Análisis de abuso de envío de correo",
+      "description": "Investigación de patrón anómalo de envío masivo desde cuenta de usuario comprometida. Se detectaron más de 5,000 correos enviados en 24 horas.",
+      "severity": "critical",
+      "status": "in-progress",
+      "priority": "P0",
+      "createdAt": "2025-12-01T08:30:00Z",
+      "updatedAt": "2025-12-05T10:15:00Z",
+      "closedAt": null,
+      "assignedTo": {
+        "id": "user-001",
+        "name": "Juan Pérez",
+        "email": "juan.perez@sinerlex.com",
+        "avatar": "JP"
+      },
+      "tenant": {
+        "id": "3af2e132-c361-4467-9d8b-081f06630c12",
+        "name": "SINERLEX DOMINICANA"
+      },
+      "iocs": [
+        {"type": "ip", "value": "185.234.72.15", "confidence": "high", "source": "email_headers"},
+        {"type": "ip", "value": "91.234.99.42", "confidence": "medium", "source": "sign_in_logs"},
+        {"type": "email", "value": "attacker@malicious-domain.com", "confidence": "high", "source": "recipient_list"},
+        {"type": "domain", "value": "malicious-domain.com", "confidence": "high", "source": "email_links"},
+        {"type": "user_agent", "value": "Python-urllib/3.9", "confidence": "medium", "source": "sign_in_logs"}
+      ],
+      "evidence": [
+        {"id": "ev-001", "type": "m365_audit", "name": "unified_audit_log.json", "size": 2457600, "collectedAt": "2025-12-01T09:00:00Z"},
+        {"id": "ev-002", "type": "sparrow", "name": "sparrow_analysis.csv", "size": 156800, "collectedAt": "2025-12-01T10:30:00Z"},
+        {"id": "ev-003", "type": "hawk", "name": "hawk_mailbox_report.csv", "size": 89600, "collectedAt": "2025-12-02T08:00:00Z"}
+      ],
+      "timeline": [
+        {"timestamp": "2025-11-30T22:15:00Z", "event": "Compromiso inicial", "description": "Login exitoso desde IP sospechosa", "severity": "critical"},
+        {"timestamp": "2025-11-30T22:30:00Z", "event": "Regla de buzón creada", "description": "Regla para reenviar correos a cuenta externa", "severity": "high"},
+        {"timestamp": "2025-12-01T01:00:00Z", "event": "Envío masivo iniciado", "description": "Inicio de campaña de spam/phishing", "severity": "critical"},
+        {"timestamp": "2025-12-01T08:00:00Z", "event": "Detección", "description": "Alertas de Microsoft Defender", "severity": "info"},
+        {"timestamp": "2025-12-01T08:30:00Z", "event": "Caso creado", "description": "Inicio de investigación formal", "severity": "info"}
+      ],
+      "notes": [
+        {"id": "note-001", "author": "Juan Pérez", "content": "Usuario confirmó que no reconoce la actividad. Procedemos a reset de contraseña.", "createdAt": "2025-12-01T09:00:00Z"},
+        {"id": "note-002", "author": "María García", "content": "IP 185.234.72.15 asociada a campañas de phishing previas según VirusTotal.", "createdAt": "2025-12-02T11:00:00Z"}
+      ],
+      "metrics": {
+        "hoursOpen": 96,
+        "iocsFound": 5,
+        "evidenceCollected": 3,
+        "commandsExecuted": 12
+      }
+    },
+    {
+      "id": "IR-2025-002",
+      "name": "Posible compromiso de Azure AD",
+      "description": "Alertas de múltiples intentos de login fallidos seguidos de acceso exitoso desde ubicación geográfica inusual.",
+      "severity": "high",
+      "status": "open",
+      "priority": "P1",
+      "createdAt": "2025-12-03T14:00:00Z",
+      "updatedAt": "2025-12-05T09:30:00Z",
+      "closedAt": null,
+      "assignedTo": {
+        "id": "user-002",
+        "name": "María García",
+        "email": "maria.garcia@sinerlex.com",
+        "avatar": "MG"
+      },
+      "tenant": {
+        "id": "3af2e132-c361-4467-9d8b-081f06630c12",
+        "name": "SINERLEX DOMINICANA"
+      },
+      "iocs": [
+        {"type": "ip", "value": "203.0.113.45", "confidence": "high", "source": "azure_signin"},
+        {"type": "ip", "value": "203.0.113.46", "confidence": "medium", "source": "azure_signin"},
+        {"type": "location", "value": "Moscow, Russia", "confidence": "high", "source": "geolocation"}
+      ],
+      "evidence": [
+        {"id": "ev-004", "type": "azure_signin", "name": "signin_logs.json", "size": 512000, "collectedAt": "2025-12-03T15:00:00Z"}
+      ],
+      "timeline": [
+        {"timestamp": "2025-12-03T12:00:00Z", "event": "Brute force detectado", "description": "50+ intentos fallidos en 10 minutos", "severity": "high"},
+        {"timestamp": "2025-12-03T12:15:00Z", "event": "Login exitoso", "description": "Acceso desde Rusia", "severity": "critical"},
+        {"timestamp": "2025-12-03T14:00:00Z", "event": "Alerta recibida", "description": "Microsoft Sentinel alert", "severity": "info"}
+      ],
+      "notes": [],
+      "metrics": {
+        "hoursOpen": 48,
+        "iocsFound": 3,
+        "evidenceCollected": 1,
+        "commandsExecuted": 5
+      }
+    },
+    {
+      "id": "IR-2024-999",
+      "name": "Respuesta a malware en endpoints",
+      "description": "Detección y eliminación de trojan bancario Emotet en 3 workstations del departamento de finanzas.",
+      "severity": "high",
+      "status": "resolved",
+      "priority": "P1",
+      "createdAt": "2024-11-15T10:00:00Z",
+      "updatedAt": "2024-11-28T16:00:00Z",
+      "closedAt": "2024-11-28T16:00:00Z",
+      "assignedTo": {
+        "id": "user-003",
+        "name": "Carlos López",
+        "email": "carlos.lopez@sinerlex.com",
+        "avatar": "CL"
+      },
+      "tenant": {
+        "id": "3af2e132-c361-4467-9d8b-081f06630c12",
+        "name": "SINERLEX DOMINICANA"
+      },
+      "iocs": [
+        {"type": "hash_sha256", "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "confidence": "high", "source": "loki_scan"},
+        {"type": "domain", "value": "emotet-c2.bad-domain.net", "confidence": "high", "source": "network_traffic"},
+        {"type": "ip", "value": "45.33.32.156", "confidence": "high", "source": "network_traffic"},
+        {"type": "file", "value": "invoice_12345.doc", "confidence": "high", "source": "email_attachment"}
+      ],
+      "evidence": [
+        {"id": "ev-010", "type": "loki", "name": "loki_scan_results.csv", "size": 45000, "collectedAt": "2024-11-15T11:00:00Z"},
+        {"id": "ev-011", "type": "yara", "name": "yara_matches.json", "size": 12000, "collectedAt": "2024-11-15T11:30:00Z"},
+        {"id": "ev-012", "type": "memory", "name": "memory_dump.raw", "size": 4294967296, "collectedAt": "2024-11-15T12:00:00Z"}
+      ],
+      "timeline": [],
+      "notes": [
+        {"id": "note-010", "author": "Carlos López", "content": "Emotet confirmado. Se procedió a aislamiento de equipos afectados.", "createdAt": "2024-11-15T12:00:00Z"}
+      ],
+      "metrics": {
+        "hoursOpen": 312,
+        "iocsFound": 45,
+        "evidenceCollected": 23,
+        "commandsExecuted": 156
+      }
+    },
+    {
+      "id": "IR-2025-003",
+      "name": "Data exfiltration investigation",
+      "description": "Investigación de posible robo de datos sensibles hacia almacenamiento en la nube personal.",
+      "severity": "critical",
+      "status": "on-hold",
+      "priority": "P0",
+      "createdAt": "2025-12-04T08:00:00Z",
+      "updatedAt": "2025-12-04T17:00:00Z",
+      "closedAt": null,
+      "assignedTo": {
+        "id": "user-004",
+        "name": "Ana Martínez",
+        "email": "ana.martinez@sinerlex.com",
+        "avatar": "AM"
+      },
+      "tenant": {
+        "id": "3af2e132-c361-4467-9d8b-081f06630c12",
+        "name": "SINERLEX DOMINICANA"
+      },
+      "iocs": [
+        {"type": "url", "value": "https://drive.google.com/upload/xyz123", "confidence": "medium", "source": "proxy_logs"},
+        {"type": "user", "value": "empleado.sospechoso@sinerlex.com", "confidence": "high", "source": "dlp_alert"}
+      ],
+      "evidence": [
+        {"id": "ev-020", "type": "proxy", "name": "proxy_logs.csv", "size": 890000, "collectedAt": "2025-12-04T09:00:00Z"}
+      ],
+      "timeline": [],
+      "notes": [
+        {"id": "note-020", "author": "Ana Martínez", "content": "Esperando aprobación legal para revisar correos del empleado.", "createdAt": "2025-12-04T17:00:00Z"}
+      ],
+      "metrics": {
+        "hoursOpen": 24,
+        "iocsFound": 8,
+        "evidenceCollected": 15,
+        "commandsExecuted": 3
+      }
+    }
+  ],
+  "stats": {
+    "total": 4,
+    "byStatus": {
+      "open": 1,
+      "in-progress": 1,
+      "on-hold": 1,
+      "resolved": 1,
+      "closed": 0
+    },
+    "bySeverity": {
+      "critical": 2,
+      "high": 2,
+      "medium": 0,
+      "low": 0
+    },
+    "avgResolutionTime": "156 hours",
+    "iocsTotal": 61,
+    "evidenceTotal": 42
+  }
+}

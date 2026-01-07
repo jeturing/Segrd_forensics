@@ -1,0 +1,100 @@
+{
+  "foren": {
+    "slug": "forensics",
+    "name": "FOREN",
+    "title": "Digital Forensics & Counter-Expertise",
+    "tagline": "Legal-grade evidence collection and analysis",
+    "description": "Comprehensive digital forensics platform for investigations, litigation support, and expert witness testimony.",
+    "features": [
+      { "title": "Evidence Collection", "desc": "Automated collection from endpoints, cloud, and mobile" },
+      { "title": "Chain of Custody", "desc": "Complete audit trail with SHA-256 hashing" },
+      { "title": "Expert Reports", "desc": "Court-ready forensic reports" },
+      { "title": "Counter-Expertise", "desc": "Validate or challenge existing forensic findings" }
+    ],
+    "tools": ["Sparrow", "Hawk", "YARA", "Loki", "Volatility"]
+  },
+  "axion": {
+    "slug": "incident-response",
+    "name": "AXION",
+    "title": "Incident Response",
+    "tagline": "Rapid containment and remediation",
+    "description": "End-to-end incident response from detection to recovery.",
+    "features": [
+      { "title": "Automated Playbooks", "desc": "Pre-built and custom playbooks" },
+      { "title": "Real-time Triage", "desc": "AI-assisted prioritization" },
+      { "title": "Containment Actions", "desc": "One-click isolation and remediation" },
+      { "title": "Post-Incident Reports", "desc": "Automated timeline generation" }
+    ],
+    "tools": ["OSQuery", "Velociraptor", "FastIR", "GHOST"]
+  },
+  "vigil": {
+    "slug": "threat-monitoring",
+    "name": "VIGIL",
+    "title": "Threat Monitoring",
+    "tagline": "Continuous visibility into your environment",
+    "description": "24/7 threat detection and monitoring across endpoints, cloud, and network.",
+    "features": [
+      { "title": "Behavioral Analytics", "desc": "ML-powered anomaly detection" },
+      { "title": "Threat Intelligence", "desc": "Integration with MISP and OTX" },
+      { "title": "Alert Correlation", "desc": "Intelligent alert grouping" },
+      { "title": "Custom Detection", "desc": "Sigma and YARA rules" }
+    ],
+    "tools": ["Sigma", "YARA", "MISP", "Elastic"]
+  },
+  "orbia": {
+    "slug": "automation",
+    "name": "ORBIA",
+    "title": "Security Automation (SOAR)",
+    "tagline": "Orchestrate, automate, respond",
+    "description": "Connect your security tools and automate repetitive tasks.",
+    "features": [
+      { "title": "Visual Workflow Builder", "desc": "No-code playbook creation" },
+      { "title": "200+ Integrations", "desc": "Connect to your security stack" },
+      { "title": "Case Management", "desc": "Unified incident view" },
+      { "title": "Metrics", "desc": "Track MTTR and MTTD" }
+    ],
+    "tools": ["Playbook Engine", "API Gateway", "Webhook Handler"]
+  },
+  "cortexa": {
+    "slug": "ai-analysis",
+    "name": "CORTEXA",
+    "title": "AI & LLM Analysis",
+    "tagline": "Intelligent security insights",
+    "description": "Leverage AI for threat analysis and investigation assistance.",
+    "features": [
+      { "title": "Log Analysis", "desc": "Natural language queries" },
+      { "title": "Threat Summarization", "desc": "AI-generated summaries" },
+      { "title": "IOC Extraction", "desc": "Automatic indicator extraction" },
+      { "title": "Investigation Assistant", "desc": "Chat-based guidance" }
+    ],
+    "tools": ["Ollama", "LM Studio", "OpenAI API", "Claude API"]
+  },
+  "clouda": {
+    "slug": "cloud-security",
+    "name": "CLOUDA",
+    "title": "Microsoft 365 & Cloud Security",
+    "tagline": "Protect your cloud workloads",
+    "description": "Deep visibility into Microsoft 365, Azure AD, and cloud infrastructure.",
+    "features": [
+      { "title": "M365 Forensics", "desc": "Unified Audit Log analysis" },
+      { "title": "Azure AD Monitoring", "desc": "Suspicious sign-in detection" },
+      { "title": "Configuration Audit", "desc": "Security baseline compliance" },
+      { "title": "BEC Detection", "desc": "Business email compromise" }
+    ],
+    "tools": ["Sparrow", "Hawk", "O365 Extractor", "Graph API"]
+  },
+  "nodos": {
+    "slug": "remote-agents",
+    "name": "NODOS",
+    "title": "Remote Agents & Execution Pods",
+    "tagline": "Extend SEGRD to any environment",
+    "description": "Deploy lightweight agents for remote evidence collection.",
+    "features": [
+      { "title": "Lightweight Agents", "desc": "Windows, Linux, macOS" },
+      { "title": "Isolated Execution", "desc": "Sandboxed containers" },
+      { "title": "Secure Transport", "desc": "Tailscale mesh network" },
+      { "title": "Remote Forensics", "desc": "Collect without shipping hardware" }
+    ],
+    "tools": ["FastIR Collector", "GHOST", "Velociraptor", "OSQuery"]
+  }
+}

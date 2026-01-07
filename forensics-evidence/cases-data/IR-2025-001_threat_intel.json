@@ -1,0 +1,53 @@
+[
+  {
+    "id": "threat_ip_lookup_45_33_32_156",
+    "case_id": "IR-2025-001",
+    "analysis_type": "ip_lookup",
+    "target": "45.33.32.156",
+    "result": {
+      "ip": "45.33.32.156",
+      "malicious": true,
+      "abuse_score": 80,
+      "country": "US",
+      "isp": "Linode"
+    },
+    "threat_level": "medium",
+    "indicators": [],
+    "metadata": {},
+    "created_at": "2025-12-06T06:18:36.011613",
+    "graph_node": {
+      "id": "threat_ip_lookup_45_33_32_156",
+      "label": "45.33.32.156",
+      "type": "threat_ip_lookup",
+      "threatLevel": "medium",
+      "indicators": [],
+      "metadata": {}
+    }
+  },
+  {
+    "id": "threat_email_check_usuario_empresa_com",
+    "case_id": "IR-2025-001",
+    "analysis_type": "email_check",
+    "target": "usuario@empresa.com",
+    "result": {
+      "email": "usuario@empresa.com",
+      "breaches": [
+        "Breach2024"
+      ],
+      "hibp": true,
+      "exposed_passwords": 2
+    },
+    "threat_level": "medium",
+    "indicators": [],
+    "metadata": {},
+    "created_at": "2025-12-06T06:18:36.116167",
+    "graph_node": {
+      "id": "threat_email_check_usuario_empresa_com",
+      "label": "usuario@empresa.com",
+      "type": "threat_email_check",
+      "threatLevel": "medium",
+      "indicators": [],
+      "metadata": {}
+    }
+  }
+]

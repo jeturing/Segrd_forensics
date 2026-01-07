@@ -1,0 +1,105 @@
+{
+  "hero": {
+    "title": "SEGRD",
+    "subtitle": "Seguridad, Forense y Respuesta a Incidentes",
+    "description": "Plataforma integral para SOC pequeños, bufetes de abogados y entidades financieras. Usa tu propio LLM para análisis forense avanzado con privacidad total.",
+    "cta_primary": "Solicitar Demo",
+    "cta_secondary": "Ver Módulos"
+  },
+  "value": {
+    "title": "¿Por qué SEGRD?",
+    "cards": [
+      {
+        "icon": "shield",
+        "title": "Tu LLM, Tu Control",
+        "description": "Conecta tu propia IA: OpenAI, Claude, Ollama local, o cualquier modelo compatible. Tus datos nunca salen de tu infraestructura."
+      },
+      {
+        "icon": "cpu",
+        "title": "MCP-First",
+        "description": "Arquitectura Model Context Protocol para integración nativa con agentes IA y flujos de trabajo automatizados."
+      },
+      {
+        "icon": "clock",
+        "title": "Respuesta en Minutos",
+        "description": "Reduce el tiempo de investigación forense de días a horas con análisis automatizado y correlación inteligente."
+      },
+      {
+        "icon": "dollar",
+        "title": "Costo Predecible",
+        "description": "Precio fijo por asiento. Sin sorpresas por tokens consumidos o volumen de datos analizados."
+      }
+    ]
+  },
+  "markets": {
+    "title": "Diseñado Para",
+    "segments": [
+      {
+        "id": "soc",
+        "title": "SOC Pequeños y MSSPs",
+        "description": "Equipos de 2-20 analistas que necesitan capacidades enterprise sin la complejidad. Automatiza el triaje, acelera la investigación.",
+        "features": ["Correlación multi-fuente", "Playbooks automatizados", "Reportes ejecutivos"]
+      },
+      {
+        "id": "legal",
+        "title": "Bufetes de Abogados",
+        "description": "Contraperitajes informáticos, eDiscovery y análisis forense para litigios. Cadena de custodia certificada.",
+        "features": ["Informes periciales", "Cadena de custodia", "eDiscovery integrado"]
+      },
+      {
+        "id": "banking",
+        "title": "Bancos y Financieras",
+        "description": "Cumplimiento PCI-DSS, detección de fraude y respuesta a incidentes para entidades reguladas.",
+        "features": ["Compliance PCI/SOX", "Detección de fraude", "Auditoría continua"]
+      }
+    ]
+  },
+  "byollm": {
+    "title": "Trae Tu Propio LLM",
+    "description": "SEGRD funciona con cualquier modelo de lenguaje. Tú eliges dónde se procesa tu información sensible.",
+    "providers": ["OpenAI", "Anthropic Claude", "Google Gemini", "Ollama Local", "Azure OpenAI", "AWS Bedrock"],
+    "steps": [
+      {
+        "number": "1",
+        "title": "Conecta",
+        "description": "Configura tu proveedor de LLM preferido en minutos"
+      },
+      {
+        "number": "2",
+        "title": "Analiza",
+        "description": "Los datos se procesan según tus políticas de privacidad"
+      },
+      {
+        "number": "3",
+        "title": "Controla",
+        "description": "Auditoría completa de cada consulta y respuesta"
+      }
+    ]
+  },
+  "security": {
+    "title": "Seguridad Empresarial",
+    "features": [
+      {
+        "title": "Cifrado de extremo a extremo",
+        "description": "AES-256 en reposo, TLS 1.3 en tránsito"
+      },
+      {
+        "title": "Aislamiento de datos",
+        "description": "Cada tenant en infraestructura separada"
+      },
+      {
+        "title": "Auditoría completa",
+        "description": "Logs inmutables de cada acción"
+      },
+      {
+        "title": "Cumplimiento normativo",
+        "description": "SOC 2 Type II, GDPR, HIPAA ready"
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "¿Listo para transformar tu operación de seguridad?",
+    "description": "Comienza en minutos. Sin tarjeta de crédito para la prueba.",
+    "button": "Solicitar Demo"
+  }
+}

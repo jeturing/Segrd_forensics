@@ -1,0 +1,116 @@
+{
+  "networkCaptures": [
+    {
+      "id": "cap-001",
+      "name": "WORKSTATION-01 Full Capture",
+      "agent": "WORKSTATION-01",
+      "status": "completed",
+      "startedAt": "2025-12-05T08:00:00Z",
+      "stoppedAt": "2025-12-05T08:30:00Z",
+      "duration": 1800,
+      "filter": "host 192.168.1.100",
+      "packetsCaputred": 45678,
+      "fileSize": 52428800,
+      "filePath": "/evidence/IR-2025-001/network/cap-001.pcap",
+      "caseId": "IR-2025-001"
+    },
+    {
+      "id": "cap-002",
+      "name": "Suspicious outbound traffic",
+      "agent": "SERVER-PROD-01",
+      "status": "completed",
+      "startedAt": "2025-12-04T14:00:00Z",
+      "stoppedAt": "2025-12-04T14:15:00Z",
+      "duration": 900,
+      "filter": "port 443 or port 80",
+      "packetsCaputred": 12345,
+      "fileSize": 15728640,
+      "filePath": "/evidence/IR-2025-003/network/cap-002.pcap",
+      "caseId": "IR-2025-003"
+    }
+  ],
+  "memoryDumps": [
+    {
+      "id": "mem-001",
+      "name": "WORKSTATION-01 Full Memory",
+      "agent": "WORKSTATION-01",
+      "status": "completed",
+      "startedAt": "2025-12-05T09:00:00Z",
+      "completedAt": "2025-12-05T09:15:00Z",
+      "duration": 900,
+      "fileSize": 17179869184,
+      "filePath": "/evidence/IR-2025-001/memory/mem-001.raw",
+      "caseId": "IR-2025-001",
+      "analysis": {
+        "status": "completed",
+        "processes": 156,
+        "networkConnections": 45,
+        "suspiciousFindings": 3
+      }
+    },
+    {
+      "id": "mem-002",
+      "name": "Finance Workstation Dump",
+      "agent": "WORKSTATION-FIN-01",
+      "status": "analyzing",
+      "startedAt": "2025-12-04T16:00:00Z",
+      "completedAt": "2025-12-04T16:20:00Z",
+      "duration": 1200,
+      "fileSize": 8589934592,
+      "filePath": "/evidence/IR-2024-999/memory/mem-002.raw",
+      "caseId": "IR-2024-999",
+      "analysis": {
+        "status": "in-progress",
+        "progress": 75
+      }
+    }
+  ],
+  "fileCollections": [
+    {
+      "id": "file-001",
+      "name": "Suspicious Documents",
+      "agent": "WORKSTATION-01",
+      "status": "completed",
+      "startedAt": "2025-12-05T07:00:00Z",
+      "completedAt": "2025-12-05T07:10:00Z",
+      "filesCollected": 23,
+      "totalSize": 104857600,
+      "paths": [
+        "C:\\Users\\usuario\\Downloads\\*.exe",
+        "C:\\Users\\usuario\\Downloads\\*.doc*",
+        "C:\\Temp\\*"
+      ],
+      "caseId": "IR-2025-001"
+    }
+  ],
+  "yaraScanResults": [
+    {
+      "id": "yara-001",
+      "agent": "WORKSTATION-01",
+      "scanPath": "C:\\Users\\usuario\\Downloads",
+      "rulesUsed": ["gen_malware.yar", "apt_indicators.yar"],
+      "status": "completed",
+      "startedAt": "2025-12-05T06:00:00Z",
+      "completedAt": "2025-12-05T06:05:00Z",
+      "filesScanned": 156,
+      "matches": [
+        {
+          "rule": "Emotet_Dropper",
+          "file": "C:\\Users\\usuario\\Downloads\\invoice_12345.doc",
+          "strings": ["$s1: 'powershell -enc'", "$s2: 'WScript.Shell'"],
+          "severity": "critical"
+        }
+      ],
+      "caseId": "IR-2024-999"
+    }
+  ],
+  "captureStatus": {
+    "activeCaptures": 0,
+    "totalCaptures": 2,
+    "totalMemoryDumps": 2,
+    "totalFileCollections": 1,
+    "totalYaraScans": 1,
+    "storageUsed": "45.2 GB",
+    "storageAvailable": "500 GB"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "hero": {
+    "title": "Security, Forensics & Incident Response",
+    "subtitle": "For Regulated Organizations",
+    "description": "SEGRD is a modular platform built for organizations that require evidence integrity, controlled automation and private AI execution — without enterprise complexity.",
+    "cta1": "Start Free Trial",
+    "cta2": "Request Demo",
+    "trustedBy": "Trusted by security teams worldwide"
+  },
+  "value": {
+    "title": "Why SEGRD?",
+    "subtitle": "Built for regulated environments where evidence integrity matters",
+    "cards": {
+      "forensics": {
+        "title": "Digital Forensics",
+        "desc": "Legal-grade evidence collection with SHA-256 hashing, chain of custody, and exportable forensic reports."
+      },
+      "ir": {
+        "title": "Incident Response",
+        "desc": "Automated playbooks and real-time threat detection for rapid containment and remediation."
+      },
+      "ai": {
+        "title": "Private AI Analysis",
+        "desc": "BYO-LLM architecture — your AI, your data. No sensitive information leaves your environment."
+      },
+      "compliance": {
+        "title": "Compliance Ready",
+        "desc": "Immutable audit logs, RBAC, and multi-tenant isolation for regulatory requirements."
+      }
+    }
+  },
+  "markets": {
+    "title": "Built for Your Industry",
+    "subtitle": "SEGRD is designed for organizations with strict security and compliance requirements",
+    "soc": {
+      "title": "Small & Medium SOCs",
+      "desc": "Enterprise-grade capabilities without enterprise complexity.",
+      "features": ["Automated threat detection", "Playbook automation", "Real-time dashboards"]
+    },
+    "legal": {
+      "title": "Law Firms & Expert Witnesses",
+      "desc": "Digital forensics and counter-expertise for litigation.",
+      "features": ["Expert witness reports", "Evidence integrity", "Counter-expertise analysis"]
+    },
+    "banking": {
+      "title": "Small & Regional Banks",
+      "desc": "Regulatory compliance and fraud investigation.",
+      "features": ["Fraud investigation", "Compliance reporting", "Audit trail"]
+    }
+  },
+  "byollm": {
+    "title": "Your AI, Your Control",
+    "subtitle": "Bring Your Own LLM",
+    "description": "Unlike other platforms, SEGRD never sends your sensitive data to third-party AI services.",
+    "how": {
+      "title": "How It Works",
+      "step1": { "title": "Deploy Your LLM", "desc": "Run Llama, Mistral, or any compatible model in your environment" },
+      "step2": { "title": "Connect via Tailscale", "desc": "Secure zero-trust VPN connection — no public endpoints" },
+      "step3": { "title": "SEGRD Orchestrates", "desc": "We send minimal, redacted context and receive structured JSON results" }
+    },
+    "benefits": {
+      "privacy": "No PII leaves your network",
+      "control": "You control the model and training data",
+      "audit": "Full audit trail of prompts and responses",
+      "swap": "Swap models without platform changes"
+    }
+  },
+  "security": {
+    "title": "Enterprise Security, Simplified",
+    "features": {
+      "zerotrust": { "title": "Zero-Trust Architecture", "desc": "Tailscale VPN with identity-based access." },
+      "multiTenant": { "title": "True Multi-Tenancy", "desc": "Complete data isolation between tenants." },
+      "auditLog": { "title": "Immutable Audit Logs", "desc": "Every action logged with timestamps." },
+      "evidenceIntegrity": { "title": "Evidence Integrity", "desc": "SHA-256 hashing and verifiable exports." }
+    }
+  },
+  "cta": {
+    "title": "Ready to Secure Your Organization?",
+    "subtitle": "Start your 14-day free trial. No credit card required.",
+    "button": "Get Started Free"
+  }
+}

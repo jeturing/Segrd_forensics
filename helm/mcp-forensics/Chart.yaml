@@ -1,0 +1,35 @@
+apiVersion: v2
+name: mcp-forensics
+description: MCP Kali Forensics & IR Worker - Helm Chart for Kubernetes deployment
+type: application
+version: 1.0.0
+appVersion: "4.5.0"
+
+keywords:
+  - forensics
+  - incident-response
+  - security
+  - m365
+  - azure
+
+home: https://github.com/jeturing/mcp-kali-forensics
+sources:
+  - https://github.com/jeturing/mcp-kali-forensics
+
+maintainers:
+  - name: Jeturing Team
+    email: security@jeturing.io
+
+dependencies:
+  - name: postgresql
+    version: "15.x.x"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+  - name: redis
+    version: "18.x.x"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+
+annotations:
+  category: Security
+  licenses: MIT

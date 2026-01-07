@@ -1,0 +1,10 @@
+export { default as Navbar } from "./Navbar";
+export { default as Footer } from "./Footer";
+export { default as HeroSection } from "./HeroSection";
+export { default as ValueProps } from "./ValueProps";
+export { default as TargetMarkets } from "./TargetMarkets";
+export { default as BYOLLMSection } from "./BYOLLMSection";
+export { default as ModulesGrid } from "./ModulesGrid";
+export { default as FAQSection } from "./FAQSection";
+export { default as CTASection } from "./CTASection";
+export { default as LanguageSwitcher } from "./LanguageSwitcher";

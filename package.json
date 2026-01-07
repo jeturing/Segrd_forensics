@@ -1,0 +1,40 @@
+{
+  "name": "mcp-kali-forensics",
+  "version": "4.2.0",
+  "description": "MCP Kali Forensics & IR Worker - Forensic analysis and incident response for Microsoft 365, Azure AD, endpoints, and leaked credentials",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\" --kill-others-on-exit",
+    "dev:api": "python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 9000",
+    "dev:frontend": "cd frontend-react && npm run dev",
+    "build": "cd frontend-react && npm run build",
+    "preview": "cd frontend-react && npm run preview",
+    "lint": "cd frontend-react && npm run lint",
+    "lint:fix": "cd frontend-react && npm run lint:fix",
+    "format": "cd frontend-react && npm run format",
+    "test": "cd frontend-react && npm run test",
+    "test:ui": "cd frontend-react && npm run test:ui",
+    "install:all": "npm install && cd frontend-react && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "keywords": [
+    "forensics",
+    "incident-response",
+    "microsoft-365",
+    "azure-ad",
+    "security",
+    "mcp",
+    "kali-linux"
+  ],
+  "author": "GitHub Copilot",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "cytoscape-cola": "^2.5.1"
+  }
+}

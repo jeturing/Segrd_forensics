@@ -1,0 +1,44 @@
+# =============================================================================
+# MCP Kali Forensics - WebSocket Router v4.4.1
+# Maneja streaming de logs y eventos en tiempo real
+# =============================================================================
+
+FROM python:3.11-slim
+
+LABEL maintainer="MCP Forensics Team"
+LABEL version="4.4.1"
+LABEL description="WebSocket Router for real-time log streaming"
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY docker/requirements.ws-router.txt requirements.txt
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código
+COPY core/logging_queue.py /app/core/
+COPY api/routes/ws_streaming.py /app/api/routes/
+
+# Copiar script de entrada
+COPY docker/ws_router_main.py /app/main.py
+
+# Puerto
+EXPOSE 8091
+
+# Usuario no-root
+RUN useradd -m -u 1000 wsrouter
+USER wsrouter
+
+# Healthcheck
+HEALTHCHECK --interval=15s --timeout=5s --retries=3 \
+    CMD curl -f http://localhost:8091/health || exit 1
+
+# Comando
+CMD ["python", "main.py"]

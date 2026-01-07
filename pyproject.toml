@@ -1,0 +1,52 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Markers for different test types
+markers = [
+    "benchmark: Performance benchmark tests",
+    "integration: Integration tests requiring external services",
+    "slow: Tests that take a long time to run",
+    "e2e: End-to-end tests",
+    "unit: Unit tests (default)",
+]
+
+# Async support
+asyncio_mode = "auto"
+
+# Output options
+addopts = """
+    -v
+    --strict-markers
+    --tb=short
+    --disable-warnings
+"""
+
+# Coverage settings
+[tool.coverage.run]
+source = ["api", "core"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+fail_under = 80
+
+# Exclude from coverage
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]

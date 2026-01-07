@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mcp-forensics.fullname" . }}
+  labels:
+    {{- include "mcp-forensics.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "mcp-forensics.selectorLabels" . | nindent 4 }}
+---
+{{- if .Values.wsRouter.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mcp-forensics.fullname" . }}-ws-router
+  labels:
+    {{- include "mcp-forensics.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ws-router
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.wsRouter.service.port }}
+      targetPort: ws
+      protocol: TCP
+      name: ws
+  selector:
+    {{- include "mcp-forensics.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ws-router
+{{- end }}
+---
+{{- if .Values.llmProvider.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mcp-forensics.fullname" . }}-llm-provider
+  labels:
+    {{- include "mcp-forensics.labels" . | nindent 4 }}
+    app.kubernetes.io/component: llm-provider
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.llmProvider.service.port }}
+      targetPort: llm
+      protocol: TCP
+      name: llm
+  selector:
+    {{- include "mcp-forensics.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: llm-provider
+{{- end }}

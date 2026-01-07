@@ -1,0 +1,28 @@
+[Unit]
+Description=MCP Kali Forensics & IR Worker
+After=network.target
+
+[Service]
+Type=simple
+User=hack
+Group=hack
+WorkingDirectory=/home/hack/mcp-kali-forensics
+Environment="PATH=/home/hack/mcp-kali-forensics/venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/hack/mcp-kali-forensics/venv/bin/uvicorn api.main:app --host 0.0.0.0 --port 9000
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp-forensics
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/hack/forensics-evidence /home/hack/mcp-kali-forensics/logs /home/hack/mcp-kali-forensics/forensics.db
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "home": "Home",
+    "modules": "Modules",
+    "pricing": "Pricing",
+    "docs": "Documentation",
+    "login": "Log In",
+    "signup": "Get Started",
+    "contact": "Contact"
+  },
+  "footer": {
+    "company": "Jeturing Inc.",
+    "tagline": "Security, Forensics & Incident Response Platform",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© {{year}} Jeturing Inc. All rights reserved.",
+    "madeIn": "Made in USA 🇺🇸"
+  },
+  "cta": {
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "requestDemo": "Request Demo",
+    "contactSales": "Contact Sales",
+    "startTrial": "Start Free Trial"
+  },
+  "badges": {
+    "new": "New",
+    "beta": "Beta",
+    "enterprise": "Enterprise"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCP Kali Forensics Modules Schema",
+  "type": "object",
+  "properties": {
+    "version": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "description": {"type": "string"},
+          "version": {"type": "string"},
+          "status": {"type": "string", "enum": ["active", "inactive", "development"]},
+          "category": {"type": "string"},
+          "icon": {"type": "string"},
+          "color": {"type": "string"},
+          "routes": {
+            "type": "object",
+            "properties": {
+              "prefix": {"type": "string"},
+              "file": {"type": "string"},
+              "auth_required": {"type": "boolean"}
+            }
+          },
+          "service": {
+            "type": ["object", "null"],
+            "properties": {
+              "file": {"type": "string"},
+              "singleton": {"type": ["string", "null"]}
+            }
+          },
+          "model": {
+            "type": ["object", "null"],
+            "properties": {
+              "file": {"type": "string"},
+              "classes": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "frontend": {
+            "type": "object",
+            "properties": {
+              "page": {"type": "string"},
+              "components": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "features": {"type": "array", "items": {"type": "string"}},
+          "dependencies": {"type": "array", "items": {"type": "string"}},
+          "api_endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "method": {"type": "string"},
+                "path": {"type": "string"},
+                "description": {"type": "string"}
+              }
+            }
+          }
+        },
+        "required": ["id", "name", "status", "category"]
+      }
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "description": {"type": "string"},
+          "order": {"type": "integer"}
+        }
+      }
+    },
+    "auto_generation": {
+      "type": "object",
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "templates": {"type": "object"},
+        "output_dirs": {"type": "object"}
+      }
+    }
+  }
+}

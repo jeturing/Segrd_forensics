@@ -1,0 +1,144 @@
+═══════════════════════════════════════════════════════════════
+MCP KALI FORENSICS - REPORTE DE INSTALACIÓN COMPLETADA
+═══════════════════════════════════════════════════════════════
+
+Fecha: $(date '+%Y-%m-%d %H:%M:%S %Z')
+Usuario: $USER
+Sistema: Kali GNU/Linux Rolling
+Kernel: $(uname -r)
+
+═══════════════════════════════════════════════════════════════
+✅ ACTUALIZACIONES DEL SISTEMA
+═══════════════════════════════════════════════════════════════
+
+✓ Repositorios de Kali actualizados
+✓ 110 paquetes actualizados a las últimas versiones
+✓ Sistema operativo actualizado a la última versión
+
+═══════════════════════════════════════════════════════════════
+✅ HERRAMIENTAS FORENSES INSTALADAS
+═══════════════════════════════════════════════════════════════
+
+Ubicación: /opt/forensics-tools/
+
+1. ✓ Sparrow 365
+   Ruta: /opt/forensics-tools/Sparrow/
+   Descripción: Detección de compromiso en Azure/M365
+   Uso: Análisis de sign-ins sospechosos, OAuth apps maliciosas
+
+2. ✓ Hawk
+   Ruta: /opt/forensics-tools/hawk/
+   Descripción: Investigación de compromisos en Exchange Online
+   Uso: Análisis forense de buzones de correo comprometidos
+
+3. ✓ Loki Scanner
+   Ruta: /opt/forensics-tools/Loki/
+   Archivo: loki.py
+   Descripción: Scanner de IOCs y malware
+   Firmas: Actualizadas con loki-upgrader.py
+   Uso: Escaneo de sistemas en busca de indicadores de compromiso
+
+4. ✓ YARA Rules
+   Ruta: /opt/forensics-tools/yara-rules/
+   Descripción: Colección signature-base de Neo23x0
+   Contenido: 1000+ reglas YARA para detección de malware
+   Uso: Detección de malware conocido y APTs
+
+5. ✓ Volatility 3
+   Ruta: /opt/forensics-tools/volatility3/
+   Script: vol.py
+   Versión: 2.27.1
+   Descripción: Framework de análisis de memoria forense
+   Uso: Análisis de dumps de memoria RAM
+
+6. ✓ O365 Extractor
+   Ruta: /opt/forensics-tools/O365-Extractor/
+   Script: o365_extractor.py
+   Descripción: Extractor de logs de auditoría de M365
+   Uso: Recolección de Unified Audit Logs vía Graph API
+
+7. ✓ YARA
+   Versión: 4.5.4
+   Descripción: Herramienta de clasificación de malware
+   Estado: Preinstalado en Kali, actualizado
+
+8. ✓ OSQuery
+   Versión: 5.10.2
+   Descripción: Framework de consultas SQL para endpoints
+   Estado: Preinstalado en Kali, actualizado
+
+9. ✓ PowerShell Core
+   Versión: 7.5.4
+   Descripción: Shell de Microsoft para ejecutar Sparrow/Hawk
+   Estado: Instalado y funcional
+
+═══════════════════════════════════════════════════════════════
+✅ CONFIGURACIÓN M365
+═══════════════════════════════════════════════════════════════
+
+✓ Tenant ID: 3af2e132-c361-4467-9d8b-081f06630c12
+✓ Client ID: 91e9700b-8453-467a-b216-cc381a3858cc
+✓ Client Secret: Configurado
+✓ Organización: SINERLEX DOMINICANA ABOGADOS CONSULTORES SRL
+✓ Autenticación: EXITOSA
+✓ Permisos: 14 aprobados (6 Graph + 8 Intune)
+
+═══════════════════════════════════════════════════════════════
+✅ ESTRUCTURA DE DIRECTORIOS
+═══════════════════════════════════════════════════════════════
+
+/home/hack/mcp-kali-forensics/
+├── api/                 # FastAPI backend
+│   ├── routes/         # Endpoints REST
+│   ├── services/       # Lógica de negocio
+│   └── middleware/     # Autenticación
+├── scripts/            # Scripts de configuración
+├── audit-logs/         # Registros de auditoría
+├── logs/               # Logs de aplicación
+└── forensics-evidence/ # Almacenamiento de evidencia
+
+/opt/forensics-tools/
+├── Sparrow/
+├── hawk/
+├── Loki/
+├── yara-rules/
+├── volatility3/
+└── O365-Extractor/
+
+═══════════════════════════════════════════════════════════════
+🚀 PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════
+
+1. Iniciar el servicio MCP:
+   cd /home/hack/mcp-kali-forensics
+   source venv/bin/activate  # Si usas entorno virtual
+   uvicorn api.main:app --host 0.0.0.0 --port 8080
+
+2. Verificar el API:
+   curl http://localhost:8080/health
+
+3. Ver documentación interactiva:
+   http://localhost:8080/docs
+
+4. Probar análisis M365:
+   curl -X POST http://localhost:8080/forensics/m365/analyze \
+     -H "X-API-Key: tu-clave" \
+     -H "Content-Type: application/json" \
+     -d '{"case_id":"IR-001","scope":["sparrow"]}'
+
+5. Generar auditoría periódica:
+   ./scripts/generate_audit.sh
+
+═══════════════════════════════════════════════════════════════
+📊 ESTADÍSTICAS DE INSTALACIÓN
+═══════════════════════════════════════════════════════════════
+
+• Herramientas instaladas: 9/9 (100%)
+• Permisos M365: 14 aprobados
+• Firmas YARA: 1000+ reglas
+• Espacio utilizado: ~200 MB
+• Tiempo total: ~15 minutos
+
+═══════════════════════════════════════════════════════════════
+FIN DEL REPORTE DE INSTALACIÓN
+═══════════════════════════════════════════════════════════════

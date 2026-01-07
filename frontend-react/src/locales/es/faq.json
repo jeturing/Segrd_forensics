@@ -1,0 +1,57 @@
+{
+  "title": "Preguntas Frecuentes",
+  "categories": {
+    "general": {
+      "title": "General",
+      "questions": [
+        {
+          "q": "¿Qué es SEGRD?",
+          "a": "SEGRD es una plataforma de seguridad, análisis forense digital y respuesta a incidentes desarrollada por Jeturing Inc. Combina herramientas forenses tradicionales con inteligencia artificial para automatizar y acelerar investigaciones de seguridad."
+        },
+        {
+          "q": "¿Qué significa BYO-LLM?",
+          "a": "BYO-LLM significa Bring Your Own LLM (Trae Tu Propio Modelo de Lenguaje). SEGRD te permite conectar tu proveedor de IA preferido - OpenAI, Anthropic Claude, Google Gemini, o modelos locales como Ollama - para que tus datos sensibles nunca salgan de tu control."
+        }
+      ]
+    },
+    "technical": {
+      "title": "Técnico",
+      "questions": [
+        {
+          "q": "¿Qué es MCP y por qué es importante?",
+          "a": "MCP (Model Context Protocol) es un estándar abierto creado por Anthropic para conectar modelos de IA con herramientas externas. SEGRD usa MCP para que agentes de IA puedan ejecutar análisis forenses, correlacionar eventos y generar reportes de forma autónoma."
+        },
+        {
+          "q": "¿Puedo usar SEGRD sin conexión a internet?",
+          "a": "Sí. Con la opción de despliegue on-premise y un LLM local como Ollama, SEGRD funciona completamente aislado. Ideal para entornos air-gapped o con requisitos estrictos de privacidad."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Precios",
+      "questions": [
+        {
+          "q": "¿Cómo funciona el modelo de precios?",
+          "a": "SEGRD usa un modelo de precio por asiento (usuario) con tarifa fija mensual. No hay cargos adicionales por volumen de datos analizados o consultas al LLM - eso depende de tu proveedor de IA elegido."
+        },
+        {
+          "q": "¿Hay una prueba gratuita?",
+          "a": "Sí, ofrecemos una prueba de 14 días con acceso completo a todos los módulos. No requiere tarjeta de crédito. Solicita tu demo para comenzar."
+        }
+      ]
+    },
+    "security": {
+      "title": "Seguridad",
+      "questions": [
+        {
+          "q": "¿Qué certificaciones de seguridad tiene SEGRD?",
+          "a": "SEGRD está diseñado para cumplir con SOC 2 Type II, GDPR, HIPAA y PCI-DSS. El aislamiento multi-tenant garantiza que los datos de cada cliente están completamente separados."
+        },
+        {
+          "q": "¿Dónde se almacenan mis datos?",
+          "a": "Tienes control total. Puedes elegir despliegue en nube (AWS, Azure, GCP en la región que prefieras) o completamente on-premise en tu infraestructura."
+        }
+      ]
+    }
+  }
+}

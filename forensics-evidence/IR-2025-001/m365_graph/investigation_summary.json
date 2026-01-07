@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "case_id": "IR-2025-001",
+  "tenant_id": "3af2e132-c361-4467-9d8b-081f06630c12",
+  "started_at": "2025-12-05T16:32:30.576889",
+  "evidence_path": "/home/hack/forensics-evidence/IR-2025-001/m365_graph",
+  "collections": {
+    "risky_signins": 0,
+    "risky_users": 0,
+    "signin_logs": 0,
+    "audit_logs": 0,
+    "oauth_consents": 31,
+    "users_analyzed": 1,
+    "inbox_rules": 0
+  },
+  "completed_at": "2025-12-05T16:32:42.668101",
+  "summary": {
+    "risk_score": 40,
+    "critical_findings": {
+      "high_risk_signins": 0,
+      "medium_risk_signins": 0,
+      "high_risk_users": 0,
+      "risky_oauth_apps": 4,
+      "suspicious_inbox_rules": 0
+    },
+    "risky_apps": [
+      "SharePoint Online Web Client Extensibility",
+      "SharePoint Online Web Client Extensibility",
+      "Adobe Acrobat Reader for PDF",
+      "Read AI"
+    ],
+    "suspicious_rules_users": [],
+    "total_evidence_items": 32
+  }
+}

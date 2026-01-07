@@ -1,0 +1,35 @@
+# =============================================================================
+# MCP Kali Forensics - Logging Queue Worker v4.4.1
+# Procesa logs de análisis y los distribuye via Redis/WebSocket
+# =============================================================================
+
+FROM python:3.11-slim
+
+LABEL maintainer="MCP Forensics Team"
+LABEL version="4.4.1"
+LABEL description="Logging queue worker for analysis log processing"
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY docker/requirements.logging-worker.txt requirements.txt
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código
+COPY core/logging_queue.py /app/core/
+COPY docker/logging_worker_main.py /app/main.py
+
+# Usuario no-root
+RUN useradd -m -u 1000 logworker
+RUN mkdir -p /var/analysis-logs && chown logworker:logworker /var/analysis-logs
+USER logworker
+
+# Comando
+CMD ["python", "main.py"]

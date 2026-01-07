@@ -1,0 +1,418 @@
+version: '3.8'
+
+# =============================================================================
+# MCP Kali Forensics v4.4.1 - Docker Compose
+# Incluye: ws-router, llm-provider, logging-queue-worker
+# =============================================================================
+
+services:
+  # ============================================================================
+  # CORE: MCP Forensics API
+  # ============================================================================
+  mcp-forensics:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-kali-forensics
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # API Configuration
+      - API_KEY=${API_KEY:-change-me-please}
+      - DEBUG=${DEBUG:-false}
+      
+      # RBAC v4.4.1
+      - RBAC_ENABLED=${RBAC_ENABLED:-true}
+      - RBAC_DEFAULT_ROLE=${RBAC_DEFAULT_ROLE:-analyst}
+      
+      # Jeturing CORE
+      - JETURING_CORE_ENABLED=${JETURING_CORE_ENABLED:-true}
+      - JETURING_CORE_URL=${JETURING_CORE_URL}
+      - JETURING_CORE_API_KEY=${JETURING_CORE_API_KEY}
+      
+      # Microsoft 365
+      - M365_TENANT_ID=${M365_TENANT_ID}
+      - M365_CLIENT_ID=${M365_CLIENT_ID}
+      - M365_CLIENT_SECRET=${M365_CLIENT_SECRET}
+      
+            - OLLAMA_ENABLED=${OLLAMA_ENABLED:-true}
+      - TAILSCALE_ENABLED=${TAILSCALE_ENABLED:-false}
+      - TAILSCALE_AUTH_KEY=${TAILSCALE_AUTH_KEY}
+      
+      # HIBP
+      - HIBP_API_KEY=${HIBP_API_KEY}
+      - HIBP_ENABLED=${HIBP_ENABLED:-false}
+      
+      # Dehashed
+      - DEHASHED_API_KEY=${DEHASHED_API_KEY}
+      - DEHASHED_ENABLED=${DEHASHED_ENABLED:-false}
+      
+      # VirusTotal
+      - VT_API_KEY=${VT_API_KEY}
+      
+      # Database
+      - DATABASE_URL=${DATABASE_URL:-postgresql://forensics:${DB_PASSWORD}@postgres:5432/forensics}
+      
+      # Redis
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      
+      # LLM Provider
+      - LLM_PROVIDER_URL=${LLM_PROVIDER_URL:-http://llm-provider:8090}
+      
+      # WebSocket Router
+      - WS_ROUTER_URL=${WS_ROUTER_URL:-http://ws-router:8091}
+      
+      # OpenTelemetry
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://jaeger:4317}
+      - OTEL_SERVICE_NAME=mcp-forensics
+    
+    volumes:
+      # Evidencia persistente
+      - evidence:/var/evidence
+      
+      # Logs de análisis
+      - analysis-logs:/var/analysis-logs
+      
+      # Sandbox temporal para ejecución segura
+      - sandbox:/tmp/mcp-sandbox
+      
+      # Logs persistentes
+      - logs:/var/log/mcp-forensics
+      
+      # Base de datos SQLite (fallback)
+      - db:/app/data
+      
+      # Configuración personalizada
+      - ./config:/app/config:ro
+    
+    networks:
+      - forensics-net
+      - jeturing-core-net
+    
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:mcp-forensics
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ws-router:
+        condition: service_started
+    
+    labels:
+      - "com.jeturing.service=mcp-forensics"
+      - "com.jeturing.type=mcp"
+      - "com.jeturing.version=4.4.1"
+
+  # ============================================================================
+  # v4.4.1: WebSocket Router
+  # Maneja streaming de logs y eventos en tiempo real
+  # ============================================================================
+  ws-router:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ws-router
+    container_name: mcp-ws-router
+    restart: unless-stopped
+    ports:
+      - "8091:8091"
+    environment:
+      - REDIS_URL=redis://redis:6379/1
+      - API_URL=http://mcp-forensics:8080
+      - MAX_CONNECTIONS=${WS_MAX_CONNECTIONS:-1000}
+      - HEARTBEAT_INTERVAL=${WS_HEARTBEAT_INTERVAL:-30}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://jaeger:4317}
+      - OTEL_SERVICE_NAME=ws-router
+    volumes:
+      - logs:/var/log/ws-router
+    networks:
+      - forensics-net
+    depends_on:
+      - redis
+      - ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "com.jeturing.service=ws-router"
+      - "com.jeturing.version=4.4.1"
+
+  # ============================================================================
+  # v4.4.1: LLM Provider (Agnóstico)
+  # Proxy unificado para LM Studio, Ollama, OpenAI, etc.
+  # ============================================================================
+  llm-provider:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.llm-provider
+    container_name: mcp-llm-provider
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      - LM_STUDIO_URL=${LM_STUDIO_URL:-http://100.101.115.5:2714}
+      - OLLAMA_URL=${OLLAMA_URL:-http://ollama:11434}
+      - OLLAMA_ENABLED=${OLLAMA_ENABLED:-true}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - DEFAULT_PROVIDER=${DEFAULT_LLM_PROVIDER:-lmstudio}
+      - MAX_TOKENS=${LLM_MAX_TOKENS:-4096}
+      - TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+      - REDIS_URL=redis://redis:6379/2
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://jaeger:4317}
+      - OTEL_SERVICE_NAME=llm-provider
+    volumes:
+      - llm-cache:/var/cache/llm
+    networks:
+      - forensics-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.jeturing.service=llm-provider"
+      - "com.jeturing.version=4.4.1"
+
+  # ============================================================================
+  # v4.4.1: Logging Queue Worker
+  # Procesa logs de análisis y los distribuye via WebSocket
+  # ============================================================================
+  logging-queue-worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.logging-worker
+    container_name: mcp-logging-worker
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/3
+      - WS_ROUTER_URL=http://ws-router:8091
+      - POSTGRES_URL=postgresql://forensics:${DB_PASSWORD}@postgres:5432/forensics
+      - BATCH_SIZE=${LOG_BATCH_SIZE:-100}
+      - FLUSH_INTERVAL=${LOG_FLUSH_INTERVAL:-5}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://jaeger:4317}
+      - OTEL_SERVICE_NAME=logging-worker
+    volumes:
+      - analysis-logs:/var/analysis-logs
+      - logs:/var/log/logging-worker
+    networks:
+      - forensics-net
+    depends_on:
+      - redis
+      - postgres
+      - ws-router
+    labels:
+      - "com.jeturing.service=logging-worker"
+
+  # ============================================================================
+  # DATABASE: PostgreSQL
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: mcp-forensics-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=forensics
+      - POSTGRES_USER=forensics
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-change-me-please}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./migrations/init_postgresql.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - forensics-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forensics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "com.jeturing.service=postgres"
+
+  # ============================================================================
+  # CACHE: Redis
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: mcp-forensics-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    networks:
+      - forensics-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "com.jeturing.service=redis"
+
+  # ============================================================================
+  # OBSERVABILITY: Jaeger (OpenTelemetry)
+  # ============================================================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    container_name: mcp-jaeger
+    restart: unless-stopped
+    ports:
+      - "16686:16686"  # UI
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - forensics-net
+    profiles:
+      - observability
+    labels:
+      - "com.jeturing.service=jaeger"
+
+  # ============================================================================
+  # EXECUTOR: Tool Executor (Sandboxed)
+  # Ejecuta herramientas forenses en entorno aislado
+  # ============================================================================
+  tool-executor:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.executor
+    container_name: mcp-tool-executor
+    restart: unless-stopped
+    environment:
+      - API_URL=http://mcp-forensics:8080
+      - REDIS_URL=redis://redis:6379/4
+      - EXECUTION_TIMEOUT=${TOOL_TIMEOUT:-600}
+    volumes:
+      - evidence:/var/evidence
+      - sandbox:/tmp/mcp-sandbox
+      - ./tools:/opt/forensics-tools:ro
+    networks:
+      - forensics-net
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:docker/seccomp-executor.json
+      - apparmor:mcp-executor
+    profiles:
+      - executor
+    labels:
+      - "com.jeturing.service=tool-executor"
+      - "com.jeturing.version=4.4.1"
+
+  # ==========================================================================
+  # Local Postgres + PostgREST for maintenance/testing
+  # ==========================================================================
+  pg_local_db:
+    image: postgres:15
+    container_name: mcp-forensics-pg-local
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=.
+      - POSTGRES_DB=forensics_db
+    volumes:
+      - pg-local-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - forensics-net
+
+  postgrest:
+    image: postgrest/postgrest:latest
+    container_name: mcp-forensics-postgrest
+    restart: unless-stopped
+    depends_on:
+      - pg_local_db
+    environment:
+      - PGRST_DB_URI=postgres://root:.@pg_local_db:5432/forensics_db
+      - PGRST_DB_SCHEMA=public
+      - PGRST_DB_ANON_ROLE=anon
+    ports:
+      - "3000:3000"
+    networks:
+      - forensics-net
+
+  # ============================================================================
+  # LLM: Ollama runtime (para modelos locales p.ej. phi-4)
+  # ============================================================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: mcp-ollama
+    restart: unless-stopped
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - forensics-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+volumes:
+  evidence:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${EVIDENCE_PATH:-./forensics-evidence}
+  analysis-logs:
+    driver: local
+  sandbox:
+    driver: local
+  logs:
+    driver: local
+  db:
+    driver: local
+  postgres-data:
+    driver: local
+  pg-local-data:
+    driver: local
+  redis-data:
+    driver: local
+  llm-cache:
+    driver: local
+  ollama-models:
+    driver: local
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+networks:
+  forensics-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+  jeturing-core-net:
+    external: true
+    name: jeturing-core-network

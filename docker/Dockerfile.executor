@@ -1,0 +1,59 @@
+# =============================================================================
+# MCP Kali Forensics - Tool Executor v4.4.1
+# Ejecuta herramientas forenses en entorno aislado con AppArmor/Seccomp
+# =============================================================================
+
+FROM kalilinux/kali-rolling:latest
+
+LABEL maintainer="MCP Forensics Team"
+LABEL version="4.4.1"
+LABEL description="Sandboxed forensic tool executor"
+
+# Evitar prompts interactivos
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Instalar herramientas forenses base
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Core tools
+    python3 \
+    python3-pip \
+    python3-venv \
+    curl \
+    wget \
+    git \
+    # Forensics
+    yara \
+    osquery \
+    volatility3 \
+    # Network
+    nmap \
+    masscan \
+    tcpdump \
+    tshark \
+    # Malware analysis
+    clamav \
+    # Utils
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar requirements
+COPY docker/requirements.executor.txt requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Copiar código
+COPY docker/executor_main.py /app/main.py
+
+# Crear usuario no-root
+RUN useradd -m -u 1000 executor
+
+# Directorios con permisos
+RUN mkdir -p /var/evidence /tmp/mcp-sandbox \
+    && chown -R executor:executor /var/evidence /tmp/mcp-sandbox
+
+# Cambiar a usuario no-root
+USER executor
+
+# Comando
+CMD ["python3", "main.py"]

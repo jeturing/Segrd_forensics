@@ -1,0 +1,145 @@
+{
+  "templates": {
+    "windows": [
+      {
+        "category": "Procesos",
+        "commands": [
+          {"id": "w-proc-1", "label": "Listar procesos", "cmd": "tasklist /v", "icon": "📋", "description": "Lista todos los procesos activos con detalles"},
+          {"id": "w-proc-2", "label": "Procesos por CPU", "cmd": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 20", "icon": "⚙️", "description": "Top 20 procesos por uso de CPU"},
+          {"id": "w-proc-3", "label": "Procesos con conexiones", "cmd": "Get-NetTCPConnection | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,State,OwningProcess", "icon": "🌐", "description": "Procesos con conexiones de red activas"},
+          {"id": "w-proc-4", "label": "Árbol de procesos", "cmd": "Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CommandLine", "icon": "🌲", "description": "Árbol de procesos padre-hijo"}
+        ]
+      },
+      {
+        "category": "Red",
+        "commands": [
+          {"id": "w-net-1", "label": "Conexiones activas", "cmd": "netstat -ano", "icon": "🌐", "description": "Todas las conexiones de red con PIDs"},
+          {"id": "w-net-2", "label": "Puertos escuchando", "cmd": "netstat -an | findstr LISTENING", "icon": "🔌", "description": "Puertos en estado LISTEN"},
+          {"id": "w-net-3", "label": "ARP cache", "cmd": "arp -a", "icon": "📡", "description": "Tabla ARP local"},
+          {"id": "w-net-4", "label": "DNS cache", "cmd": "ipconfig /displaydns", "icon": "🔍", "description": "Cache DNS local"},
+          {"id": "w-net-5", "label": "Reglas firewall", "cmd": "netsh advfirewall firewall show rule name=all", "icon": "🔒", "description": "Todas las reglas del firewall"}
+        ]
+      },
+      {
+        "category": "Sistema",
+        "commands": [
+          {"id": "w-sys-1", "label": "Usuarios locales", "cmd": "net user", "icon": "👤", "description": "Lista de usuarios locales"},
+          {"id": "w-sys-2", "label": "Grupos locales", "cmd": "net localgroup", "icon": "👥", "description": "Grupos locales del sistema"},
+          {"id": "w-sys-3", "label": "Servicios", "cmd": "Get-Service | Where-Object {$_.Status -eq 'Running'} | Select-Object Name,DisplayName,Status", "icon": "⚙️", "description": "Servicios en ejecución"},
+          {"id": "w-sys-4", "label": "Tareas programadas", "cmd": "schtasks /query /fo LIST /v", "icon": "⏰", "description": "Todas las tareas programadas"},
+          {"id": "w-sys-5", "label": "Autorun entries", "cmd": "Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", "icon": "🚀", "description": "Programas de inicio automático"}
+        ]
+      },
+      {
+        "category": "Logs",
+        "commands": [
+          {"id": "w-log-1", "label": "Security events (últimos 100)", "cmd": "Get-EventLog -LogName Security -Newest 100", "icon": "📋", "description": "Últimos 100 eventos de seguridad"},
+          {"id": "w-log-2", "label": "Failed logins", "cmd": "Get-EventLog -LogName Security | Where-Object {$_.EventID -eq 4625} | Select-Object -First 50", "icon": "❌", "description": "Intentos de login fallidos"},
+          {"id": "w-log-3", "label": "PowerShell history", "cmd": "Get-Content (Get-PSReadlineOption).HistorySavePath", "icon": "📜", "description": "Historial de comandos PowerShell"}
+        ]
+      },
+      {
+        "category": "Memoria",
+        "commands": [
+          {"id": "w-mem-1", "label": "Info memoria RAM", "cmd": "Get-WmiObject Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory", "icon": "💾", "description": "Estado de memoria RAM"},
+          {"id": "w-mem-2", "label": "Procesos por memoria", "cmd": "Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10 Name,@{N='MemMB';E={[math]::Round($_.WorkingSet64/1MB,2)}}", "icon": "📊", "description": "Top 10 procesos por uso de memoria"}
+        ]
+      }
+    ],
+    "macos": [
+      {
+        "category": "Procesos",
+        "commands": [
+          {"id": "m-proc-1", "label": "Procesos activos", "cmd": "ps aux", "icon": "📋", "description": "Lista de todos los procesos"},
+          {"id": "m-proc-2", "label": "Top por CPU", "cmd": "ps aux --sort=-%cpu | head -20", "icon": "⚙️", "description": "Top 20 procesos por CPU"},
+          {"id": "m-proc-3", "label": "Procesos de usuario", "cmd": "ps -U $USER", "icon": "👤", "description": "Procesos del usuario actual"}
+        ]
+      },
+      {
+        "category": "Red",
+        "commands": [
+          {"id": "m-net-1", "label": "Conexiones activas", "cmd": "lsof -i", "icon": "🌐", "description": "Archivos de red abiertos"},
+          {"id": "m-net-2", "label": "Puertos escuchando", "cmd": "netstat -an | grep LISTEN", "icon": "🔌", "description": "Puertos en LISTEN"},
+          {"id": "m-net-3", "label": "Tabla de routing", "cmd": "netstat -rn", "icon": "🛣️", "description": "Tabla de rutas de red"}
+        ]
+      },
+      {
+        "category": "Sistema",
+        "commands": [
+          {"id": "m-sys-1", "label": "Usuarios", "cmd": "dscl . -list /Users", "icon": "👤", "description": "Lista de usuarios del sistema"},
+          {"id": "m-sys-2", "label": "LaunchAgents", "cmd": "ls -la ~/Library/LaunchAgents /Library/LaunchAgents", "icon": "🚀", "description": "Agentes de inicio"},
+          {"id": "m-sys-3", "label": "Aplicaciones instaladas", "cmd": "ls /Applications", "icon": "📱", "description": "Apps instaladas"},
+          {"id": "m-sys-4", "label": "Extensiones Chrome", "cmd": "ls ~/Library/Application\\ Support/Google/Chrome/Default/Extensions", "icon": "🌐", "description": "Extensiones de Chrome"}
+        ]
+      }
+    ],
+    "linux": [
+      {
+        "category": "Procesos",
+        "commands": [
+          {"id": "l-proc-1", "label": "Procesos", "cmd": "ps aux", "icon": "📋", "description": "Lista de procesos"},
+          {"id": "l-proc-2", "label": "Árbol de procesos", "cmd": "pstree -p", "icon": "🌲", "description": "Árbol de procesos con PIDs"},
+          {"id": "l-proc-3", "label": "Top por CPU", "cmd": "ps aux --sort=-%cpu | head -20", "icon": "⚙️", "description": "Top 20 por CPU"}
+        ]
+      },
+      {
+        "category": "Red",
+        "commands": [
+          {"id": "l-net-1", "label": "Sockets activos", "cmd": "ss -tulpn", "icon": "🌐", "description": "Sockets TCP/UDP"},
+          {"id": "l-net-2", "label": "Conexiones establecidas", "cmd": "ss -t state established", "icon": "🔗", "description": "Conexiones establecidas"},
+          {"id": "l-net-3", "label": "Reglas iptables", "cmd": "iptables -L -n -v", "icon": "🔒", "description": "Reglas de firewall"}
+        ]
+      },
+      {
+        "category": "Sistema",
+        "commands": [
+          {"id": "l-sys-1", "label": "Usuarios", "cmd": "cat /etc/passwd", "icon": "👤", "description": "Lista de usuarios"},
+          {"id": "l-sys-2", "label": "Cron jobs", "cmd": "crontab -l", "icon": "⏰", "description": "Tareas programadas del usuario"},
+          {"id": "l-sys-3", "label": "Servicios systemd", "cmd": "systemctl list-units --type=service --state=running", "icon": "⚙️", "description": "Servicios activos"},
+          {"id": "l-sys-4", "label": "SSH authorized keys", "cmd": "cat ~/.ssh/authorized_keys", "icon": "🔑", "description": "Llaves SSH autorizadas"},
+          {"id": "l-sys-5", "label": "Últimos logins", "cmd": "last -20", "icon": "📋", "description": "Últimos 20 logins"}
+        ]
+      },
+      {
+        "category": "Logs",
+        "commands": [
+          {"id": "l-log-1", "label": "Auth logs", "cmd": "tail -100 /var/log/auth.log", "icon": "🔐", "description": "Últimos logs de autenticación"},
+          {"id": "l-log-2", "label": "Syslog", "cmd": "tail -100 /var/log/syslog", "icon": "📜", "description": "Últimos logs del sistema"},
+          {"id": "l-log-3", "label": "Auditd", "cmd": "ausearch -m ALL -ts recent", "icon": "🔍", "description": "Logs de auditoría recientes"}
+        ]
+      }
+    ]
+  },
+  "history": [
+    {
+      "id": "cmd-001",
+      "command": "tasklist /v",
+      "agent": "WORKSTATION-01",
+      "executedAt": "2025-12-05T10:15:00Z",
+      "executedBy": "admin@sinerlex.com",
+      "exitCode": 0,
+      "duration": 1250,
+      "outputSize": 45000
+    },
+    {
+      "id": "cmd-002",
+      "command": "netstat -ano",
+      "agent": "WORKSTATION-01",
+      "executedAt": "2025-12-05T10:16:00Z",
+      "executedBy": "admin@sinerlex.com",
+      "exitCode": 0,
+      "duration": 800,
+      "outputSize": 12000
+    },
+    {
+      "id": "cmd-003",
+      "command": "ps aux",
+      "agent": "LAPTOP-MAC-01",
+      "executedAt": "2025-12-05T09:30:00Z",
+      "executedBy": "admin@sinerlex.com",
+      "exitCode": 0,
+      "duration": 500,
+      "outputSize": 28000
+    }
+  ]
+}

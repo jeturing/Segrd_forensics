@@ -1,0 +1,567 @@
+{
+  "$schema": "./modules.schema.json",
+  "version": "4.3.0",
+  "generated_at": "2025-12-08T00:00:00Z",
+  "modules": [
+    {
+      "id": "tenants",
+      "name": "Multi-Tenant Management",
+      "description": "Gestión de múltiples tenants M365/Azure AD",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "core",
+      "icon": "Building2",
+      "color": "#3B82F6",
+      "routes": {
+        "prefix": "/tenants",
+        "file": "api/routes/tenants.py",
+        "auth_required": false
+      },
+      "service": {
+        "file": "api/services/multi_tenant.py",
+        "singleton": "multi_tenant"
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/TenantsPage.jsx",
+        "components": [
+          "TenantList",
+          "TenantOnboard",
+          "TenantStats"
+        ]
+      },
+      "features": [
+        "CRUD tenants",
+        "Onboarding con validación",
+        "Estadísticas por tenant",
+        "Switch de tenant activo"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Listar tenants"},
+        {"method": "GET", "path": "/active", "description": "Tenant activo"},
+        {"method": "GET", "path": "/{tenant_id}", "description": "Obtener tenant"},
+        {"method": "POST", "path": "/onboard", "description": "Onboarding"},
+        {"method": "PUT", "path": "/{tenant_id}", "description": "Actualizar"},
+        {"method": "DELETE", "path": "/{tenant_id}", "description": "Eliminar"},
+        {"method": "POST", "path": "/{tenant_id}/activate", "description": "Activar"},
+        {"method": "POST", "path": "/{tenant_id}/analyze", "description": "Ejecutar análisis"}
+      ]
+    },
+    {
+      "id": "credentials",
+      "name": "Credential Analysis",
+      "description": "Análisis de credenciales filtradas (HIBP, Dehashed)",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "forensics",
+      "icon": "Key",
+      "color": "#EF4444",
+      "routes": {
+        "prefix": "/forensics/credentials",
+        "file": "api/routes/credentials.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/credential_check.py",
+        "singleton": "credential_checker"
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/CredentialsPage.jsx",
+        "components": [
+          "CredentialChecker",
+          "BreachResults",
+          "DomainSearch"
+        ]
+      },
+      "features": [
+        "Búsqueda HIBP",
+        "Búsqueda Dehashed",
+        "Análisis de stealer logs",
+        "Exportación IOCs"
+      ],
+      "dependencies": ["cases"],
+      "api_endpoints": [
+        {"method": "POST", "path": "/check", "description": "Verificar credenciales"},
+        {"method": "POST", "path": "/domain", "description": "Buscar por dominio"},
+        {"method": "GET", "path": "/breaches/{email}", "description": "Brechas por email"}
+      ]
+    },
+    {
+      "id": "hunting",
+      "name": "Threat Hunting",
+      "description": "Queries de hunting contra M365, endpoints y SIEM",
+      "version": "4.3.0",
+      "status": "active",
+      "category": "detection",
+      "icon": "Crosshair",
+      "color": "#8B5CF6",
+      "routes": {
+        "prefix": "/hunting",
+        "file": "api/routes/hunting.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/hunting.py",
+        "singleton": "hunting_service"
+      },
+      "model": {
+        "file": "api/models/hunting.py",
+        "classes": ["HuntQuery", "HuntResult"]
+      },
+      "frontend": {
+        "page": "frontend-react/src/modules/ThreatHunting/HuntingPage.jsx",
+        "components": [
+          "HuntQueryList",
+          "HuntExecutor",
+          "HuntResults",
+          "MitreMapping"
+        ]
+      },
+      "features": [
+        "Queries KQL predefinidas",
+        "Queries OSQuery",
+        "Reglas Sigma",
+        "Análisis LLM de resultados",
+        "Mapeo MITRE ATT&CK"
+      ],
+      "dependencies": ["tenants", "llm"],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Estado del servicio"},
+        {"method": "GET", "path": "/queries", "description": "Listar queries"},
+        {"method": "GET", "path": "/queries/{query_id}", "description": "Obtener query"},
+        {"method": "POST", "path": "/execute", "description": "Ejecutar hunt"},
+        {"method": "POST", "path": "/execute/custom", "description": "Hunt personalizado"},
+        {"method": "GET", "path": "/results/{case_id}", "description": "Resultados por caso"},
+        {"method": "POST", "path": "/queries/save", "description": "Guardar query"},
+        {"method": "GET", "path": "/categories", "description": "Categorías MITRE"},
+        {"method": "GET", "path": "/mitre", "description": "Cobertura MITRE"},
+        {"method": "POST", "path": "/batch", "description": "Ejecutar batch"}
+      ]
+    },
+    {
+      "id": "timeline",
+      "name": "Forensic Timeline",
+      "description": "Línea de tiempo de eventos con correlación",
+      "version": "4.3.0",
+      "status": "active",
+      "category": "analysis",
+      "icon": "Clock",
+      "color": "#10B981",
+      "routes": {
+        "prefix": "/timeline",
+        "file": "api/routes/timeline.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/timeline.py",
+        "singleton": "timeline_service"
+      },
+      "model": {
+        "file": "api/models/timeline.py",
+        "classes": ["TimelineEvent"]
+      },
+      "frontend": {
+        "page": "frontend-react/src/modules/Timeline/TimelinePage.jsx",
+        "components": [
+          "TimelineView",
+          "EventCard",
+          "CorrelationGraph",
+          "TimelineExport"
+        ]
+      },
+      "features": [
+        "Timeline visual interactivo",
+        "Correlación de eventos",
+        "Importación desde herramientas",
+        "Exportación JSON/CSV",
+        "Marcado de eventos clave"
+      ],
+      "dependencies": ["cases"],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Estado del servicio"},
+        {"method": "GET", "path": "/{case_id}", "description": "Timeline de caso"},
+        {"method": "POST", "path": "/events", "description": "Agregar evento"},
+        {"method": "POST", "path": "/events/bulk", "description": "Agregar múltiples"},
+        {"method": "GET", "path": "/events/{event_id}", "description": "Obtener evento"},
+        {"method": "PUT", "path": "/events/{event_id}", "description": "Actualizar evento"},
+        {"method": "DELETE", "path": "/events/{event_id}", "description": "Eliminar evento"},
+        {"method": "POST", "path": "/correlate", "description": "Correlacionar eventos"},
+        {"method": "GET", "path": "/{case_id}/correlations", "description": "Correlaciones"},
+        {"method": "GET", "path": "/{case_id}/summary", "description": "Resumen timeline"},
+        {"method": "GET", "path": "/{case_id}/graph", "description": "Datos para gráfico"},
+        {"method": "POST", "path": "/{case_id}/import/{source}", "description": "Importar"},
+        {"method": "GET", "path": "/{case_id}/export", "description": "Exportar"}
+      ]
+    },
+    {
+      "id": "reports",
+      "name": "Report Generator",
+      "description": "Generación de reportes PDF/HTML con LLM",
+      "version": "4.3.0",
+      "status": "active",
+      "category": "output",
+      "icon": "FileText",
+      "color": "#F59E0B",
+      "routes": {
+        "prefix": "/reports",
+        "file": "api/routes/reports.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/reports.py",
+        "singleton": "reports_service"
+      },
+      "model": {
+        "file": "api/models/reports.py",
+        "classes": ["ForensicReport", "ReportSection"]
+      },
+      "frontend": {
+        "page": "frontend-react/src/modules/Reports/ReportsPage.jsx",
+        "components": [
+          "ReportGenerator",
+          "ReportViewer",
+          "TemplateEditor",
+          "ReportList"
+        ]
+      },
+      "features": [
+        "Reportes técnicos PDF",
+        "Reportes ejecutivos",
+        "Cadena de custodia",
+        "Templates personalizados",
+        "Resumen LLM automático"
+      ],
+      "dependencies": ["cases", "timeline", "llm"],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Estado del servicio"},
+        {"method": "POST", "path": "/generate", "description": "Generar reporte"},
+        {"method": "GET", "path": "/case/{case_id}", "description": "Reportes de caso"},
+        {"method": "GET", "path": "/{report_id}", "description": "Obtener reporte"},
+        {"method": "GET", "path": "/{report_id}/status", "description": "Estado generación"},
+        {"method": "GET", "path": "/{report_id}/download", "description": "Descargar"},
+        {"method": "POST", "path": "/{report_id}/regenerate", "description": "Regenerar"},
+        {"method": "DELETE", "path": "/{report_id}", "description": "Eliminar"},
+        {"method": "GET", "path": "/templates", "description": "Listar templates"},
+        {"method": "POST", "path": "/templates", "description": "Crear template"},
+        {"method": "GET", "path": "/sections", "description": "Secciones disponibles"},
+        {"method": "POST", "path": "/preview", "description": "Preview reporte"},
+        {"method": "POST", "path": "/batch", "description": "Generar batch"}
+      ]
+    },
+    {
+      "id": "llm",
+      "name": "LLM Provider",
+      "description": "Proveedor LLM agnóstico (LM Studio, Ollama)",
+      "version": "4.3.0",
+      "status": "active",
+      "category": "ai",
+      "icon": "Brain",
+      "color": "#EC4899",
+      "routes": {
+        "prefix": "/llm",
+        "file": "api/routes/llm_settings.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/llm_provider.py",
+        "singleton": "LLMManager (via get_llm_manager)"
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/MaintenancePanel.jsx",
+        "components": [
+          "ModelSelector",
+          "LLMStatus",
+          "GenerateTest"
+        ]
+      },
+      "features": [
+        "Auto-detección de modelos",
+        "Cambio de proveedor",
+        "Caché de modelos",
+        "Fallback automático",
+        "Análisis forense con LLM"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/status", "description": "Estado LLM"},
+        {"method": "GET", "path": "/health", "description": "Health check"},
+        {"method": "GET", "path": "/models", "description": "Listar modelos"},
+        {"method": "GET", "path": "/models/active", "description": "Modelo activo"},
+        {"method": "POST", "path": "/models/active", "description": "Cambiar modelo"},
+        {"method": "POST", "path": "/generate", "description": "Generar texto"},
+        {"method": "POST", "path": "/analyze", "description": "Analizar hallazgos"},
+        {"method": "POST", "path": "/test", "description": "Test conexión"},
+        {"method": "POST", "path": "/refresh", "description": "Refrescar caché"}
+      ]
+    },
+    {
+      "id": "cases",
+      "name": "Case Management",
+      "description": "Gestión de casos forenses",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "core",
+      "icon": "Folder",
+      "color": "#6366F1",
+      "routes": {
+        "prefix": "/forensics/case",
+        "file": "api/routes/cases.py",
+        "auth_required": true
+      },
+      "service": {
+        "file": "api/services/case_manager.py",
+        "singleton": "case_manager"
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/CasesPage.jsx",
+        "components": [
+          "CaseList",
+          "CaseDetail",
+          "CaseCreate",
+          "CaseTimeline"
+        ]
+      },
+      "features": [
+        "CRUD casos",
+        "Asignación",
+        "Estados workflow",
+        "Evidencias por caso"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Listar casos"},
+        {"method": "POST", "path": "/", "description": "Crear caso"},
+        {"method": "GET", "path": "/{case_id}", "description": "Obtener caso"},
+        {"method": "PUT", "path": "/{case_id}", "description": "Actualizar caso"},
+        {"method": "DELETE", "path": "/{case_id}", "description": "Eliminar caso"},
+        {"method": "GET", "path": "/{case_id}/status", "description": "Estado del caso"}
+      ]
+    },
+    {
+      "id": "ioc_store",
+      "name": "IOC Store",
+      "description": "Almacén de Indicadores de Compromiso",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "detection",
+      "icon": "Database",
+      "color": "#DC2626",
+      "routes": {
+        "prefix": "/api/iocs",
+        "file": "api/routes/ioc_store.py",
+        "auth_required": false
+      },
+      "service": {
+        "file": "api/services/ioc_manager.py",
+        "singleton": "ioc_manager"
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/IOCStore.jsx",
+        "components": [
+          "IOCTable",
+          "IOCForm",
+          "IOCImport"
+        ]
+      },
+      "features": [
+        "CRUD IOCs",
+        "Importación STIX/OpenIOC",
+        "Búsqueda avanzada",
+        "Exportación para SIEM"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Listar IOCs"},
+        {"method": "POST", "path": "/", "description": "Crear IOC"},
+        {"method": "GET", "path": "/{ioc_id}", "description": "Obtener IOC"},
+        {"method": "DELETE", "path": "/{ioc_id}", "description": "Eliminar IOC"},
+        {"method": "POST", "path": "/import", "description": "Importar IOCs"},
+        {"method": "GET", "path": "/export", "description": "Exportar IOCs"}
+      ]
+    },
+    {
+      "id": "agents",
+      "name": "Mobile Agents",
+      "description": "Agentes desplegables Red/Blue/Purple",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "execution",
+      "icon": "Users",
+      "color": "#7C3AED",
+      "routes": {
+        "prefix": "/api/agents",
+        "file": "api/routes/agents.py",
+        "auth_required": false
+      },
+      "service": {
+        "file": "api/services/agent_manager.py",
+        "singleton": null
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/AgentsPage.jsx",
+        "components": [
+          "AgentList",
+          "AgentDeploy",
+          "AgentStatus"
+        ]
+      },
+      "features": [
+        "Despliegue de agentes",
+        "Monitoreo status",
+        "Tareas remotas",
+        "Logs de agentes"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Listar agentes"},
+        {"method": "POST", "path": "/deploy", "description": "Desplegar agente"},
+        {"method": "GET", "path": "/{agent_id}", "description": "Obtener agente"},
+        {"method": "POST", "path": "/{agent_id}/task", "description": "Asignar tarea"}
+      ]
+    },
+    {
+      "id": "kali_tools",
+      "name": "Kali Tools",
+      "description": "Herramientas forenses de Kali Linux",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "execution",
+      "icon": "Terminal",
+      "color": "#059669",
+      "routes": {
+        "prefix": "/api/tools/kali",
+        "file": "api/routes/kali_tools.py",
+        "auth_required": false
+      },
+      "service": {
+        "file": "api/services/kali_executor.py",
+        "singleton": null
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/KaliToolsPage.jsx",
+        "components": [
+          "ToolSelector",
+          "ToolExecutor",
+          "OutputViewer"
+        ]
+      },
+      "features": [
+        "Loki Scanner",
+        "YARA",
+        "Volatility",
+        "OSQuery"
+      ],
+      "dependencies": [],
+      "api_endpoints": [
+        {"method": "GET", "path": "/", "description": "Listar herramientas"},
+        {"method": "POST", "path": "/{tool}/execute", "description": "Ejecutar"},
+        {"method": "GET", "path": "/{tool}/status", "description": "Estado"}
+      ]
+    },
+    {
+      "id": "threat_intel",
+      "name": "Threat Intelligence",
+      "description": "APIs externas: Shodan, VirusTotal, HIBP",
+      "version": "4.1.0",
+      "status": "active",
+      "category": "enrichment",
+      "icon": "Shield",
+      "color": "#0EA5E9",
+      "routes": {
+        "prefix": "/api/threat-intel",
+        "file": "api/routes/threat_intel.py",
+        "auth_required": false
+      },
+      "service": {
+        "file": "api/services/threat_intel.py",
+        "singleton": null
+      },
+      "model": null,
+      "frontend": {
+        "page": "frontend-react/src/pages/ThreatIntelPage.jsx",
+        "components": [
+          "IOCEnricher",
+          "VirusTotalResult",
+          "ShodanResult"
+        ]
+      },
+      "features": [
+        "Búsqueda VirusTotal",
+        "Búsqueda Shodan",
+        "Enriquecimiento IOCs",
+        "Caché de resultados"
+      ],
+      "dependencies": ["ioc_store"],
+      "api_endpoints": [
+        {"method": "GET", "path": "/shodan/{ip}", "description": "Buscar IP"},
+        {"method": "GET", "path": "/virustotal/{hash}", "description": "Buscar hash"},
+        {"method": "POST", "path": "/enrich", "description": "Enriquecer IOC"}
+      ]
+    }
+  ],
+  "categories": {
+    "core": {
+      "name": "Core",
+      "description": "Módulos fundamentales del sistema",
+      "order": 1
+    },
+    "forensics": {
+      "name": "Forensics",
+      "description": "Análisis forense y credenciales",
+      "order": 2
+    },
+    "detection": {
+      "name": "Detection",
+      "description": "Detección de amenazas y IOCs",
+      "order": 3
+    },
+    "analysis": {
+      "name": "Analysis",
+      "description": "Análisis y correlación",
+      "order": 4
+    },
+    "execution": {
+      "name": "Execution",
+      "description": "Ejecución de herramientas",
+      "order": 5
+    },
+    "enrichment": {
+      "name": "Enrichment",
+      "description": "Enriquecimiento de datos",
+      "order": 6
+    },
+    "output": {
+      "name": "Output",
+      "description": "Generación de reportes y salidas",
+      "order": 7
+    },
+    "ai": {
+      "name": "AI",
+      "description": "Inteligencia artificial y LLM",
+      "order": 8
+    }
+  },
+  "auto_generation": {
+    "enabled": true,
+    "templates": {
+      "route": "core/templates/route.py.jinja2",
+      "service": "core/templates/service.py.jinja2",
+      "model": "core/templates/model.py.jinja2",
+      "frontend_page": "core/templates/page.jsx.jinja2",
+      "frontend_component": "core/templates/component.jsx.jinja2"
+    },
+    "output_dirs": {
+      "routes": "api/routes",
+      "services": "api/services",
+      "models": "api/models",
+      "frontend": "frontend-react/src/modules"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# =============================================================================
+# MCP Kali Forensics - LLM Provider v4.4.1
+# Proxy unificado para LM Studio, Ollama, OpenAI, Anthropic
+# =============================================================================
+
+FROM python:3.11-slim
+
+LABEL maintainer="MCP Forensics Team"
+LABEL version="4.4.1"
+LABEL description="Unified LLM Provider proxy"
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY docker/requirements.llm-provider.txt requirements.txt
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código del proveedor LLM
+COPY api/services/llm_provider.py /app/services/
+COPY docker/llm_provider_main.py /app/main.py
+
+# Puerto
+EXPOSE 8090
+
+# Usuario no-root
+RUN useradd -m -u 1000 llmprovider
+RUN mkdir -p /var/cache/llm && chown llmprovider:llmprovider /var/cache/llm
+USER llmprovider
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost:8090/health || exit 1
+
+# Comando
+CMD ["python", "main.py"]
