@@ -16,14 +16,12 @@ import {
   Lock,
   Eye,
   EyeOff,
-  CreditCard,
   CheckCircle
 } from 'lucide-react';
 import registrationService from '../../services/registration';
 
 const STEPS = [
   { id: 'info', title: 'Your Information', icon: User },
-  { id: 'plan', title: 'Select Plan', icon: CreditCard },
   { id: 'account', title: 'Create Account', icon: Lock },
   { id: 'complete', title: 'Complete', icon: CheckCircle },
 ];
@@ -56,18 +54,8 @@ const RegisterPage = () => {
   const [completionData, setCompletionData] = useState(null);
 
   useEffect(() => {
-    loadPlans();
     checkExistingSession();
   }, []);
-
-  const loadPlans = async () => {
-    try {
-      const plansData = await registrationService.getPlans();
-      setPlans(plansData);
-    } catch (err) {
-      console.error('Failed to load plans:', err);
-    }
-  };
 
   const checkExistingSession = async () => {
     try {
@@ -109,13 +97,6 @@ const RegisterPage = () => {
         }
         return true;
       
-      case 'plan':
-        if (!formData.selectedPlan) {
-          setError('Please select a plan');
-          return false;
-        }
-        return true;
-      
       case 'account':
         if (!formData.username || formData.username.length < 3) {
           setError('Username must be at least 3 characters');
@@ -149,7 +130,7 @@ const RegisterPage = () => {
     try {
       switch (currentStep) {
         case 'info':
-          // Start registration
+          // Start registration and proceed to account
           const startResult = await registrationService.startRegistration({
             email: formData.email,
             fullName: formData.fullName,
@@ -157,25 +138,6 @@ const RegisterPage = () => {
             phone: formData.phone,
           });
           setSessionData(startResult.data);
-          setCurrentStep('plan');
-          break;
-        
-        case 'plan':
-          // Select plan
-          const planResult = await registrationService.selectPlan(
-            formData.selectedPlan,
-            formData.billingPeriod
-          );
-          
-          if (planResult.data?.requires_payment) {
-            // Redirect to Stripe checkout
-            const checkoutResult = await registrationService.createCheckoutSession();
-            if (checkoutResult.checkout_url) {
-              window.location.href = checkoutResult.checkout_url;
-              return;
-            }
-          }
-          
           setCurrentStep('account');
           break;
         
@@ -205,10 +167,6 @@ const RegisterPage = () => {
       setCurrentStep(STEPS[stepIndex - 1].id);
       setError(null);
     }
-  };
-
-  const getSelectedPlan = () => {
-    return plans.find(p => p.plan_id === formData.selectedPlan);
   };
 
   const renderStepIndicator = () => (
@@ -309,94 +267,8 @@ const RegisterPage = () => {
     </div>
   );
 
-  const renderPlanStep = () => (
-    <div className="space-y-6">
-      {/* Billing Toggle */}
-      <div className="flex justify-center mb-4">
-        <div className="bg-gray-800 rounded-lg p-1 inline-flex">
-          <button
-            type="button"
-            onClick={() => setFormData(prev => ({ ...prev, billingPeriod: 'monthly' }))}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              formData.billingPeriod === 'monthly'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            type="button"
-            onClick={() => setFormData(prev => ({ ...prev, billingPeriod: 'yearly' }))}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              formData.billingPeriod === 'yearly'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Yearly <span className="text-green-400 text-xs">-17%</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Plans */}
-      <div className="grid gap-4">
-        {plans.map((plan) => {
-          const isSelected = formData.selectedPlan === plan.plan_id;
-          const price = formData.billingPeriod === 'yearly' ? plan.price_yearly : plan.price_monthly;
-          
-          return (
-            <div
-              key={plan.plan_id}
-              onClick={() => setFormData(prev => ({ ...prev, selectedPlan: plan.plan_id }))}
-              className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                isSelected 
-                  ? 'border-blue-500 bg-blue-500/10' 
-                  : 'border-gray-700 hover:border-gray-600'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-                  <p className="text-sm text-gray-400">{plan.description}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-white">
-                    {plan.is_free ? 'Free' : `$${price}`}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {plan.is_free ? `${plan.trial_days} days` : `/${formData.billingPeriod === 'yearly' ? 'year' : 'month'}`}
-                  </div>
-                </div>
-              </div>
-              
-              {isSelected && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {(plan.features || []).slice(0, 3).map((feature, idx) => (
-                    <span key={idx} className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-
   const renderAccountStep = () => (
     <div className="space-y-6">
-      <div className="bg-blue-500/10 border border-blue-500 rounded-lg p-4 mb-6">
-        <p className="text-blue-400 text-sm">
-          <strong>Selected Plan:</strong> {getSelectedPlan()?.name || formData.selectedPlan}
-          {getSelectedPlan()?.is_free && (
-            <span className="ml-2">({getSelectedPlan()?.trial_days}-day free trial)</span>
-          )}
-        </p>
-      </div>
-      
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
           <User className="w-4 h-4 inline mr-2" />
@@ -496,8 +368,6 @@ const RegisterPage = () => {
     switch (currentStep) {
       case 'info':
         return renderInfoStep();
-      case 'plan':
-        return renderPlanStep();
       case 'account':
         return renderAccountStep();
       case 'complete':
