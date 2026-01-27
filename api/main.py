@@ -134,23 +134,44 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Private Network Access (PNA) opt-in for browser preflight requests
-# Modern browsers enforce Private Network Access when a public origin
-# (e.g. https://segrd.com) attempts to call a local/private address (localhost, 10.x.x.x).
-# The preflight will include `Access-Control-Request-Private-Network: true` and
-# the server must respond with `Access-Control-Allow-Private-Network: true`.
+## Private Network Access (PNA) middleware
+## Modern browsers enforce Private Network Access when a public origin
+## (e.g. https://segrd.com) attempts to call a local/private address (localhost, 10.x.x.x).
+## The preflight will include `Access-Control-Request-Private-Network: true` and
+## the server must respond with `Access-Control-Allow-Private-Network: true`.
 class PrivateNetworkMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        response = await call_next(request)
+        # If the browser is sending a preflight with Private-Network hint,
+        # we must include Access-Control-Allow-Private-Network in the response.
+        add_pna = False
         try:
             if request.method == "OPTIONS":
-                response.headers["Access-Control-Allow-Private-Network"] = "true"
+                # Some browsers include this header in lowercase or mixed case
+                if any(h.lower() == "access-control-request-private-network" for h in request.headers.keys()):
+                    add_pna = True
         except Exception:
-            pass
+            add_pna = False
+
+        response = await call_next(request)
+
+        if add_pna:
+            # Ensure the header is present on the preflight response
+            response.headers.setdefault("Access-Control-Allow-Private-Network", "true")
+
         return response
 
+# Register PNA middleware BEFORE CORS so the header is present for preflight responses
 app.add_middleware(PrivateNetworkMiddleware)
+
+# CORS Middleware (registered after PNA middleware so preflight responses
+# can include the Access-Control-Allow-Private-Network header)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # RBAC Middleware v4.4.1 - Control de acceso basado en roles
 # Verifica permisos por ruta y método HTTP con rate limiting
