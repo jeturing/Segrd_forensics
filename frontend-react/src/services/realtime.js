@@ -3,8 +3,22 @@
  * Servicio para conexiones WebSocket en tiempo real
  */
 
-const rawWsBase = import.meta.env.VITE_WS_URL || 'ws://localhost:9000/ws';
-const WS_BASE_URL = rawWsBase.replace(/\/$/, '');
+// Construir URL WebSocket dinámica basada en el protocolo actual
+// Si VITE_WS_URL es una ruta relativa como '/ws', determinar el esquema (ws:// o wss://)
+const rawWsBase = import.meta.env.VITE_WS_URL || '/ws';
+let WS_BASE_URL;
+
+if (rawWsBase.startsWith('ws://') || rawWsBase.startsWith('wss://')) {
+  // URL absoluta ya proporcionada
+  WS_BASE_URL = rawWsBase.replace(/\/$/, '');
+} else {
+  // Ruta relativa: construir URL WebSocket usando el host actual
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsHost = window.location.host; // includes port if non-standard
+  const wsPath = rawWsBase.startsWith('/') ? rawWsBase : `/${rawWsBase}`;
+  WS_BASE_URL = `${wsProtocol}//${wsHost}${wsPath}`.replace(/\/$/, '');
+}
+
 const WS_ROOT = WS_BASE_URL.endsWith('/ws') ? WS_BASE_URL : `${WS_BASE_URL}/ws`;
 
 /**

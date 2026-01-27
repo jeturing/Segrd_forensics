@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 from typing import Optional
 
-from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon
+from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon, security_checklist
 from api.middleware.auth import verify_api_key
 from api.middleware.case_context import CaseContextMiddleware
 from api.middleware.rbac import RBACMiddleware
@@ -21,6 +21,7 @@ from api.services.llm_provider import init_llm_manager, cleanup_llm_manager, get
 from api.config import settings
 from api.database import init_db
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 
 # Import v4.4 core components
 from core import case_context_manager, process_manager
@@ -133,6 +134,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Private Network Access (PNA) opt-in for browser preflight requests
+# Modern browsers enforce Private Network Access when a public origin
+# (e.g. https://segrd.com) attempts to call a local/private address (localhost, 10.x.x.x).
+# The preflight will include `Access-Control-Request-Private-Network: true` and
+# the server must respond with `Access-Control-Allow-Private-Network: true`.
+class PrivateNetworkMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        try:
+            if request.method == "OPTIONS":
+                response.headers["Access-Control-Allow-Private-Network"] = "true"
+        except Exception:
+            pass
+        return response
+
+app.add_middleware(PrivateNetworkMiddleware)
 
 # RBAC Middleware v4.4.1 - Control de acceso basado en roles
 # Verifica permisos por ruta y método HTTP con rate limiting
@@ -600,6 +618,12 @@ if v41_enabled:
         tags=["v4.1 Correlation Engine"],
         dependencies=[Depends(verify_api_key)]
     )
+
+# Security Checklist router (sin autenticación, público)
+app.include_router(
+    security_checklist.router,
+    tags=["Security Checklist"]
+)
 
     # v4.1 - Attack Graph Enhanced router (con autenticación)
     app.include_router(

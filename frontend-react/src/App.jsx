@@ -53,6 +53,7 @@ import ReportsPage from './components/Reports/ReportsPage';
 import './styles/globals.css';
 
 import CredentialsPage from './components/Credentials/CredentialsPage';
+import SecurityChecklistForm from './pages/SecurityChecklistForm';
 
 const GraphPage = () => {
   const params = new URLSearchParams(window.location.search);
@@ -88,6 +89,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/security-checklist" element={<SecurityChecklistForm />} />
               
               {/* Protected routes */}
               <Route path="/dashboard" element={
