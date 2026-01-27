@@ -121,6 +121,8 @@ app = FastAPI(
     title="MCP Kali Forensics & IR",
     description="Micro Compute Pod para análisis forense automatizado - v4.4 con Arquitectura Orientada a Casos, Persistencia de Procesos y Agentes Funcionales",
     version="4.4.0",
+    # Swagger UI bundled with FastAPI doesn't yet support OpenAPI 3.1; force 3.0.2 to avoid version validation errors
+    openapi_version="3.0.2",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc"
