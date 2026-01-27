@@ -1,10 +1,10 @@
 {
   "hero": {
-    "title": "Seguridad, Forense y Respuesta a Incidentes",
-    "subtitle": "Para Organizaciones Reguladas",
-    "description": "SEGRD es una plataforma modular diseñada para organizaciones que requieren integridad de evidencia, automatización controlada y ejecución de IA privada — sin la complejidad empresarial.",
-    "cta_primary": "Iniciar Prueba Gratuita",
-    "cta_secondary": "Explorar Módulos"
+    "title": "Ciberseguridad Empresarial con IA",
+    "subtitle": "Protección 24x7, Respuesta Rápida, Evidencia Certificada",
+    "description": "Jeturing protege tu empresa con tecnología SEGRD™: monitoreo continuo, respuesta automatizada a incidentes y forense digital para litigios — todo gestionado por expertos.",
+    "cta_primary": "Evalúa Tu Seguridad",
+    "cta_secondary": "Conocer Servicios"
   },
   "value": {
     "title": "¿Por qué SEGRD?",
@@ -32,25 +32,25 @@
     ]
   },
   "markets": {
-    "title": "Diseñado Para",
+    "title": "Diseñado Para Tu Empresa",
     "segments": [
       {
         "id": "soc",
-        "title": "SOC Pequeños y MSSPs",
-        "description": "Equipos de 2-20 analistas que necesitan capacidades enterprise sin complejidad. Automatiza el triaje, acelera la investigación.",
-        "features": ["Correlación multi-fuente", "Playbooks automatizados", "Reportes ejecutivos"]
+        "title": "Empresas en Crecimiento",
+        "description": "Organizaciones que necesitan capacidades enterprise sin la complejidad. Protección automática, respuesta rápida.",
+        "features": ["Monitoreo 24x7 gestionado", "Respuesta a incidentes", "Reportes ejecutivos"]
       },
       {
         "id": "legal",
-        "title": "Bufetes de Abogados",
-        "description": "Peritajes forenses digitales, eDiscovery y análisis forense para litigios. Cadena de custodia certificada.",
-        "features": ["Informes periciales", "Cadena de custodia", "eDiscovery integrado"]
+        "title": "Organizaciones Reguladas",
+        "description": "Empresas que requieren evidencia digital certificada para auditorías, cumplimiento normativo y litigios.",
+        "features": ["Cadena de custodia legal", "Evidencia certificada", "Cumplimiento normativo"]
       },
       {
         "id": "banking",
-        "title": "Bancos e Instituciones Financieras",
-        "description": "Cumplimiento PCI-DSS, detección de fraude y respuesta a incidentes para entidades reguladas.",
-        "features": ["Compliance PCI/SOX", "Detección de fraude", "Auditoría continua"]
+        "title": "Instituciones Críticas",
+        "description": "Organizaciones donde un incidente de seguridad puede detener operaciones o generar pérdidas significativas.",
+        "features": ["Protección 24x7", "Recuperación rápida", "Auditoría continua"]
       }
     ]
   },

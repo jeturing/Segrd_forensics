@@ -1,0 +1,179 @@
+{
+  "title": "Planes de Seguridad Empresarial",
+  "subtitle": "Desde asesoría estratégica hasta protección integral 24x7",
+  "assessment_cta_title": "¿No sabes qué plan necesitas?",
+  "assessment_cta_desc": "Responde nuestro checklist rápido de ciberseguridad y te recomendaremos el nivel adecuado.",
+  "assessment_cta_button": "Hacer Evaluación Gratuita",
+  "billing_monthly": "Mensual",
+  "billing_yearly": "Anual",
+  "billing_savings": "Ahorra 15%",
+  "vciso": {
+    "title": "v-CISO (Liderazgo de Seguridad)",
+    "subtitle": "Tu ejecutivo de seguridad sin costo de nómina",
+    "lite": {
+      "name": "v-CISO Lite",
+      "description": "Asesoría y Acompañamiento",
+      "price": 1500,
+      "price_unit": "/mes",
+      "tagline": "Ideal para PYMEs que necesitan guía estratégica",
+      "features": [
+        "Reuniones mensuales de asesoría (2h)",
+        "Revisión de políticas y procedimientos",
+        "Evaluación trimestral de riesgos",
+        "Acceso a plantillas de seguridad",
+        "Consulta por email (respuesta 48h)",
+        "Reporte mensual de estado"
+      ],
+      "cta": "Solicitar Consulta"
+    },
+    "standard": {
+      "name": "v-CISO Estándar",
+      "description": "Liderazgo Activo de Seguridad",
+      "price": 3500,
+      "price_unit": "/mes",
+      "tagline": "Para empresas que requieren un líder activo",
+      "features": [
+        "Reuniones semanales de dirección (4h/mes)",
+        "Gestión activa del programa de seguridad",
+        "Roadmap anual de madurez",
+        "Supervisión de proveedores de seguridad",
+        "Representación ante auditorías",
+        "Desarrollo y capacitación del equipo",
+        "Línea directa de consulta (respuesta 24h)",
+        "Reportes ejecutivos para C-Level"
+      ],
+      "cta": "Solicitar Consulta",
+      "recommended": "Más Popular"
+    }
+  },
+  "bundles": {
+    "title": "Paquetes de Protección",
+    "essential": {
+      "name": "Protección Esencial",
+      "bundle": "Bundle I",
+      "description": "Cobertura base para empresas que inician su programa",
+      "targetCompanies": "Hasta 100 empleados",
+      "price": 2500,
+      "price_unit": "/mes",
+      "features": [
+        "Evaluación Anual de Seguridad",
+        "EDR (Endpoint Detection & Response)",
+        "Protección DNS",
+        "v-CISO Lite (2h/mes)",
+        "Backup Cloud Básico (500GB)"
+      ],
+      "notIncluded": [
+        "MDR 24x7",
+        "SIEM Gestionado",
+        "SEGRD™ Forense",
+        "Protección M365"
+      ],
+      "cta": "Solicitar Consulta"
+    },
+    "professional": {
+      "name": "Resiliencia Profesional",
+      "bundle": "Bundle II",
+      "description": "Protección robusta con monitoreo y respuesta rápida",
+      "targetCompanies": "100-300 empleados",
+      "price": 4500,
+      "price_unit": "/mes",
+      "features": [
+        "Todo de Esencial +",
+        "MDR 24x7 (SOC gestionado)",
+        "SIEM gestionado con retención 90 días",
+        "v-CISO Estándar (4h/mes)",
+        "Backup Cloud Profesional (2TB)",
+        "Protección M365 Básica"
+      ],
+      "notIncluded": [
+        "SEGRD™ Forense Completo",
+        "Respuesta Forense 24x7",
+        "Investigación Avanzada M365"
+      ],
+      "cta": "Solicitar Consulta",
+      "recommended": "Recomendado"
+    },
+    "critical": {
+      "name": "Defensa Crítica",
+      "bundle": "Bundle III",
+      "description": "Protección integral para operaciones críticas",
+      "targetCompanies": "300+ empleados",
+      "price": 6500,
+      "price_unit": "/mes",
+      "features": [
+        "Todo de Profesional +",
+        "SEGRD™ Forense Completo",
+        "Respuesta Forense 24x7",
+        "Investigación Avanzada M365",
+        "Backup Cloud Empresarial (Ilimitado)",
+        "SIEM Empresarial (retención 12 meses)",
+        "Escalada ejecutiva directa",
+        "Cumplimiento regulatorio garantizado"
+      ],
+      "cta": "Solicitar Consulta"
+    }
+  },
+  "addons": {
+    "title": "Escudos de Seguridad (Add-ons)",
+    "subtitle": "Servicios individuales para complementar tu protección",
+    "dns": {
+      "name": "Escudo DNS",
+      "description": "Filtrado DNS avanzado contra malware, phishing y dominios maliciosos",
+      "price": 200,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    },
+    "mdr": {
+      "name": "MDR 24x7",
+      "description": "Monitoreo, detección y respuesta gestionada por analistas SOC",
+      "price": 500,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    },
+    "siem": {
+      "name": "SIEM Cloud",
+      "description": "Correlación de eventos y logs con retención de 12 meses",
+      "price": 750,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    },
+    "forensics": {
+      "name": "SEGRD™ Forense",
+      "description": "Plataforma forense con análisis M365, credenciales y endpoints",
+      "price": 1200,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    },
+    "m365": {
+      "name": "Protección M365",
+      "description": "Backup, DLP y protección avanzada para Microsoft 365",
+      "price": 350,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    },
+    "bcdr": {
+      "name": "BCDR Cloud",
+      "description": "Backup y recuperación ante desastres con RTO garantizado",
+      "price": 800,
+      "price_unit": "/mes",
+      "cta": "Consultar"
+    }
+  },
+  "comparison": {
+    "title": "Comparación de Planes",
+    "included": "Incluido",
+    "notIncluded": "No incluido",
+    "custom": "Personalizado"
+  },
+  "contact": {
+    "title": "¿Necesitas ayuda?",
+    "description": "Nuestro equipo te ayudará a elegir el plan perfecto para tu empresa",
+    "cta": "Contactar Ventas"
+  },
+  "sla": {
+    "title": "SLAs por Plan",
+    "essential": "Disponibilidad 99%",
+    "professional": "Disponibilidad 99.5%",
+    "critical": "Disponibilidad 99.9%"
+  }
+}

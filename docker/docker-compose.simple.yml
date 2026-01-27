@@ -1,0 +1,107 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: mcp-forensics-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: forensics_db
+      POSTGRES_USER: forensics
+      POSTGRES_PASSWORD: forensics123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - forensics-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forensics -d forensics_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: mcp-forensics-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - forensics-net
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+    container_name: mcp-forensics-api
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./api:/app/api
+      - ./core:/app/core
+      - ./evidence:/var/evidence
+      - ./logs:/app/logs
+      - ./forensics-evidence:/home/forensics-evidence
+    environment:
+      - ENV=production
+      - DATABASE_URL=postgresql://forensics:forensics123@postgres:5432/forensics_db
+      - REDIS_URL=redis://redis:6379/0
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    networks:
+      - forensics-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: mcp-forensics-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - ./logs/nginx:/var/log/nginx
+    networks:
+      - forensics-net
+    depends_on:
+      - backend
+      - postgres
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/nginx-health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  forensics-net:
+    driver: bridge

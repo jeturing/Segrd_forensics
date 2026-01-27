@@ -1,0 +1,62 @@
+<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="200" cy="150" r="100" fill="#06b6d4" opacity="0.1"/>
+  <circle cx="1000" cy="450" r="150" fill="#0284c7" opacity="0.1"/>
+  
+  <!-- Main Shield Icon -->
+  <g transform="translate(850, 200)">
+    <path d="M 0 10 L 60 0 L 60 80 Q 60 120 0 150 Q -60 120 -60 80 L -60 0 Z" 
+          fill="url(#shieldGradient)" stroke="#06b6d4" stroke-width="2"/>
+    <circle cx="0" cy="70" r="20" fill="none" stroke="#fff" stroke-width="2"/>
+    <path d="M -5 70 L 0 75 L 8 65" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Text Content -->
+  <text x="100" y="120" font-size="48" font-weight="bold" fill="#fff" font-family="sans-serif">
+    Enterprise Security
+  </text>
+  <text x="100" y="180" font-size="36" font-weight="bold" fill="#06b6d4" font-family="sans-serif">
+    Made Simple
+  </text>
+  <text x="100" y="240" font-size="18" fill="#cbd5e1" font-family="sans-serif">
+    24/7 Protection • Expert Response • Complete Control
+  </text>
+  
+  <!-- Feature boxes -->
+  <g transform="translate(100, 310)">
+    <!-- Box 1 -->
+    <rect x="0" y="0" width="200" height="100" rx="8" fill="#06b6d4" opacity="0.15" stroke="#06b6d4" stroke-width="1"/>
+    <circle cx="25" cy="25" r="15" fill="#06b6d4"/>
+    <path d="M 18 25 L 22 28 L 32 18" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <text x="50" y="30" font-size="14" fill="#06b6d4" font-weight="bold" font-family="sans-serif">24/7 Monitoring</text>
+    <text x="50" y="50" font-size="12" fill="#cbd5e1" font-family="sans-serif">Real-time threat detection</text>
+    
+    <!-- Box 2 -->
+    <rect x="230" y="0" width="200" height="100" rx="8" fill="#0284c7" opacity="0.15" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="255" cy="25" r="15" fill="#0284c7"/>
+    <text x="15" y="30" font-size="12" fill="#fff" font-family="sans-serif" font-weight="bold">SOC</text>
+    <text x="280" y="30" font-size="14" fill="#0284c7" font-weight="bold" font-family="sans-serif">Incident Response</text>
+    <text x="280" y="50" font-size="12" fill="#cbd5e1" font-family="sans-serif">Expert team on standby</text>
+    
+    <!-- Box 3 -->
+    <rect x="460" y="0" width="200" height="100" rx="8" fill="#06b6d4" opacity="0.15" stroke="#06b6d4" stroke-width="1"/>
+    <circle cx="485" cy="25" r="15" fill="#06b6d4"/>
+    <path d="M 478 20 L 478 30 M 485 17 L 485 33 M 492 20 L 492 30" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <text x="510" y="30" font-size="14" fill="#06b6d4" font-weight="bold" font-family="sans-serif">SEGRD™ AI</text>
+    <text x="510" y="50" font-size="12" fill="#cbd5e1" font-family="sans-serif">Forensic analysis platform</text>
+  </g>
+</svg>

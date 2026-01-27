@@ -1,11 +1,12 @@
 """
-Security Checklist API
+Security Checklist API v2.0
 Endpoint para recibir y procesar formularios de checklist de ciberseguridad
+Con sistema de recomendaciones detalladas - Alineado con propuesta comercial Jeturing
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 import logging
 import smtplib
@@ -21,55 +22,71 @@ router = APIRouter(prefix="/security-checklist", tags=["Security Checklist"])
 # PYDANTIC MODELS
 # ============================================================================
 
+class RecommendationsModel(BaseModel):
+    tier: str = ""
+    score: int = 0
+    tierName: str = ""
+    pricing: int = 0
+    vciso: str = "lite"
+    vcisoPricing: int = 1500
+    services: List[str] = []
+    gaps: List[str] = []
+    urgentActions: List[str] = []
+
+
 class SecurityChecklistRequest(BaseModel):
-    # Sección 1
+    # Sección 1: Datos básicos
     company_name: str
+    contact_name: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
     country: str
     industry: str
     employees: Optional[str] = None
 
-    # Sección 2
+    # Sección 2: Tecnología
     computers: Optional[str] = None
     has_servers: Optional[str] = None
-    uses_m365: Optional[str] = None
+    uses_m365: bool = False
     m365_users: Optional[str] = None
-    has_vpn: Optional[str] = None
+    has_vpn: bool = False
 
-    # Sección 3
+    # Sección 3: Seguridad actual
     has_security_officer: bool = False
     security_only_it: bool = False
     has_policies: bool = False
 
-    # Sección 4
+    # Sección 4: Riesgos e Incidentes
     had_incidents: bool = False
     operates_24_7: bool = False
     attack_could_stop_business: bool = False
 
-    # Sección 5
+    # Sección 5: Cumplimiento
     clients_demand_security: bool = False
     has_cyber_insurance: bool = False
     compliance_requirements: List[str] = []
 
-    # Sección 6
+    # Sección 6: Monitoreo
     has_24_7_monitoring: bool = False
     has_centralized_logs: bool = False
     can_reconstruct_incident: bool = False
 
-    # Sección 7
+    # Sección 7: Respaldo
     has_backups: bool = False
     tested_backups: bool = False
-    recovery_time_target: Optional[str] = None
+    knows_recovery_time: bool = False
 
-    # Sección 8
+    # Sección 8: Legal y Forense
     needs_digital_evidence: bool = False
     concerned_internal_fraud: bool = False
 
-    # Sección 9
+    # Sección 9: Comentarios
     comments: Optional[str] = None
 
     # Computed fields
     recommended_tier: Optional[str] = None
     risk_score: Optional[int] = None
+    recommendations: Optional[Dict[str, Any]] = None
     submitted_at: Optional[str] = None
 
 

@@ -1,0 +1,59 @@
+{
+  "title": "Evaluación de Seguridad",
+  "subtitle": "Responde un cuestionario rápido y obtén una evaluación personalizada",
+  "sections": {
+    "basic_info": "Información Básica",
+    "technology": "Tecnología",
+    "current_security": "Seguridad Actual",
+    "risks": "Riesgos e Incidentes",
+    "compliance": "Cumplimiento Regulatorio",
+    "monitoring": "Monitoreo",
+    "backup": "Respaldo",
+    "forensics": "Legal y Forense",
+    "comments": "Comentarios Adicionales"
+  },
+  "questions": {
+    "employees": "¿Cuántos empleados tiene tu empresa?",
+    "budget": "¿Cuál es tu presupuesto anual de ciberseguridad?",
+    "breaches": "¿Ha sufrido tu empresa algún incidente de seguridad en los últimos 2 años?",
+    "backup": "¿Tienes un plan de respaldo y recuperación ante desastres?",
+    "awareness": "¿Realizas capacitación regular de conciencia de seguridad?",
+    "mfa": "¿Utilizas Autenticación Multi-Factor (MFA)?",
+    "encryption": "¿Encriptas datos sensibles?",
+    "audit": "¿Realizas auditorías de seguridad regulares?",
+    "compliance": "¿Estás sujeto a requisitos de cumplimiento (HIPAA, PCI, GDPR)?",
+    "incident_response": "¿Tienes un plan de respuesta a incidentes?",
+    "endpoint_protection": "¿Tienes EDR (Endpoint Detection & Response)?",
+    "siem": "¿Utilizas un sistema SIEM (Security Information and Event Management)?",
+    "threat_hunt": "¿Realizas búsqueda de amenazas?",
+    "vendor_management": "¿Tienes un programa de gestión de seguridad de proveedores?",
+    "vulnerability_scan": "¿Realizas escaneos de vulnerabilidades regularmente?",
+    "penetration_test": "¿Realizas pruebas de penetración?",
+    "security_team": "¿Tienes un equipo de seguridad dedicado?",
+    "iso_certification": "¿Estás certificado ISO 27001?",
+    "incident_history": "¿Has sufrido un incidente de seguridad significativo en los últimos 12 meses?",
+    "zero_trust": "¿Implementas el modelo de seguridad Zero Trust?"
+  },
+  "result_title": "Resultados de tu Evaluación de Seguridad",
+  "result_description": "Basado en tus respuestas, aquí está nuestro análisis y recomendaciones",
+  "risk_level": "Nivel de Riesgo",
+  "risk_levels": {
+    "low": "Riesgo Bajo",
+    "medium": "Riesgo Medio",
+    "high": "Riesgo Alto",
+    "critical": "Riesgo Crítico"
+  },
+  "recommendation": "Plan Recomendado",
+  "next_steps": "Próximos Pasos",
+  "identified_gaps": "Brechas de Seguridad Identificadas",
+  "urgent_actions": "Acciones Urgentes Requeridas",
+  "vciso_recommendation": "Recomendación v-CISO",
+  "assessment_complete": "Evaluación Completada",
+  "contact_cta": "Obtén tu Cotización Personalizada",
+  "options": {
+    "yes": "Sí",
+    "no": "No",
+    "partially": "Parcialmente",
+    "not_sure": "No Estoy Seguro"
+  }
+}

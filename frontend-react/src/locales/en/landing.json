@@ -1,10 +1,10 @@
 {
   "hero": {
-    "title": "Security, Forensics & Incident Response",
-    "subtitle": "For Regulated Organizations",
-    "description": "SEGRD is a modular platform built for organizations that require evidence integrity, controlled automation and private AI execution — without enterprise complexity.",
-    "cta_primary": "Start Free Trial",
-    "cta_secondary": "Explore Modules"
+    "title": "Enterprise Cybersecurity with AI",
+    "subtitle": "24x7 Protection, Rapid Response, Certified Evidence",
+    "description": "Jeturing protects your business with SEGRD™ technology: continuous monitoring, automated incident response and digital forensics for litigation — all managed by experts.",
+    "cta_primary": "Assess Your Security",
+    "cta_secondary": "Learn About Services"
   },
   "value": {
     "title": "Why SEGRD?",
@@ -32,25 +32,25 @@
     ]
   },
   "markets": {
-    "title": "Built For",
+    "title": "Built For Your Business",
     "segments": [
       {
         "id": "soc",
-        "title": "Small SOCs and MSSPs",
-        "description": "Teams of 2-20 analysts who need enterprise capabilities without complexity. Automate triage, accelerate investigation.",
-        "features": ["Multi-source correlation", "Automated playbooks", "Executive reports"]
+        "title": "Growing Companies",
+        "description": "Organizations that need enterprise capabilities without complexity. Automatic protection, rapid response.",
+        "features": ["Managed 24x7 monitoring", "Incident response", "Executive reports"]
       },
       {
         "id": "legal",
-        "title": "Law Firms",
-        "description": "Digital forensics expert witness, eDiscovery and forensic analysis for litigation. Certified chain of custody.",
-        "features": ["Expert witness reports", "Chain of custody", "Integrated eDiscovery"]
+        "title": "Regulated Organizations",
+        "description": "Companies that require certified digital evidence for audits, regulatory compliance and litigation.",
+        "features": ["Legal chain of custody", "Certified evidence", "Regulatory compliance"]
       },
       {
         "id": "banking",
-        "title": "Banks and Financial Institutions",
-        "description": "PCI-DSS compliance, fraud detection and incident response for regulated entities.",
-        "features": ["PCI/SOX compliance", "Fraud detection", "Continuous audit"]
+        "title": "Mission-Critical Organizations",
+        "description": "Organizations where a security incident can stop operations or generate significant losses.",
+        "features": ["24x7 protection", "Rapid recovery", "Continuous audit"]
       }
     ]
   },

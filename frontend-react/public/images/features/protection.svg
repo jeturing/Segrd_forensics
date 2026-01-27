@@ -1,0 +1,39 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="featureGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="#0f172a" rx="12"/>
+  <rect width="400" height="300" fill="url(#featureGrad3)" opacity="0.08" rx="12"/>
+  
+  <!-- Lock/Security icon -->
+  <g transform="translate(200, 80)">
+    <!-- Padlock body -->
+    <rect x="-30" y="-10" width="60" height="50" rx="4" fill="none" stroke="#06b6d4" stroke-width="3"/>
+    <!-- Padlock shackle -->
+    <path d="M -20 -10 Q -20 -40 20 -40 Q 40 -40 40 -10" fill="none" stroke="#06b6d4" stroke-width="3"/>
+    <!-- Key hole -->
+    <circle cx="0" cy="15" r="6" fill="none" stroke="#06b6d4" stroke-width="2"/>
+    <rect x="-2" y="24" width="4" height="10" fill="#06b6d4"/>
+    
+    <!-- Shield behind padlock -->
+    <path d="M -50 0 L 50 0 L 50 30 Q 50 50 0 65 Q -50 50 -50 30 Z" fill="#06b6d4" opacity="0.15" stroke="#06b6d4" stroke-width="2"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="200" y="230" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle" font-family="sans-serif">
+    Complete Protection
+  </text>
+  
+  <!-- Description -->
+  <text x="200" y="265" font-size="14" fill="#cbd5e1" text-anchor="middle" font-family="sans-serif">
+    Layered security architecture
+  </text>
+  <text x="200" y="285" font-size="14" fill="#cbd5e1" text-anchor="middle" font-family="sans-serif">
+    defending all your assets
+  </text>
+</svg>

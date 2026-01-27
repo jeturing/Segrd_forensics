@@ -1,9 +1,38 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { copyFileSync, mkdirSync, readdirSync, statSync } from 'fs'
+
+// Plugin to copy locales folder to dist
+const copyLocalesPlugin = () => ({
+  name: 'copy-locales',
+  writeBundle() {
+    const srcLocales = path.resolve(__dirname, 'src/locales')
+    const destLocales = path.resolve(__dirname, 'dist/locales')
+    
+    function copyDir(src, dest) {
+      mkdirSync(dest, { recursive: true })
+      const entries = readdirSync(src, { withFileTypes: true })
+      
+      for (const entry of entries) {
+        const srcPath = path.join(src, entry.name)
+        const destPath = path.join(dest, entry.name)
+        
+        if (entry.isDirectory()) {
+          copyDir(srcPath, destPath)
+        } else {
+          copyFileSync(srcPath, destPath)
+        }
+      }
+    }
+    
+    copyDir(srcLocales, destLocales)
+    console.log('✓ Copied locales to dist/')
+  }
+})
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyLocalesPlugin()],
   test: {
     environment: 'jsdom',
     globals: true,
