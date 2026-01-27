@@ -10,8 +10,8 @@ export default defineConfig({
     setupFiles: './src/setupTests.js',
   },
   server: {
-    port: 3000,
-    strictPort: true,  // Fallar si puerto 3000 está ocupado (NO usar otro puerto)
+    port: 3001,  // App runs on 3001, public website on 3000
+    strictPort: true,
     host: '0.0.0.0',
     proxy: {
       '/api': {

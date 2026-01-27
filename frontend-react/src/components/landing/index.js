@@ -8,3 +8,4 @@ export { default as ModulesGrid } from "./ModulesGrid";
 export { default as FAQSection } from "./FAQSection";
 export { default as CTASection } from "./CTASection";
 export { default as LanguageSwitcher } from "./LanguageSwitcher";
+export { default as ParallaxImage, ParallaxContainer } from "./ParallaxImage";

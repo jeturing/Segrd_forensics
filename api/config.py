@@ -208,6 +208,17 @@ class Settings(BaseSettings):
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
     STRIPE_ENVIRONMENT: str = "test"  # test, live
     
+    # ============================================================================
+    # SMTP EMAIL (v4.6.1)
+    # ============================================================================
+    SMTP_HOST: str = "mail5010.site4now.net"
+    SMTP_PORT: int = 465
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+    SMTP_SSL: bool = True
+    SMTP_FROM_EMAIL: str = "no-reply@sajet.us"
+    SMTP_CONTACT_TO: str = "sales@jeturing.com"
+    
     class Config:
         env_file = ".env"
         case_sensitive = True

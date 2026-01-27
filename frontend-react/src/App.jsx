@@ -17,6 +17,15 @@ import RegisterPage from './pages/Register/RegisterPage';
 import PricingPage from './pages/Pricing/PricingPage';
 // v4.6 - Landing Page
 import LandingPage from './pages/Landing/LandingPage';
+// v4.6.1 - Public Pages (Modules, Contact, Docs, Legal)
+import ModulesPage from './pages/Modules/ModulesPage';
+import ContactPage from './pages/Contact/ContactPage';
+import DocsPage from './pages/Docs/DocsPage';
+import ChangelogPage from './pages/Changelog/ChangelogPage';
+import PrivacyPage from './pages/Legal/PrivacyPage';
+import TermsPage from './pages/Legal/TermsPage';
+import SecurityPage from './pages/Legal/SecurityPage';
+import CompliancePage from './pages/Legal/CompliancePage';
 import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import { Investigations } from './components/Investigations';
@@ -90,6 +99,16 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/security-checklist" element={<SecurityChecklistForm />} />
+              
+              {/* v4.6.1 - Public pages (Modules, Contact, Docs, Legal) */}
+              <Route path="/modules" element={<ModulesPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/docs" element={<DocsPage />} />
+              <Route path="/changelog" element={<ChangelogPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/security" element={<SecurityPage />} />
+              <Route path="/compliance" element={<CompliancePage />} />
               
               {/* Protected routes */}
               <Route path="/dashboard" element={

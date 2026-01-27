@@ -6,13 +6,14 @@ Con arquitectura orientada a casos, persistencia de procesos y Red Team HexStrik
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from contextlib import asynccontextmanager
 import logging
 from datetime import datetime
 from typing import Optional
+import json
 
-from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon, security_checklist
+from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon, security_checklist, contact
 from api.middleware.auth import verify_api_key
 from api.middleware.case_context import CaseContextMiddleware
 from api.middleware.rbac import RBACMiddleware
@@ -121,12 +122,26 @@ app = FastAPI(
     title="MCP Kali Forensics & IR",
     description="Micro Compute Pod para análisis forense automatizado - v4.4 con Arquitectura Orientada a Casos, Persistencia de Procesos y Agentes Funcionales",
     version="4.4.0",
-    # Swagger UI bundled with FastAPI doesn't yet support OpenAPI 3.1; force 3.0.2 to avoid version validation errors
     openapi_version="3.0.2",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+# Patch: Override openapi() method to return 3.0.2 for Swagger UI compatibility
+_original_openapi = app.openapi
+
+def patched_openapi():
+    """Return OpenAPI schema with version 3.0.2 instead of 3.1.0 for Swagger UI compatibility."""
+    schema = _original_openapi()
+    if schema and isinstance(schema, dict):
+        # Make a copy to avoid modifying the cached schema
+        schema = dict(schema)
+        schema["openapi"] = "3.0.2"
+    return schema
+
+# Bind the patched method to the app instance
+app.openapi = patched_openapi
 
 # CORS Middleware
 app.add_middleware(
@@ -195,6 +210,15 @@ async def health_check():
         "timestamp": datetime.utcnow().isoformat(),
         "version": "4.4.0"
     }
+
+# Custom OpenAPI endpoint that downgrades 3.1 to 3.0.2 for Swagger UI
+@app.get("/openapi.json", include_in_schema=False)
+async def get_openapi_json():
+    """Serve OpenAPI schema with version 3.0.2 for Swagger UI compatibility"""
+    schema = app.openapi()
+    if schema:
+        schema["openapi"] = "3.0.2"
+    return schema
 
 @app.get("/")
 async def root():
@@ -411,6 +435,13 @@ app.include_router(
     tags=["Cost Management"]
 )
 
+# Contact Form router (v4.6.1 - Public contact form)
+app.include_router(
+    contact.router,
+    prefix="/api",
+    tags=["Contact"]
+)
+
 # ============================================================================
 # v4.6 ROLE MANAGEMENT ROUTERS
 # ============================================================================
@@ -594,12 +625,17 @@ app.include_router(
 )
 
 # Timeline router (con autenticación)
-# Web Reconnaissance for Threat Hunting (con integración de web-check-api)app.include_router(    hunting_web_recon.router,    tags=["v4.3 Threat Hunting - OSINT"])
 app.include_router(
     timeline.router,
     prefix="/timeline",
     tags=["v4.3 Timeline"],
     dependencies=[Depends(verify_api_key)]
+)
+
+# Web Reconnaissance for Threat Hunting (con integración de web-check-api)
+app.include_router(
+    hunting_web_recon.router,
+    tags=["v4.3 Threat Hunting - OSINT"]
 )
 
 # Reports router (con autenticación)
@@ -648,12 +684,12 @@ app.include_router(
     tags=["Security Checklist"]
 )
 
-    # v4.1 - Attack Graph Enhanced router (con autenticación)
-    app.include_router(
-        graph_v41.router,
-        tags=["v4.1 Attack Graph"],
-        dependencies=[Depends(verify_api_key)]
-    )
+# v4.1 - Attack Graph Enhanced router (con autenticación)
+app.include_router(
+    graph_v41.router,
+    tags=["v4.1 Attack Graph"],
+    dependencies=[Depends(verify_api_key)]
+)
 
 # ============================================================================
 # v4.1 - REAL DATA ROUTES (NO MOCKS)

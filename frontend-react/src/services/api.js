@@ -17,7 +17,9 @@ const envApiUrl = normalizeBaseUrl(import.meta.env.VITE_API_URL);
 const inferredBaseUrl = typeof window !== 'undefined'
   ? normalizeBaseUrl(`${window.location.protocol}//${window.location.host}`)
   : '';
-const API_BASE_URL = normalizeBaseUrl(envApiUrl || inferredBaseUrl || 'http://localhost:8888');
+// Use relative /api path for production deployment behind proxy (nginx/Kong)
+// This ensures frontend calls API at same origin as served from
+const API_BASE_URL = envApiUrl || inferredBaseUrl || '/api';
 
 console.log(`🔧 API Configured Base URL: ${API_BASE_URL}`);
 
