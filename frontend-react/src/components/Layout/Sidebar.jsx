@@ -72,7 +72,8 @@ const globalAdminMenuItems = [
       { id: 'admin-tenants', label: 'Tenants Global', icon: '🏛️', path: '/admin/tenants' },
       { id: 'admin-billing', label: 'Billing & Stripe', icon: '💳', path: '/admin/billing' },
       { id: 'admin-settings', label: 'Config Legado', icon: '⚙️', path: '/admin/settings' },
-      { id: 'admin-system', label: 'Sistema & LLM', icon: '🤖', path: '/admin/system-config' }
+      { id: 'admin-system', label: 'Sistema & LLM', icon: '🤖', path: '/admin/system-config' },
+      { id: 'admin-pricing', label: 'Pricing', icon: '💲', path: '/admin/pricing' }
     ]
   }
 ];

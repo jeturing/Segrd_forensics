@@ -25,17 +25,17 @@ const PRICING_MODEL = {
   // Per-device pricing tiers (monthly)
   devicePricing: {
     essential: {
-      rate: 0.50,
+      rate: 6.00,
       min: 1,
       max: 50
     },
     professional: {
-      rate: 1.50,
+      rate: 9.00,
       min: 51,
       max: 200
     },
     critical: {
-      rate: 3.00,
+      rate: 12.00,
       min: 201,
       max: Infinity
     }

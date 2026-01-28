@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-from api.middleware.auth import get_current_user, require_global_admin
+from api.middleware.auth import get_current_user, require_global_admin, verify_api_key
 from api.config import get_settings
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,8 @@ def get_pg_connection():
 router = APIRouter(
     prefix="/api/admin/pricing",
     tags=["Pricing Admin"],
-    dependencies=[Depends(require_global_admin)],
+    # Permitimos API Key (X-API-Key) o usuario global admin
+    dependencies=[Depends(verify_api_key)],
 )
 
 # Public read-only router (sin auth) para consumir pricing en landing/calculadora
