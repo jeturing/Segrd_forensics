@@ -1,6 +1,50 @@
 {
   "title": "Planes de Seguridad Empresarial",
   "subtitle": "Desde asesoría estratégica hasta protección integral 24x7",
+  "pricing_model": {
+    "title": "Modelo de Precios Dinámico",
+    "description": "Los precios se ajustan automáticamente según cantidad de dispositivos y retención de logs",
+    "device_pricing": {
+      "essential": {
+        "rate": 0.50,
+        "label": "Tier Esencial",
+        "range": "1-50 dispositivos"
+      },
+      "professional": {
+        "rate": 1.50,
+        "label": "Tier Profesional",
+        "range": "51-200 dispositivos"
+      },
+      "critical": {
+        "rate": 3.00,
+        "label": "Tier Crítico",
+        "range": "201+ dispositivos"
+      }
+    },
+    "retention_tiers": {
+      "30": {
+        "days": 30,
+        "cost": 0,
+        "label": "30 días (Base)"
+      },
+      "90": {
+        "days": 90,
+        "cost": 150,
+        "label": "90 días"
+      },
+      "180": {
+        "days": 180,
+        "cost": 300,
+        "label": "180 días"
+      },
+      "365": {
+        "days": 365,
+        "cost": 500,
+        "label": "1 año"
+      }
+    },
+    "calculator_description": "Usa nuestro calculador interactivo para obtener un presupuesto personalizado"
+  },
   "assessment_cta_title": "¿No sabes qué plan necesitas?",
   "assessment_cta_desc": "Responde nuestro checklist rápido de ciberseguridad y te recomendaremos el nivel adecuado.",
   "assessment_cta_button": "Hacer Evaluación Gratuita",

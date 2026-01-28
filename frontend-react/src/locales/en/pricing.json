@@ -1,6 +1,50 @@
 {
   "title": "Enterprise Security Plans",
   "subtitle": "From strategic advisory to comprehensive 24x7 protection",
+  "pricing_model": {
+    "title": "Dynamic Pricing Model",
+    "description": "Prices adjust automatically based on number of devices and log retention",
+    "device_pricing": {
+      "essential": {
+        "rate": 0.50,
+        "label": "Essential Tier",
+        "range": "1-50 devices"
+      },
+      "professional": {
+        "rate": 1.50,
+        "label": "Professional Tier",
+        "range": "51-200 devices"
+      },
+      "critical": {
+        "rate": 3.00,
+        "label": "Critical Tier",
+        "range": "201+ devices"
+      }
+    },
+    "retention_tiers": {
+      "30": {
+        "days": 30,
+        "cost": 0,
+        "label": "30 days (Base)"
+      },
+      "90": {
+        "days": 90,
+        "cost": 150,
+        "label": "90 days"
+      },
+      "180": {
+        "days": 180,
+        "cost": 300,
+        "label": "180 days"
+      },
+      "365": {
+        "days": 365,
+        "cost": 500,
+        "label": "1 year"
+      }
+    },
+    "calculator_description": "Use our interactive calculator to get a personalized quote"
+  },
   "assessment_cta_title": "Don't know which plan you need?",
   "assessment_cta_desc": "Answer our quick security checklist and we'll recommend the right level for you.",
   "assessment_cta_button": "Free Assessment",

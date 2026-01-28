@@ -19,6 +19,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import registrationService from '../../services/registration';
+import PricingCalculator from '../../components/PricingCalculator';
 
 const STEPS = [
   { id: 'info', title: 'Your Information', icon: User },
@@ -33,7 +34,6 @@ const RegisterPage = () => {
   const [currentStep, setCurrentStep] = useState('info');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [plans, setPlans] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   
   // Form data
@@ -42,8 +42,6 @@ const RegisterPage = () => {
     fullName: '',
     companyName: '',
     phone: '',
-    selectedPlan: searchParams.get('plan') || 'free_trial',
-    billingPeriod: searchParams.get('billing') || 'monthly',
     username: '',
     password: '',
     confirmPassword: '',
@@ -267,6 +265,12 @@ const RegisterPage = () => {
     </div>
   );
 
+  const renderPricingCalculator = () => (
+    <div className="mt-8">
+      <PricingCalculator />
+    </div>
+  );
+
   const renderAccountStep = () => (
     <div className="space-y-6">
       <div>
@@ -367,7 +371,12 @@ const RegisterPage = () => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'info':
-        return renderInfoStep();
+        return (
+          <>
+            {renderInfoStep()}
+            {renderPricingCalculator()}
+          </>
+        );
       case 'account':
         return renderAccountStep();
       case 'complete':
@@ -425,7 +434,7 @@ const RegisterPage = () => {
                 onClick={handleNext}
                 disabled={loading}
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50"
-              >
+                >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (

@@ -285,6 +285,21 @@ Herramientas de análisis forense e IR automatizada con ML.
 
 ---
 
+## 🌐 MCP Servers Instalados
+
+### Chrome DevTools MCP
+
+| Aspecto | Detalle |
+|---------|---------|
+| **Versión** | 0.14.0 |
+| **Paquete** | `chrome-devtools-mcp` |
+| **Documentación** | [MCP_CHROME_DEVTOOLS.md](./MCP_CHROME_DEVTOOLS.md) |
+| **Uso** | Automatización de Chrome, capturas, análisis de red |
+
+**Herramientas disponibles**: click, fill, navigate, screenshot, network analysis, performance traces
+
+---
+
 ## 🔗 Links Útiles
 
 | Recurso | Descripción |
@@ -293,6 +308,7 @@ Herramientas de análisis forense e IR automatizada con ML.
 | [Microsoft Docs](https://docs.microsoft.com) | Documentación oficial |
 | [GitHub Issues](https://github.com) | Reporte de problemas |
 | [Security Blog](https://techcommunity.microsoft.com) | Blog de seguridad |
+| [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) | MCP para Chrome |
 
 ---
 
@@ -305,8 +321,8 @@ Herramientas de análisis forense e IR automatizada con ML.
 
 ---
 
-**Version**: 4.2  
+**Version**: 4.7  
 **Status**: ✓ Completo  
-**Última Actualización**: 2025-12-07  
-**Total de Documentos**: 12+
+**Última Actualización**: 2026-01-27  
+**Total de Documentos**: 15+
 

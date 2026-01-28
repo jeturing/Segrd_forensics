@@ -15,6 +15,7 @@ import ProfilePage from './pages/Auth/ProfilePage';
 // v4.6 - Registration & Pricing
 import RegisterPage from './pages/Register/RegisterPage';
 import PricingPage from './pages/Pricing/PricingPage';
+import EstimatorPage from './pages/Pricing/EstimatorPage';
 // v4.6 - Landing Page
 import LandingPage from './pages/Landing/LandingPage';
 // v4.6.1 - Public Pages (Modules, Contact, Docs, Legal)
@@ -53,7 +54,8 @@ import {
   GlobalTenantsPage,
   GlobalBillingPage,
   GlobalSettingsPage,
-  LandingContentPage
+  LandingContentPage,
+  PricingManagementPage
 } from './pages/GlobalAdmin';
 // v4.3 - New modules
 import ThreatHuntingPage from './components/ThreatHunting/ThreatHuntingPage';
@@ -98,6 +100,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/pricing/estimator" element={<EstimatorPage />} />
               <Route path="/security-checklist" element={<SecurityChecklistForm />} />
               
               {/* v4.6.1 - Public pages (Modules, Contact, Docs, Legal) */}
@@ -271,6 +274,12 @@ function App() {
               <Route path="/admin/landing" element={
                 <ProtectedRoute requiredGlobalAdmin>
                   <Layout><LandingContentPage /></Layout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/admin/pricing" element={
+                <ProtectedRoute requiredGlobalAdmin>
+                  <Layout><PricingManagementPage /></Layout>
                 </ProtectedRoute>
               } />
 

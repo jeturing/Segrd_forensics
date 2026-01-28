@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     
     # Aplicación
     APP_NAME: str = "mcp-kali-forensics"
-    APP_VERSION: str = "4.6.0"
+    APP_VERSION: str = "4.7.0"
     DEBUG: bool = False
     DEMO_DATA_ENABLED: bool = False  # Deshabilitar datos demo por defecto; usar env DEMO_DATA_ENABLED=true para habilitar fallback
     
@@ -147,18 +147,18 @@ class Settings(BaseSettings):
     AUDIT_LOG_ROTATION_WHEN: str = "midnight"
     AUDIT_LOG_BACKUP_COUNT: int = 14
     
-    # Database (SQLite local)
-    DATABASE_URL: str = "sqlite:///./forensics.db"
-    # DB mode: 'sqlite' (local) or 'postgrest' (use PostgREST endpoint)
-    DB_MODE: str = "sqlite"
+    # Database (PostgreSQL por defecto, SQLite legacy removido)
+    DATABASE_URL: str = "postgresql://forensics:change-me-please@postgres:5432/forensics"
+    # DB mode: 'postgresql' (default) or 'postgrest' (use PostgREST endpoint)
+    DB_MODE: str = "postgresql"
     POSTGREST_URL: Optional[str] = None
 
-    # PostgreSQL (para endpoints administrativos y landing content)
+    # PostgreSQL (base de datos principal)
     POSTGRES_HOST: str = "postgres"
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str = "forensics"
     POSTGRES_USER: str = "forensics"
-    POSTGRES_PASSWORD: Optional[str] = None
+    POSTGRES_PASSWORD: str = "change-me-please"
     
     # ============================================================================
     # HERRAMIENTAS INSTALADAS - CATEGORÍA BÁSICO

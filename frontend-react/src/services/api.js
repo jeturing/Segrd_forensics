@@ -37,7 +37,7 @@ api.interceptors.request.use((config) => {
   // Usa la misma API key que el backend por defecto para evitar 401 al cargar el dashboard
   const apiKey = localStorage.getItem('apiKey') ||
     import.meta.env.VITE_API_KEY ||
-    'mcp-forensics-dev-key';
+    'ac-e0ck-0wdkq-0aca';
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

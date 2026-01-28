@@ -462,6 +462,31 @@ app.include_router(
 )
 
 # ============================================================================
+# v4.7 GLOBAL ADMIN CRUD ROUTERS (PostgreSQL)
+# ============================================================================
+
+# Import new CRUD routers
+from api.routes import global_admin_crud, security_tools_crud, pricing
+
+# Global Admin CRUD router - Full CRUD for users, tenants, subscriptions
+app.include_router(
+    global_admin_crud.router,
+    tags=["Global Admin CRUD"]
+)
+
+# Security Tools CRUD router - Quick actions, catalog, session
+app.include_router(
+    security_tools_crud.router,
+    tags=["Security Tools API"]
+)
+
+# Pricing Admin router - Manage bundles, addons, pricing config
+app.include_router(
+    pricing.router,
+    tags=["Pricing Admin"]
+)
+
+# ============================================================================
 # v4.6 REGISTRATION & SUBSCRIPTION ROUTERS
 # ============================================================================
 

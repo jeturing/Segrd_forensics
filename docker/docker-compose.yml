@@ -10,7 +10,7 @@ services:
       - "9000:9000"
     environment:
       # API Configuration
-      - API_KEY=change-me-please
+      - API_KEY=ac-e0ck-0wdkq-0aca
       - DEBUG=false
       
       # Jeturing CORE

@@ -7,6 +7,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
+import { Navbar, Footer } from '../../components/landing';
+import PricingCalculator from '@/components/pricing/PricingCalculator';
 import { 
   Check, 
   X, 
@@ -206,33 +209,16 @@ const PricingPage = () => {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>{t('pricing:title')} - SEGRD</title>
-        <meta name="description" content={t('pricing:subtitle')} />
-      </Helmet>
-      
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Hero Section with Image */}
-          <div className="mb-16 rounded-2xl overflow-hidden bg-gradient-to-r from-slate-800 to-slate-900 border border-cyan-500/20">
-            <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
-              <div>
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-2xl font-bold text-white">JETURING</span>
-                </div>
-                <h1 className="text-4xl font-bold text-white mb-4">
-                  {t('pricing:title')}
-                </h1>
-                <p className="text-slate-300 text-lg">
-                  {t('pricing:subtitle')}
-                </p>
-              </div>
-            </div>
-          </div>
+    <HelmetProvider>
+      <div className="min-h-screen bg-gray-900">
+        <Navbar />
+        <Helmet>
+          <title>Planes de Seguridad Empresarial - SEGRD</title>
+          <meta name="description" content="Desde asesoría estratégica hasta protección integral 24x7" />
+        </Helmet>
+        
+        <main className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
+          <div className="max-w-7xl mx-auto">
 
           {/* CTA: Take Assessment */}
           <div className="text-center mb-12">
@@ -244,13 +230,22 @@ const PricingPage = () => {
                   : 'Answer our quick security checklist and we\'ll recommend the right level for you.'
                 }
               </p>
-              <button
-                onClick={handleStartChecklist}
-                className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-8 rounded-lg transition flex items-center gap-2 mx-auto"
-              >
-                <FileSearch className="w-5 h-5" />
-                {i18n.language === 'es' ? 'Hacer Evaluación Gratuita' : 'Free Assessment'}
-              </button>
+              <div className="flex gap-3 justify-center flex-wrap">
+                <button
+                  onClick={handleStartChecklist}
+                  className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-8 rounded-lg transition flex items-center gap-2"
+                >
+                  <FileSearch className="w-5 h-5" />
+                  {i18n.language === 'es' ? 'Hacer Evaluación Gratuita' : 'Free Assessment'}
+                </button>
+                <button
+                  onClick={() => navigate('/pricing/estimator')}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition flex items-center gap-2"
+                >
+                  <Zap className="w-5 h-5" />
+                  {i18n.language === 'es' ? 'Estimador Dinámico' : 'Dynamic Estimator'}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -480,6 +475,50 @@ const PricingPage = () => {
           )}
         </div>
 
+        {/* Dynamic Pricing Model Section */}
+        <div className="mb-12 max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/30 rounded-xl p-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-4">🧮 Modelo de Precios Dinámico</h3>
+                <p className="text-slate-300 mb-4">
+                  Nuestros precios se ajustan automáticamente según tu infraestructura real:
+                </p>
+                <ul className="space-y-3 text-slate-300">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Dispositivos:</strong> Tarifa variable por cantidad</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Retención:</strong> 30, 90, 180 o 365 días de logs</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Liderazgo:</strong> v-CISO o sin incluir</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Add-ons:</strong> Servicios a la carta</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex flex-col justify-center">
+                <button
+                  onClick={() => navigate('/pricing/estimator')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition flex items-center justify-center gap-2 mb-4"
+                >
+                  <Zap className="w-5 h-5" />
+                  Calcular tu Presupuesto Personalizado
+                </button>
+                <p className="text-slate-300 text-sm text-center">
+                  Usa nuestro estimador interactivo para obtener un presupuesto preciso en segundos
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Comparison Note */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 max-w-4xl mx-auto mb-12">
           <h3 className="text-xl font-bold text-white mb-4 text-center">¿Por qué elegir Jeturing?</h3>
@@ -554,8 +593,10 @@ const PricingPage = () => {
           </p>
         </div>
       </div>
+    </main>
+    <Footer />
     </div>
-    </>
+    </HelmetProvider>
   );
 };
 

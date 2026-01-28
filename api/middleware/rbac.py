@@ -246,11 +246,11 @@ class RBACMiddleware(BaseHTTPMiddleware):
     
     async def _validate_bearer_token(self, token: str) -> Dict[str, Any]:
         """Validar Bearer Token (JWT) y extraer permisos del usuario"""
-        from jose import jwt, JWTError
+        import jwt
         from api.config import settings
         
         try:
-            # Decodificar JWT
+            # Decodificar JWT (usando PyJWT que es compatible con Python 3.13)
             payload = jwt.decode(
                 token, 
                 settings.JWT_SECRET_KEY, 
@@ -317,7 +317,7 @@ class RBACMiddleware(BaseHTTPMiddleware):
                 "is_global_admin": False
             }
             
-        except JWTError as e:
+        except jwt.PyJWTError as e:
             logger.warning(f"⚠️ JWT validation failed: {e}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
