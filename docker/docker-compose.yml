@@ -35,8 +35,17 @@ services:
       - DEHASHED_API_KEY=
       - DEHASHED_ENABLED=false
       
+      # LLM Configuration
+      - LLM_PROVIDER=ollama
+      - OLLAMA_ENABLED=true
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2
+      - OLLAMA_TIMEOUT=180
+      - LLM_STUDIO_URL=http://100.101.115.5:2714/v1
+      - LLM_STUDIO_TIMEOUT=120
+      
       # Database - PostgreSQL recommended for production
-      - DATABASE_URL=postgresql+asyncpg://forensics:change-me-please@postgres:5432/forensics
+      - DATABASE_URL=postgresql+asyncpg://forensics:1212lne1ne12090d12@postgres:5432/forensics
       # For SQLite mode (development only): DATABASE_URL=sqlite+aiosqlite:///./forensics.db
       
       # Redis
@@ -54,6 +63,10 @@ services:
       
       # Configuración personalizada
       - ./config:/app/config:ro
+      
+      # Código fuente (desarrollo - hot reload)
+      - ./api:/app/api:ro
+      - ./core:/app/core:ro
     
     networks:
       - forensics-net
@@ -93,7 +106,7 @@ services:
     environment:
       - POSTGRES_DB=forensics
       - POSTGRES_USER=forensics
-      - POSTGRES_PASSWORD=change-me-please
+      - POSTGRES_PASSWORD=1212lne1ne12090d12
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./scripts/backup_postgres.sh:/usr/local/bin/backup.sh:ro
@@ -141,13 +154,17 @@ services:
       - ./evidence:/var/evidence
     environment:
       - ENV=production
-      - DATABASE_URL=postgresql://forensics:change-me-please@postgres:5432/forensics
+      - DATABASE_URL=postgresql://forensics:1212lne1ne12090d12@postgres:5432/forensics
       - REDIS_URL=redis://redis:6379/0
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB=forensics
       - POSTGRES_USER=forensics
-      - POSTGRES_PASSWORD=change-me-please
+      - POSTGRES_PASSWORD=1212lne1ne12090d12
+      - LLM_PROVIDER=ollama
+      - OLLAMA_ENABLED=true
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2
     networks:
       - forensics-net
     depends_on:

@@ -94,22 +94,25 @@ class LLMProviderManager:
         """Configura proveedores por defecto desde variables de entorno"""
         import os
         
-        # LM Studio (prioridad más alta)
+        # Ollama (prioridad más alta en Docker)
+        ollama_url = os.getenv("OLLAMA_URL", "http://ollama:11434")
+        ollama_enabled = os.getenv("OLLAMA_ENABLED", "true").lower() == "true"
+        self.providers[ProviderType.OLLAMA] = ProviderConfig(
+            type=ProviderType.OLLAMA,
+            base_url=ollama_url,
+            priority=1,
+            enabled=ollama_enabled,
+            timeout=int(os.getenv("OLLAMA_TIMEOUT", "180"))
+        )
+        
+        # LM Studio (prioridad 2 - servidor externo)
         lm_studio_url = os.getenv("LM_STUDIO_URL", "http://100.101.115.5:2714")
         self.providers[ProviderType.LM_STUDIO] = ProviderConfig(
             type=ProviderType.LM_STUDIO,
             base_url=lm_studio_url,
-            priority=1,
-            enabled=True
-        )
-        
-        # Ollama
-        ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
-        self.providers[ProviderType.OLLAMA] = ProviderConfig(
-            type=ProviderType.OLLAMA,
-            base_url=ollama_url,
             priority=2,
-            enabled=os.getenv("OLLAMA_ENABLED", "false").lower() == "true"
+            enabled=os.getenv("LM_STUDIO_ENABLED", "true").lower() == "true",
+            timeout=int(os.getenv("LLM_STUDIO_TIMEOUT", "120"))
         )
         
         # OpenAI (si hay API key)
@@ -137,6 +140,8 @@ class LLMProviderManager:
             priority=99,
             enabled=True
         )
+        
+        logger.info(f"🤖 LLM Providers configurados: Ollama={ollama_enabled} ({ollama_url}), LM_Studio={lm_studio_url}")
         
     async def _get_session(self) -> aiohttp.ClientSession:
         """Obtiene o crea sesión HTTP"""

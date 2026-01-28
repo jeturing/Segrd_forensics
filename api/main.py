@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Optional
 import json
 
-from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon, security_checklist, contact
+from api.routes import m365, credentials, endpoint, cases, dashboard, tenants, graph, workflow, evidence, forensics_tools, graph_editor, account_analysis_routes, auth, oauth, agents, investigations, active_investigation, ioc_store, realtime, kali_tools, threat_intel, missing_endpoints, llm_settings, hunting, timeline, reports, modules, system_maintenance, system_health, tools_status, ws_streaming, monkey365, misp, configuration, context, redteam, llm_agents, costs, landing, storage, hunting_web_recon, security_checklist, contact, system_settings
 from api.middleware.auth import verify_api_key
 from api.middleware.case_context import CaseContextMiddleware
 from api.middleware.rbac import RBACMiddleware
@@ -401,6 +401,12 @@ app.include_router(
 # Health & tools status
 app.include_router(system_health.router)
 app.include_router(tools_status.router)
+
+# System Settings router (v4.7 - Dynamic configuration management)
+app.include_router(
+    system_settings.router,
+    tags=["System Settings"]
+)
 
 # Attack Graph router (con autenticación)
 app.include_router(

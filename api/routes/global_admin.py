@@ -903,3 +903,299 @@ async def get_platform_audit_logs(
     except Exception as e:
         logger.error(f"❌ Error obteniendo audit logs: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# SYSTEM SETTINGS - CONFIGURACIÓN DINÁMICA DESDE BD
+# ============================================================================
+
+class SystemSettingCreate(BaseModel):
+    """Crear configuración del sistema."""
+    key: str = Field(..., description="Clave única de la configuración")
+    value: str = Field(..., description="Valor de la configuración")
+    value_type: str = Field("string", description="Tipo: string, int, bool, json")
+    description: Optional[str] = None
+    category: str = Field("general", description="Categoría: llm, smtp, minio, database, security")
+
+
+class SystemSettingUpdate(BaseModel):
+    """Actualizar configuración del sistema."""
+    value: str
+    description: Optional[str] = None
+
+
+class SystemSettingBulkUpdate(BaseModel):
+    """Actualización masiva de configuraciones."""
+    settings: List[dict] = Field(..., description="Lista de {key, value}")
+
+
+@router.get("/system-settings")
+async def get_system_settings(
+    category: Optional[str] = Query(None, description="Filtrar por categoría"),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    ⚙️ Obtener todas las configuraciones del sistema desde BD.
+    Retorna configuraciones editables desde el panel de admin.
+    """
+    try:
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+        
+        conn = psycopg2.connect(
+            host=settings.POSTGRES_HOST,
+            port=settings.POSTGRES_PORT,
+            database=settings.POSTGRES_DB,
+            user=settings.POSTGRES_USER,
+            password=settings.POSTGRES_PASSWORD
+        )
+        
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            # Crear tabla si no existe
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    id SERIAL PRIMARY KEY,
+                    key VARCHAR(100) UNIQUE NOT NULL,
+                    value TEXT,
+                    value_type VARCHAR(20) DEFAULT 'string',
+                    description TEXT,
+                    category VARCHAR(50) DEFAULT 'general',
+                    created_at TIMESTAMP DEFAULT NOW(),
+                    updated_at TIMESTAMP DEFAULT NOW()
+                )
+            """)
+            conn.commit()
+            
+            # Insertar valores por defecto si la tabla está vacía
+            cur.execute("SELECT COUNT(*) as cnt FROM system_settings")
+            count = cur.fetchone()['cnt']
+            
+            if count == 0:
+                # Insertar configuraciones por defecto desde env/config
+                default_settings = [
+                    # LLM
+                    ("LLM_PROVIDER", "ollama", "string", "Proveedor LLM activo", "llm"),
+                    ("OLLAMA_URL", "http://ollama:11434", "string", "URL del servidor Ollama", "llm"),
+                    ("OLLAMA_MODEL", "llama3.2", "string", "Modelo Ollama por defecto", "llm"),
+                    ("OLLAMA_ENABLED", "true", "bool", "Habilitar Ollama", "llm"),
+                    ("LLM_STUDIO_URL", "http://100.101.115.5:2714/v1", "string", "URL de LM Studio", "llm"),
+                    ("LLM_STUDIO_TIMEOUT", "120", "int", "Timeout LLM en segundos", "llm"),
+                    # SMTP
+                    ("SMTP_HOST", settings.SMTP_HOST, "string", "Servidor SMTP", "smtp"),
+                    ("SMTP_PORT", str(settings.SMTP_PORT), "int", "Puerto SMTP", "smtp"),
+                    ("SMTP_USER", settings.SMTP_USER or "", "string", "Usuario SMTP", "smtp"),
+                    ("SMTP_FROM_EMAIL", settings.SMTP_FROM_EMAIL, "string", "Email remitente", "smtp"),
+                    ("SMTP_CONTACT_TO", settings.SMTP_CONTACT_TO, "string", "Email destino contacto", "smtp"),
+                    ("SMTP_CHECKLIST_CC_EMAILS", settings.SMTP_CHECKLIST_CC_EMAILS, "string", "Emails CC checklist", "smtp"),
+                    # MINIO
+                    ("MINIO_ENABLED", "true", "bool", "Habilitar MinIO", "minio"),
+                    ("MINIO_ENDPOINT", settings.MINIO_ENDPOINT, "string", "Endpoint MinIO", "minio"),
+                    ("MINIO_BUCKET", settings.MINIO_BUCKET, "string", "Bucket por defecto", "minio"),
+                    # Security
+                    ("JWT_EXPIRATION_HOURS", str(settings.JWT_EXPIRATION_HOURS), "int", "Expiración JWT en horas", "security"),
+                    ("RBAC_ENABLED", "true", "bool", "Habilitar RBAC", "security"),
+                ]
+                
+                for key, value, vtype, desc, cat in default_settings:
+                    cur.execute("""
+                        INSERT INTO system_settings (key, value, value_type, description, category)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON CONFLICT (key) DO NOTHING
+                    """, (key, value, vtype, desc, cat))
+                conn.commit()
+            
+            # Obtener settings
+            query = "SELECT * FROM system_settings"
+            params = []
+            if category:
+                query += " WHERE category = %s"
+                params.append(category)
+            query += " ORDER BY category, key"
+            
+            cur.execute(query, params)
+            rows = cur.fetchall()
+        
+        conn.close()
+        
+        # Agrupar por categoría
+        grouped = {}
+        for row in rows:
+            cat = row['category'] or 'general'
+            if cat not in grouped:
+                grouped[cat] = []
+            grouped[cat].append(dict(row))
+        
+        return {
+            "success": True,
+            "settings": grouped,
+            "total": len(rows)
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error obteniendo system settings: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/system-settings/{key}")
+async def update_system_setting(
+    key: str,
+    update: SystemSettingUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    ⚙️ Actualizar una configuración del sistema.
+    """
+    try:
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+        
+        conn = psycopg2.connect(
+            host=settings.POSTGRES_HOST,
+            port=settings.POSTGRES_PORT,
+            database=settings.POSTGRES_DB,
+            user=settings.POSTGRES_USER,
+            password=settings.POSTGRES_PASSWORD
+        )
+        
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("""
+                UPDATE system_settings 
+                SET value = %s, 
+                    description = COALESCE(%s, description),
+                    updated_at = NOW()
+                WHERE key = %s
+                RETURNING *
+            """, (update.value, update.description, key))
+            
+            row = cur.fetchone()
+            
+            if not row:
+                # Insertar si no existe
+                cur.execute("""
+                    INSERT INTO system_settings (key, value, description)
+                    VALUES (%s, %s, %s)
+                    RETURNING *
+                """, (key, update.value, update.description))
+                row = cur.fetchone()
+            
+            conn.commit()
+        
+        conn.close()
+        
+        logger.info(f"⚙️ Setting actualizado: {key} = {update.value[:50]}...")
+        
+        return {
+            "success": True,
+            "setting": dict(row) if row else None
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error actualizando setting {key}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/system-settings")
+async def update_system_settings_bulk_v2(
+    update: SystemSettingBulkUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    ⚙️ Actualizar múltiples configuraciones del sistema.
+    """
+    try:
+        import psycopg2
+        
+        conn = psycopg2.connect(
+            host=settings.POSTGRES_HOST,
+            port=settings.POSTGRES_PORT,
+            database=settings.POSTGRES_DB,
+            user=settings.POSTGRES_USER,
+            password=settings.POSTGRES_PASSWORD
+        )
+        
+        updated = 0
+        with conn.cursor() as cur:
+            for item in update.settings:
+                key = item.get('key')
+                value = item.get('value')
+                if key and value is not None:
+                    cur.execute("""
+                        INSERT INTO system_settings (key, value, updated_at)
+                        VALUES (%s, %s, NOW())
+                        ON CONFLICT (key) DO UPDATE SET
+                            value = EXCLUDED.value,
+                            updated_at = NOW()
+                    """, (key, str(value)))
+                    updated += 1
+            conn.commit()
+        
+        conn.close()
+        
+        logger.info(f"⚙️ {updated} settings actualizados en bulk")
+        
+        return {
+            "success": True,
+            "updated": updated
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error en bulk update de settings: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/system-settings/llm-status")
+async def get_llm_status(current_user: dict = Depends(get_current_user)):
+    """
+    🤖 Obtener estado de los proveedores LLM.
+    """
+    try:
+        import aiohttp
+        import asyncio
+        
+        providers_status = {}
+        
+        # Verificar Ollama
+        ollama_url = "http://ollama:11434"
+        try:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(f"{ollama_url}/api/tags") as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        models = [m.get('name') for m in data.get('models', [])]
+                        providers_status['ollama'] = {
+                            "status": "online",
+                            "url": ollama_url,
+                            "models": models
+                        }
+                    else:
+                        providers_status['ollama'] = {"status": "error", "url": ollama_url}
+        except Exception as e:
+            providers_status['ollama'] = {"status": "offline", "url": ollama_url, "error": str(e)}
+        
+        # Verificar LM Studio
+        lm_studio_url = "http://100.101.115.5:2714"
+        try:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(f"{lm_studio_url}/v1/models") as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        models = [m.get('id') for m in data.get('data', [])]
+                        providers_status['lm_studio'] = {
+                            "status": "online",
+                            "url": lm_studio_url,
+                            "models": models
+                        }
+                    else:
+                        providers_status['lm_studio'] = {"status": "error", "url": lm_studio_url}
+        except Exception as e:
+            providers_status['lm_studio'] = {"status": "offline", "url": lm_studio_url, "error": str(e)}
+        
+        return {
+            "success": True,
+            "providers": providers_status,
+            "active_provider": "ollama"  # TODO: leer de BD
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error verificando LLM status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

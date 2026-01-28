@@ -148,7 +148,7 @@ class Settings(BaseSettings):
     AUDIT_LOG_BACKUP_COUNT: int = 14
     
     # Database (PostgreSQL por defecto, SQLite legacy removido)
-    DATABASE_URL: str = "postgresql://forensics:change-me-please@postgres:5432/forensics"
+    DATABASE_URL: str = "postgresql://forensics:1212lne1ne12090d12@postgres:5432/forensics"
     # DB mode: 'postgresql' (default) or 'postgrest' (use PostgREST endpoint)
     DB_MODE: str = "postgresql"
     POSTGREST_URL: Optional[str] = None
@@ -158,7 +158,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str = "forensics"
     POSTGRES_USER: str = "forensics"
-    POSTGRES_PASSWORD: str = "change-me-please"
+    POSTGRES_PASSWORD: str = "1212lne1ne12090d12"
     
     # ============================================================================
     # HERRAMIENTAS INSTALADAS - CATEGORÍA BÁSICO
@@ -191,13 +191,19 @@ class Settings(BaseSettings):
     # ============================================================================
     # LLM STUDIO INTEGRATION (v4.3)
     # ============================================================================
-    LLM_PROVIDER: str = "llm_studio"  # llm_studio, phi4_local, offline
-    LLM_STUDIO_URL: str = "http://100.101.115.5:2714/v1/completions"
+    LLM_PROVIDER: str = "ollama"  # ollama, lm_studio, openai, offline
+    LLM_STUDIO_URL: str = "http://100.101.115.5:2714/v1"  # LM Studio externo (Tailscale)
     LLM_STUDIO_API_KEY: Optional[str] = None
     LLM_STUDIO_MODEL: str = "phi-4"
-    LLM_STUDIO_TIMEOUT: int = 40
+    LLM_STUDIO_TIMEOUT: int = 120
     PHI4_LOCAL_ENABLED: bool = True
     OFFLINE_LLM_ENABLED: bool = True
+    
+    # Ollama (contenedores Docker)
+    OLLAMA_ENABLED: bool = True
+    OLLAMA_URL: str = "http://ollama:11434"  # Nombre del servicio Docker
+    OLLAMA_MODEL: str = "llama3.2"  # Modelo por defecto
+    OLLAMA_TIMEOUT: int = 180  # 3 minutos para generación
     
     # ============================================================================
     # STRIPE BILLING (v4.6)
@@ -218,6 +224,8 @@ class Settings(BaseSettings):
     SMTP_SSL: bool = True
     SMTP_FROM_EMAIL: str = "no-reply@sajet.us"
     SMTP_CONTACT_TO: str = "sales@jeturing.com"
+    # Correos CC para Security Checklist (separados por coma)
+    SMTP_CHECKLIST_CC_EMAILS: str = "jcarvajal@jeturing.com,info@jeturing.com,elsaencarnacion@esecure.do"
     
     class Config:
         env_file = ".env"

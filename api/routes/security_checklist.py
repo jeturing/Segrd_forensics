@@ -247,10 +247,17 @@ EMAIL_TEMPLATE = """
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def send_email(to_email: str, subject: str, html_content: str, from_email: str = None) -> bool:
+def send_email(to_email: str, subject: str, html_content: str, from_email: str = None, cc_emails: List[str] = None) -> bool:
     """
     Enviar email usando SMTP
     Soporta tanto STARTTLS (puerto 587) como SSL (puerto 465)
+    
+    Args:
+        to_email: Destinatario principal
+        subject: Asunto del correo
+        html_content: Contenido HTML del correo
+        from_email: Remitente (opcional, usa SMTP_FROM_EMAIL por defecto)
+        cc_emails: Lista de correos CC (opcional)
     """
     try:
         smtp_host = os.getenv('SMTP_HOST', 'smtp.gmail.com')
@@ -268,21 +275,31 @@ def send_email(to_email: str, subject: str, html_content: str, from_email: str =
         msg['Subject'] = subject
         msg['From'] = from_email
         msg['To'] = to_email
+        
+        # Agregar CC si se proporcionan
+        if cc_emails:
+            msg['Cc'] = ', '.join(cc_emails)
 
         msg.attach(MIMEText(html_content, 'html'))
+        
+        # Lista completa de destinatarios (To + CC)
+        all_recipients = [to_email]
+        if cc_emails:
+            all_recipients.extend(cc_emails)
 
         # Usar SSL directo para puerto 465, STARTTLS para puerto 587
         if smtp_ssl or smtp_port == 465:
             with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
                 server.login(smtp_user, smtp_password)
-                server.send_message(msg)
+                server.sendmail(from_email, all_recipients, msg.as_string())
         else:
             with smtplib.SMTP(smtp_host, smtp_port) as server:
                 server.starttls()
                 server.login(smtp_user, smtp_password)
-                server.send_message(msg)
+                server.sendmail(from_email, all_recipients, msg.as_string())
 
-        logger.info(f"✅ Email sent to {to_email}")
+        cc_info = f" (CC: {', '.join(cc_emails)})" if cc_emails else ""
+        logger.info(f"✅ Email sent to {to_email}{cc_info}")
         return True
 
     except Exception as e:
@@ -309,7 +326,7 @@ async def submit_security_checklist(
 ):
     """
     Recibir y procesar el formulario de seguridad
-    Envía automáticamente el informe a sales@jeturing.com
+    Envía automáticamente el informe a sales@jeturing.com con CC a los correos configurados
     """
     try:
         # Convertir datos a diccionario
@@ -317,13 +334,21 @@ async def submit_security_checklist(
 
         # Generar reporte HTML
         html_report = generate_html_report(checklist_dict)
+        
+        # Obtener correos CC desde variables de entorno
+        cc_emails_str = os.getenv('SMTP_CHECKLIST_CC_EMAILS', '')
+        cc_emails = [email.strip() for email in cc_emails_str.split(',') if email.strip()]
+        
+        # Obtener destinatario principal desde env (con fallback)
+        to_email = os.getenv('SMTP_CONTACT_TO', 'sales@jeturing.com')
 
-        # Enqueue email tasks
+        # Enqueue email tasks con CC
         background_tasks.add_task(
             send_email,
-            to_email="sales@jeturing.com",
+            to_email=to_email,
             subject=f"🛡️ Nuevo Checklist de Seguridad - {data.company_name} ({data.recommended_tier})",
-            html_content=html_report
+            html_content=html_report,
+            cc_emails=cc_emails if cc_emails else None
         )
 
         # Opcional: enviar confirmación al cliente (si tuviera email)
