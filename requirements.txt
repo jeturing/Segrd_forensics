@@ -64,3 +64,6 @@ minio>=7.2.0
 
 # Async HTTP client
 aiohttp>=3.9.0
+
+# PDF generation
+reportlab==4.1.0

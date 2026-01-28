@@ -7,7 +7,7 @@
  * - Add-ons adicionales
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   Zap, 
@@ -18,6 +18,7 @@ import {
   Check,
   TrendingUp
 } from 'lucide-react';
+import api from '../../services/api';
 
 // Pricing Model Configuration
 const PRICING_MODEL = {
@@ -73,22 +74,52 @@ const PricingCalculator = () => {
   const [vciso, setVciso] = useState('none');
   const [selectedAddons, setSelectedAddons] = useState({});
   const [expandedSection, setExpandedSection] = useState('devices');
+  const [pricingModel, setPricingModel] = useState(PRICING_MODEL);
+
+  // Cargar pricing dinámico desde el backend (público)
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const res = await api.get('/api/pricing');
+        const calc = res.data?.calculator || {};
+        setPricingModel({
+          devicePricing: calc.device_pricing || calc.devicePricing || PRICING_MODEL.devicePricing,
+          retentionTiers: calc.retention_tiers || calc.retentionTiers || PRICING_MODEL.retentionTiers,
+          vcisoPlans: calc.vciso_plans || calc.vcisoPlans || PRICING_MODEL.vcisoPlans,
+          addons: calc.addons || PRICING_MODEL.addons,
+        });
+      } catch (e) {
+        console.warn('No se pudo cargar pricing dinámico, usando defaults', e);
+        setPricingModel(PRICING_MODEL);
+      }
+    };
+    fetchPricing();
+  }, []);
 
   // Calculate device tier cost
   const getDeviceTierCost = (deviceCount) => {
-    if (deviceCount <= 50) return deviceCount * PRICING_MODEL.devicePricing.essential.rate;
-    if (deviceCount <= 200) return deviceCount * PRICING_MODEL.devicePricing.professional.rate;
-    return deviceCount * PRICING_MODEL.devicePricing.critical.rate;
+    const tiers = pricingModel.devicePricing;
+    if (deviceCount <= tiers.essential.max) return deviceCount * tiers.essential.rate;
+    if (deviceCount <= tiers.professional.max) return deviceCount * tiers.professional.rate;
+    return deviceCount * tiers.critical.rate;
+  };
+
+  const getDeviceTierLabel = (deviceCount) => {
+    const tiers = pricingModel.devicePricing;
+    if (deviceCount <= tiers.essential.max) return { name: 'Esencial', rate: tiers.essential.rate };
+    if (deviceCount <= tiers.professional.max) return { name: 'Profesional', rate: tiers.professional.rate };
+    return { name: 'Crítico', rate: tiers.critical.rate };
   };
 
   // Calculate total price
   const calculations = useMemo(() => {
     const deviceCost = getDeviceTierCost(devices);
-    const retentionCost = PRICING_MODEL.retentionTiers[retention].cost;
-    const vcisosCost = PRICING_MODEL.vcisoPlans[vciso].cost;
+    const retentionCost = pricingModel.retentionTiers[retention]?.cost ?? 0;
+    const vcisosCost = pricingModel.vcisoPlans[vciso]?.cost ?? 0;
     
     const addonsCost = Object.entries(selectedAddons).reduce((sum, [key, selected]) => {
-      return selected ? sum + PRICING_MODEL.addons[key].cost : sum;
+      const addon = pricingModel.addons[key];
+      return selected && addon ? sum + addon.cost : sum;
     }, 0);
 
     const subtotal = deviceCost + retentionCost + vcisosCost + addonsCost;
@@ -177,13 +208,14 @@ const PricingCalculator = () => {
                   <span>500+</span>
                 </div>
                 <div className="bg-blue-500/10 border border-blue-500/30 rounded p-3 text-sm">
-                  <p className="text-blue-200">
-                    Tier: <strong>{
-                      devices <= 50 ? 'Esencial ($0.50/dispositivo)' :
-                      devices <= 200 ? 'Profesional ($1.50/dispositivo)' :
-                      'Crítico ($3.00/dispositivo)'
-                    }</strong>
-                  </p>
+                  {(() => {
+                    const tier = getDeviceTierLabel(devices);
+                    return (
+                      <p className="text-blue-200">
+                        Tier: <strong>{tier.name} (${tier.rate}/dispositivo)</strong>
+                      </p>
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -207,7 +239,7 @@ const PricingCalculator = () => {
             
             {expandedSection === 'retention' && (
               <div className="space-y-3">
-                {Object.entries(PRICING_MODEL.retentionTiers).map(([days, { cost, label }]) => (
+                {Object.entries(pricingModel.retentionTiers).map(([days, { cost, label }]) => (
                   <label key={days} className="flex items-center gap-3 cursor-pointer group">
                     <input
                       type="radio"
@@ -245,7 +277,7 @@ const PricingCalculator = () => {
             
             {expandedSection === 'vciso' && (
               <div className="space-y-3">
-                {Object.entries(PRICING_MODEL.vcisoPlans).map(([key, { cost, label, hours }]) => (
+                {Object.entries(pricingModel.vcisoPlans).map(([key, { cost, label, hours }]) => (
                   <label key={key} className="flex items-center gap-3 cursor-pointer group">
                     <input
                       type="radio"
@@ -282,7 +314,7 @@ const PricingCalculator = () => {
             
             {expandedSection === 'addons' && (
               <div className="space-y-3">
-                {Object.entries(PRICING_MODEL.addons).map(([key, { cost, label }]) => (
+                {Object.entries(pricingModel.addons).map(([key, { cost, label }]) => (
                   <label key={key} className="flex items-center gap-3 cursor-pointer group">
                     <input
                       type="checkbox"

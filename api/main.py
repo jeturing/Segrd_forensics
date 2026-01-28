@@ -492,6 +492,12 @@ app.include_router(
     tags=["Pricing Admin"]
 )
 
+# Pricing Public router - lectura sin autenticación
+app.include_router(
+    pricing.public_router,
+    tags=["Pricing Public"]
+)
+
 # ============================================================================
 # v4.6 REGISTRATION & SUBSCRIPTION ROUTERS
 # ============================================================================

@@ -108,6 +108,8 @@ const SecurityChecklistForm = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState(null);
+  const [sendEmail, setSendEmail] = useState(true);
+  const [downloadPdf, setDownloadPdf] = useState(true);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -273,26 +275,38 @@ const SecurityChecklistForm = () => {
         recommended_tier: recs.tierName,
         risk_score: recs.score,
         recommendations: recs,
-        submitted_at: new Date().toISOString()
+        submitted_at: new Date().toISOString(),
+        send_email: sendEmail,
+        return_pdf: downloadPdf
       };
 
       const response = await axios.post(`${API_BASE_URL}/security-checklist/submit`, payload);
 
-      if (response.data.success) {
+      if (response.data?.success) {
+        // Descargar PDF si viene en la respuesta
+        if (downloadPdf && response.data.pdf_base64) {
+          const binary = atob(response.data.pdf_base64);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'propuesta-checklist.pdf';
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
         setSubmitted(true);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-        }, 300);
+        setTimeout(() => window.scrollTo(0, 0), 300);
       } else {
-        setError('Error al enviar formulario. Por favor intenta nuevamente.');
+        setSubmitted(false);
+        setError('No se pudo enviar el formulario. Por favor intenta nuevamente.');
       }
     } catch (err) {
       console.error('Error submitting form:', err);
-      // Even if API fails, show recommendations
-      setSubmitted(true);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 300);
+      setSubmitted(false);
+      setError('No se pudo enviar el formulario. Revisa tu conexión e intenta nuevamente.');
     } finally {
       setLoading(false);
     }
@@ -321,6 +335,27 @@ const SecurityChecklistForm = () => {
                 <h2 className="text-2xl font-bold text-white">¡Análisis Completado!</h2>
                 <p className="text-slate-400">Gracias, {formData.company_name}</p>
               </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 mb-4">
+              <button
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700 text-white hover:bg-slate-600 transition"
+              >
+                🖨️ Imprimir / Guardar PDF
+              </button>
+              <button
+                onClick={() => {
+                  const mailtoLink = `mailto:sales@jeturing.com?subject=Resultados%20de%20Evaluación%20de%20Seguridad%20-%20${encodeURIComponent(formData.company_name)}&body=He%20completado%20la%20evaluación%20de%20seguridad.%20Mi%20puntuación%20de%20riesgo%20es%20${recommendations.score}/10%20y%20se%20recomienda%20el%20plan%20${encodeURIComponent(recommendations.tierName)}.%0A%0AContacto:%20${encodeURIComponent(formData.contact_name)}%20${encodeURIComponent(formData.contact_email)}`;
+                  window.location.href = mailtoLink;
+                }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition"
+              >
+                ✉️ Enviar por Email
+              </button>
+              <span className="text-slate-400 text-sm">
+                *Precios tentativos, sujetos a validación comercial.*
+              </span>
             </div>
 
             {/* Recomendación Principal */}
@@ -991,6 +1026,24 @@ const SecurityChecklistForm = () => {
             <p className="text-slate-500 text-center text-sm mt-4">
               Se generará un análisis completo y un especialista te contactará con una propuesta personalizada.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 mt-4 text-sm text-slate-300">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={sendEmail}
+                  onChange={() => setSendEmail(v => !v)}
+                />
+                Enviar por correo a ventas (sales@jeturing.com)
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={downloadPdf}
+                  onChange={() => setDownloadPdf(v => !v)}
+                />
+                Descargar PDF con la propuesta
+              </label>
+            </div>
           </div>
         </form>
 

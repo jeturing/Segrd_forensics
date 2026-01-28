@@ -666,6 +666,7 @@ PUBLIC_ROUTES = [
     "/api/onboarding",           # Onboarding flow
     "/api/billing/plans",        # Public pricing
     "/api/billing/webhook",      # Stripe webhook
+    "/api/pricing",              # Pricing público (calculadora)
 ]
 
 

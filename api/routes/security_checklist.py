@@ -12,6 +12,7 @@ import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 from jinja2 import Template
 import os
 
@@ -82,6 +83,10 @@ class SecurityChecklistRequest(BaseModel):
 
     # Sección 9: Comentarios
     comments: Optional[str] = None
+
+    # Opciones de entrega
+    return_pdf: bool = False
+    send_email: bool = True
 
     # Computed fields
     recommended_tier: Optional[str] = None
@@ -247,7 +252,7 @@ EMAIL_TEMPLATE = """
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def send_email(to_email: str, subject: str, html_content: str, from_email: str = None, cc_emails: List[str] = None) -> bool:
+def send_email(to_email: str, subject: str, html_content: str, from_email: str = None, cc_emails: List[str] = None, attachments: List[Dict[str, bytes]] = None) -> bool:
     """
     Enviar email usando SMTP
     Soporta tanto STARTTLS (puerto 587) como SSL (puerto 465)
@@ -271,7 +276,7 @@ def send_email(to_email: str, subject: str, html_content: str, from_email: str =
             logger.warning("SMTP credentials not configured. Email sending disabled.")
             return False
 
-        msg = MIMEMultipart('alternative')
+        msg = MIMEMultipart('mixed')
         msg['Subject'] = subject
         msg['From'] = from_email
         msg['To'] = to_email
@@ -280,7 +285,17 @@ def send_email(to_email: str, subject: str, html_content: str, from_email: str =
         if cc_emails:
             msg['Cc'] = ', '.join(cc_emails)
 
+        # HTML
         msg.attach(MIMEText(html_content, 'html'))
+
+        # Attachments
+        if attachments:
+            for att in attachments:
+                fname = att.get("filename", "attachment.pdf")
+                data = att.get("data", b"")
+                mime_att = MIMEApplication(data, _subtype="pdf")
+                mime_att.add_header("Content-Disposition", "attachment", filename=fname)
+                msg.attach(mime_att)
         
         # Lista completa de destinatarios (To + CC)
         all_recipients = [to_email]
@@ -315,6 +330,71 @@ def generate_html_report(data: dict) -> str:
     return template.render(**data)
 
 
+def build_pdf(data: SecurityChecklistRequest, recommendations: Dict[str, Any]) -> bytes:
+    """
+    Generar un PDF simple con reportlab que resume la propuesta.
+    """
+    from io import BytesIO
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+
+    buf = BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=A4, title="Propuesta SEGRD")
+    styles = getSampleStyleSheet()
+    elems = []
+
+    elems.append(Paragraph("JETURING / SEGRD - Propuesta Tentativa", styles["Title"]))
+    elems.append(Paragraph("Security Checklist", styles["Heading3"]))
+    elems.append(Spacer(1, 12))
+    elems.append(Paragraph(f"Empresa: {data.company_name}", styles["Normal"]))
+    elems.append(Paragraph(f"Contacto: {(data.contact_name or 'N/D')} - {(data.contact_email or '')}", styles["Normal"]))
+    elems.append(Paragraph(f"País / Industria: {data.country} / {data.industry}", styles["Normal"]))
+    elems.append(Spacer(1, 12))
+
+    elems.append(Paragraph("Resumen", styles["Heading2"]))
+    table = Table([
+        ["Nivel recomendado", recommendations.get("tierName")],
+        ["Puntuación de riesgo", f"{recommendations.get('score')}/10"],
+        ["Inversión mensual estimada", f"${recommendations.get('pricing'):,.0f} USD"],
+        ["v-CISO", f"{recommendations.get('vciso')} (${recommendations.get('vcisoPricing'):,.0f}/mes)"],
+    ], hAlign="LEFT")
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+        ("INNERGRID", (0,0), (-1,-1), 0.3, colors.grey),
+        ("BOX", (0,0), (-1,-1), 0.3, colors.grey),
+    ]))
+    elems.append(table)
+    elems.append(Spacer(1, 12))
+
+    elems.append(Paragraph("Servicios recomendados", styles["Heading3"]))
+    services = recommendations.get("services", [])
+    if services:
+        for s in services:
+            elems.append(Paragraph(f"• {s}", styles["Normal"]))
+    else:
+        elems.append(Paragraph("Sin servicios adicionales", styles["Normal"]))
+    elems.append(Spacer(1, 12))
+
+    elems.append(Paragraph("Brechas identificadas", styles["Heading3"]))
+    gaps = recommendations.get("gaps", [])
+    if gaps:
+        for g in gaps:
+            elems.append(Paragraph(f"• {g}", styles["Normal"]))
+    else:
+        elems.append(Paragraph("No se identificaron brechas críticas", styles["Normal"]))
+    elems.append(Spacer(1, 12))
+
+    elems.append(Paragraph("Notas", styles["Heading3"]))
+    elems.append(Paragraph("Precios tentativos, sujetos a validación comercial y a la cantidad real de dispositivos/usuarios.", styles["Italic"]))
+
+    doc.build(elems)
+    pdf_bytes = buf.getvalue()
+    buf.close()
+    return pdf_bytes
+
+
 # ============================================================================
 # ENDPOINTS
 # ============================================================================
@@ -334,6 +414,9 @@ async def submit_security_checklist(
 
         # Generar reporte HTML
         html_report = generate_html_report(checklist_dict)
+
+        # Generar PDF opcional
+        pdf_bytes = build_pdf(data, data.recommendations or {}) if data.return_pdf else None
         
         # Obtener correos CC desde variables de entorno
         cc_emails_str = os.getenv('SMTP_CHECKLIST_CC_EMAILS', '')
@@ -342,14 +425,16 @@ async def submit_security_checklist(
         # Obtener destinatario principal desde env (con fallback)
         to_email = os.getenv('SMTP_CONTACT_TO', 'sales@jeturing.com')
 
-        # Enqueue email tasks con CC
-        background_tasks.add_task(
-            send_email,
-            to_email=to_email,
-            subject=f"🛡️ Nuevo Checklist de Seguridad - {data.company_name} ({data.recommended_tier})",
-            html_content=html_report,
-            cc_emails=cc_emails if cc_emails else None
-        )
+        # Enviar email (solo si se solicita)
+        if data.send_email:
+            background_tasks.add_task(
+                send_email,
+                to_email=to_email,
+                subject=f"🛡️ Nuevo Checklist de Seguridad - {data.company_name} ({data.recommended_tier})",
+                html_content=html_report,
+                cc_emails=cc_emails if cc_emails else None,
+                attachments=[{"filename": "propuesta-checklist.pdf", "data": pdf_bytes}] if pdf_bytes else None
+            )
 
         # Opcional: enviar confirmación al cliente (si tuviera email)
         # background_tasks.add_task(
@@ -359,12 +444,17 @@ async def submit_security_checklist(
         #     html_content=f"<p>Hola,<br><br>Gracias por completar nuestro checklist. Un especialista se pondrá en contacto pronto.</p>"
         # )
 
-        return {
+        response = {
             "success": True,
             "message": "Formulario enviado exitosamente",
             "recommended_tier": data.recommended_tier,
             "risk_score": data.risk_score
         }
+        if pdf_bytes:
+            import base64
+            response["pdf_base64"] = base64.b64encode(pdf_bytes).decode("utf-8")
+
+        return response
 
     except Exception as e:
         logger.error(f"Error submitting checklist: {str(e)}")

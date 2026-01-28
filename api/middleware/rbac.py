@@ -99,6 +99,11 @@ class RBACMiddleware(BaseHTTPMiddleware):
         # Permitir solicitudes OPTIONS (CORS preflight) sin autenticación
         if method == "OPTIONS":
             return await call_next(request)
+
+        # Bypass explícito para pricing público (landing/calculadora)
+        if path.startswith("/api/pricing"):
+            logger.info(f"🔓 RBAC Public pricing route: {path}")
+            return await call_next(request)
         
         # Bypass explícito para agentes remotos (descarga de script y WebSocket)
         # Necesario para permitir que endpoints remotos sin credenciales se conecten usando token

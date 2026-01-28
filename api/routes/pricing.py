@@ -30,10 +30,17 @@ def get_pg_connection():
     )
 
 # Routers
+# Routers
 router = APIRouter(
     prefix="/api/admin/pricing",
     tags=["Pricing Admin"],
-    dependencies=[Depends(require_global_admin)]
+    dependencies=[Depends(require_global_admin)],
+)
+
+# Public read-only router (sin auth) para consumir pricing en landing/calculadora
+public_router = APIRouter(
+    prefix="/api/pricing",
+    tags=["Pricing Public"],
 )
 
 # Public (sin auth) - solo lectura
@@ -43,6 +50,34 @@ public_router = APIRouter(
 )
 
 # Default pricing configuration
+DEFAULT_CALCULATOR = {
+    # Precio por dispositivo (USD/mes). Cliente indicó base = 6.
+    "device_pricing": {
+        "essential": {"rate": 6.00, "min": 1, "max": 50},
+        "professional": {"rate": 9.00, "min": 51, "max": 200},
+        "critical": {"rate": 12.00, "min": 201, "max": 999999},
+    },
+    "retention_tiers": {
+        30: {"cost": 0, "label": "30 días"},
+        90: {"cost": 150, "label": "90 días"},
+        180: {"cost": 300, "label": "180 días"},
+        365: {"cost": 500, "label": "1 año"},
+    },
+    "vciso_plans": {
+        "none": {"cost": 0, "label": "Sin v-CISO", "hours": 0},
+        "lite": {"cost": 1500, "label": "v-CISO Lite", "hours": 2},
+        "standard": {"cost": 3500, "label": "v-CISO Estándar", "hours": 4},
+    },
+    "addons": {
+        "dns": {"cost": 150, "label": "Escudo DNS", "unit": "/mes"},
+        "mdr": {"cost": 500, "label": "MDR 24x7", "unit": "/mes"},
+        "siem": {"cost": 750, "label": "SIEM Cloud", "unit": "/mes"},
+        "forensics": {"cost": 1200, "label": "SEGRD™ Forense", "unit": "/mes"},
+        "m365": {"cost": 350, "label": "Protección M365", "unit": "/mes"},
+        "bcdr": {"cost": 800, "label": "BCDR Cloud", "unit": "/mes"},
+    },
+}
+
 DEFAULT_PRICING = {
     "bundles": [
         {
@@ -117,7 +152,8 @@ DEFAULT_PRICING = {
     ],
     "currency": "USD",
     "tax_rate": 0.16,
-    "discount_codes": []
+    "discount_codes": [],
+    "calculator": DEFAULT_CALCULATOR,
 }
 
 
@@ -142,14 +178,46 @@ def get_pricing_from_db() -> Optional[Dict[str, Any]]:
         return None
 
 
+def normalize_pricing(pricing: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure pricing dict always has calculator section with expected keys.
+    Keeps backwards compatibility with records que solo guardaban bundles/addons.
+    """
+    if not pricing:
+        return DEFAULT_PRICING
+
+    pricing = dict(pricing)  # copy
+
+    calculator = pricing.get("calculator", {})
+
+    # Fallbacks
+    if "device_pricing" not in calculator:
+        calculator["device_pricing"] = DEFAULT_CALCULATOR["device_pricing"]
+    if "retention_tiers" not in calculator:
+        calculator["retention_tiers"] = DEFAULT_CALCULATOR["retention_tiers"]
+    if "vciso_plans" not in calculator:
+        calculator["vciso_plans"] = DEFAULT_CALCULATOR["vciso_plans"]
+    if "addons" not in calculator:
+        # si addons viene como lista, convertir a dict usando id como key
+        addons_list = pricing.get("addons", [])
+        if isinstance(addons_list, list):
+            addons_dict = {a.get("id") or a.get("name"): {k: v for k, v in a.items() if k != "id"} for a in addons_list}
+            calculator["addons"] = addons_dict
+        else:
+            calculator["addons"] = DEFAULT_CALCULATOR["addons"]
+
+    pricing["calculator"] = calculator
+    return pricing
+
+
 def get_effective_pricing() -> Dict[str, Any]:
-    """Resolver pricing usando BD si existe, si no defaults."""
+    """Resolver pricing usando BD si existe, si no defaults, siempre normalizado."""
     db_pricing = get_pricing_from_db()
     if db_pricing:
         logger.info("📊 Loaded pricing from database")
-        return db_pricing
+        return normalize_pricing(db_pricing)
     logger.info("📊 Returning default pricing configuration")
-    return DEFAULT_PRICING
+    return normalize_pricing(DEFAULT_PRICING)
 
 
 def save_pricing_to_db(pricing_data: Dict[str, Any]) -> bool:
@@ -180,15 +248,7 @@ async def get_pricing(_: dict = Depends(require_global_admin)):
     Retorna config de DB si existe, o defaults
     """
     try:
-        # Intentar cargar de DB
-        db_pricing = get_pricing_from_db()
-        if db_pricing:
-            logger.info("📊 Loaded pricing from database")
-            return db_pricing
-        
-        # Retornar defaults
-        logger.info("📊 Returning default pricing configuration")
-        return DEFAULT_PRICING
+        return get_effective_pricing()
         
     except Exception as e:
         logger.error(f"❌ Error getting pricing: {e}")
@@ -216,7 +276,8 @@ async def update_pricing(
         logger.info("✅ Pricing configuration updated")
         return {
             "success": True,
-            "message": "Pricing configuration updated successfully"
+            "message": "Pricing configuration updated successfully",
+            "pricing": normalize_pricing(pricing_data),
         }
         
     except HTTPException:
@@ -240,9 +301,19 @@ async def reset_pricing(_: dict = Depends(require_global_admin)):
         return {
             "success": True,
             "message": "Pricing reset to defaults",
-            "pricing": DEFAULT_PRICING
+            "pricing": normalize_pricing(DEFAULT_PRICING)
         }
         
     except Exception as e:
         logger.error(f"❌ Error resetting pricing: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ======================= PUBLIC ENDPOINTS =======================
+
+@public_router.get("")
+async def get_public_pricing():
+    """
+    Endpoint público de solo lectura para que el frontend consuma los precios.
+    """
+    return get_effective_pricing()
