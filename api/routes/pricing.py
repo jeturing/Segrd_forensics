@@ -29,10 +29,17 @@ def get_pg_connection():
         password=os.getenv("POSTGRES_PASSWORD", "change-me-please")
     )
 
+# Routers
 router = APIRouter(
     prefix="/api/admin/pricing",
     tags=["Pricing Admin"],
     dependencies=[Depends(require_global_admin)]
+)
+
+# Public (sin auth) - solo lectura
+public_router = APIRouter(
+    prefix="/api/pricing",
+    tags=["Pricing Public"],
 )
 
 # Default pricing configuration
@@ -133,6 +140,16 @@ def get_pricing_from_db() -> Optional[Dict[str, Any]]:
     except Exception as e:
         logger.warning(f"⚠️ Could not load pricing from DB: {e}")
         return None
+
+
+def get_effective_pricing() -> Dict[str, Any]:
+    """Resolver pricing usando BD si existe, si no defaults."""
+    db_pricing = get_pricing_from_db()
+    if db_pricing:
+        logger.info("📊 Loaded pricing from database")
+        return db_pricing
+    logger.info("📊 Returning default pricing configuration")
+    return DEFAULT_PRICING
 
 
 def save_pricing_to_db(pricing_data: Dict[str, Any]) -> bool:

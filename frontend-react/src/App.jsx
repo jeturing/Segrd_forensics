@@ -54,6 +54,7 @@ import {
   GlobalTenantsPage,
   GlobalBillingPage,
   GlobalSettingsPage,
+  SystemConfigPage,
   LandingContentPage,
   PricingManagementPage
 } from './pages/GlobalAdmin';
@@ -268,6 +269,12 @@ function App() {
               <Route path="/admin/settings" element={
                 <ProtectedRoute requiredGlobalAdmin>
                   <Layout><GlobalSettingsPage /></Layout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/admin/system-config" element={
+                <ProtectedRoute requiredGlobalAdmin>
+                  <Layout><SystemConfigPage /></Layout>
                 </ProtectedRoute>
               } />
 
